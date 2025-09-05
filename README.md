@@ -6,7 +6,9 @@ The .config file needs to be placed to the [cwd](https://en.wikipedia.org/wiki/W
 
 Syntax for config file:
 ```
-example .config file
+[ example .config file ]
+
+[ makes sure to leave comments like this supports single and multi line comments ]
 
 [SECRET_KEY <my-key>]
 
