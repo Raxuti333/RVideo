@@ -13,3 +13,6 @@ def wash(html: str) -> str:
         html = html[:b] + html[(b + e):]
         b = html.find("[")
     return html
+
+def config(field: str) -> str:
+    return wash(cut(open(".config").read(), field))
