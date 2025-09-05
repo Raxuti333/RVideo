@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def root():
-    return "Hello World"
+    return send_file(app.root_path + "/html/root.html", mimetype='text/html')
 
 @app.route("/favicon.ico")
 def favicon():
