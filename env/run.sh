@@ -1,12 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 
 # set cwd to this direcotry containing this file.
 cd "$(dirname "$0")"
 
 if [ ! -f db ]; then
-    echo "no database found in $PWD/db"
     echo "creating new database to $PWD/db"
-    # TODO sqlite db creation
+    sqlite3 db <<EOF
+CREATE TABLE profile ( pid INTEGER PRIMARY KEY, username TEXT, password TEXT );
+CREATE TABLE video ( vid INTEGER PRIMARY KEY, pid INTEGER, FOREIGN KEY(pid) REFERENCES profile(pid), name TEXT, description TEXT, date TEXT );
+CREATE TABLE comment ( vid INTEGER, FOREIGN KEY(vid) REFERENCES video(vid), pid INTEGER, FOREIGN KEY(pid) REFERENCES profile(pid), text TEXT, date TEXT );
+EOF
 fi
 
 
