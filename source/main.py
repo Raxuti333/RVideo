@@ -1,4 +1,4 @@
-from flask import Flask, send_file, session, request
+from flask import Flask, send_file, redirect, session, request
 from parse import cut, wash, config
 from profile import profile_page, profile_picture
 from signup import signup_page, signup_create
@@ -32,7 +32,7 @@ def profile():
     try:
         return JTABLE[key](app)
     except:
-        return "<p>Failed to query " + key + "</p>", 400
+        return redirect("/profile")
     
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -42,7 +42,7 @@ def signup():
     try:
         return JTABLE[key](app)
     except:
-        return "<p>Failed to query " + key + "</p>", 400
+        return redirect("/sigup")
     
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -52,7 +52,7 @@ def login():
     try:
         return JTABLE[key](app)
     except:
-        return "<p>Failed to query " + key + "</p>", 400
+        return redirect("/login")
 
 @app.route("/favicon.ico")
 def favicon():
