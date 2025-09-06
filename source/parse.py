@@ -17,3 +17,6 @@ def wash(html: str) -> str:
 def config(field: str) -> str:
     # Replace with non-garbage collection reliant method
     return wash(cut(open(".config").read(), field))
+
+def validate(input: str) -> str:
+    return input.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("[", "&#91;").replace("]", "&#93;").replace("$", "&#36;")
