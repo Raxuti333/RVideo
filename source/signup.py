@@ -43,7 +43,8 @@ def signup_create(app: Flask):
         return redirect("/signup", 303)
     
     # Check if username is taken
-    if db.query("SELECT COUNT(username) FROM profile WHERE username = ?", (username,))[0] != 0:
+    v = db.query("SELECT COUNT(username) FROM profile WHERE username = ?", (username,))[0][0]
+    if v != 0:
         flash("EXISTS")
         flash(username)
         return redirect("/signup", 303)
@@ -51,4 +52,4 @@ def signup_create(app: Flask):
     # Create new profile
     db.query("INSERT INTO profile (username, password) VALUES(?, ?)", (username, generate_password_hash(password)))
 
-    return redirect("/profile", 303)
+    return redirect("/login", 303)
