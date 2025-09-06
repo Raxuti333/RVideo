@@ -32,6 +32,10 @@ The script creates the **db** if one is not found in the environment folder.
 
 ## Running
 
+### Python
+
+This project has been developed on CPython 3.13.1
+
 ### Downloading
 Clone the master branch to your local computer and move to directory
 ```sh
