@@ -7,8 +7,8 @@ if [ ! -f db ]; then
     echo "creating new database to $PWD/db"
     sqlite3 db <<EOF
 CREATE TABLE profile ( pid INTEGER PRIMARY KEY, username TEXT, password TEXT );
-CREATE TABLE video ( vid INTEGER PRIMARY KEY, pid INTEGER, FOREIGN KEY(pid) REFERENCES profile(pid), name TEXT, description TEXT, date TEXT );
-CREATE TABLE comment ( vid INTEGER, FOREIGN KEY(vid) REFERENCES video(vid), pid INTEGER, FOREIGN KEY(pid) REFERENCES profile(pid), text TEXT, date TEXT );
+CREATE TABLE video ( vid INTEGER PRIMARY KEY, pid INTEGER, name TEXT, description TEXT, date TEXT, FOREIGN KEY(pid) REFERENCES profile(pid) );
+CREATE TABLE comment ( vid INTEGER, pid INTEGER, text TEXT, date TEXT, FOREIGN KEY(vid) REFERENCES video(vid), FOREIGN KEY(pid) REFERENCES profile(pid) );
 EOF
 fi
 
