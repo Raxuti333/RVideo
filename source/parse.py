@@ -15,4 +15,5 @@ def wash(html: str) -> str:
     return html
 
 def config(field: str) -> str:
+    # Replace with non-garbage collection reliant method
     return wash(cut(open(".config").read(), field))
