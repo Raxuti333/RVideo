@@ -1,0 +1,45 @@
+<body>
+    <!-- Logo block -->
+    <a href="/" style="text-decoration: none; display: inline-block; width: 190px; height: 64px;">
+        <img src="favicon.ico" style="position: relative; width: 64px; height: 64px; image-rendering: pixelated;">
+        <p style="position: relative; left: 70px; top: -82px; font-size: 32px; color: black;">RVIDEO</p>
+    </a>
+
+    <!-- Login block  -->
+    <a href="login" style="text-decoration: none; display: inline-block; position: fixed; right: 12px;">
+        <p style="font-size: 24px; margin: 0%; color: black;">Login</p>
+    </a>
+
+    [NO_PROFILE
+    <div style="max-width: fit-content; margin-left: auto; margin-right: auto;">
+        <p style="font-size: 40px; position: relative; left: 90px;">Sign up</p>
+        <form action="/signup?create" method="post">
+            <p>
+                username:
+                <input type="text" name="username">
+            </p>
+            <p>
+                password:
+                <input type="password" name="password">
+            </p>
+            <p style="position: relative; right: 55px;">
+                confirm password:
+                <input type="password" name="confirm_password">
+            </p>
+            <input type="submit" value="create profile" style="position: relative; left: 115px;">
+        </form>
+    </div>
+    ]
+
+    [NO_MATCH 
+    <p style="max-width: fit-content; margin-left: auto; margin-right: auto; color: #d10000;">Passwords don't match</p>
+    ]
+
+    [EXISTS 
+    <p style="max-width: fit-content; margin-left: auto; margin-right: auto; color: #d10000;">Username $USERNAME is taken try something else!</p>
+    ]
+    
+    [PROFILE 
+    <p style="max-width: fit-content; margin-left: auto; margin-right: auto;">You already have a profile there is no need to sign up</p>
+    ]
+</body>
