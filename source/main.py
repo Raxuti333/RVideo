@@ -16,7 +16,7 @@ def root():
 
     # Add support embeding username
     if session.get("profile") != None:
-        html = cut(html, "Profile")
+        html = cut(html.replace("$USERNAME", session["profile"]["username"]), "Profile")
     else:
         html = cut(html, "Login")
 
