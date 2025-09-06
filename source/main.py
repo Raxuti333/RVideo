@@ -1,6 +1,8 @@
 from flask import Flask, send_file, session, request
 from parse import cut, wash, config
-from profile import pfp, page
+from profile import profile_page, profile_picture
+from signup import signup_page, signup_create
+import db
 
 app = Flask(__name__)
 
@@ -23,17 +25,26 @@ def root():
 
 @app.route("/profile")
 def profile():
-    JTABLE = { "": page, "pfp" : pfp, }
+    JTABLE = { "": profile_page, "pfp" : profile_picture, }
 
     key = str(request.query_string, "utf-8")
     try:
         return JTABLE[key](app)
     except:
-        return "Failed to query " + key, 400
+        return "<p>Failed to query " + key + "</p>", 400
+    
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    JTABLE = { "": signup_page, "create": signup_create }
 
+    key = str(request.query_string, "utf-8")
+    try:
+        return JTABLE[key](app)
+    except:
+        return "<p>Failed to query " + key + "</p>", 400
 
 @app.route("/favicon.ico")
 def favicon():
-    return send_file(app.root_path + "/favicon.ico", mimetype='image/vnd.microsoft.icon')
+    return send_file(app.root_path + "/images/favicon.ico", mimetype='image/vnd.microsoft.icon')
 
 app.run("0.0.0.0", config("PORT"))
