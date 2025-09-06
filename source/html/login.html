@@ -1,0 +1,35 @@
+<body>
+    <!-- Logo block -->
+    <a href="/" style="text-decoration: none; display: inline-block; width: 190px; height: 64px;">
+        <img src="favicon.ico" style="position: relative; width: 64px; height: 64px; image-rendering: pixelated;">
+        <p style="position: relative; left: 70px; top: -82px; font-size: 32px; color: black;">RVIDEO</p>
+    </a>
+
+    <!-- Signup block  -->
+    <a href="signup" style="text-decoration: none; display: inline-block; position: fixed; right: 12px;">
+        <p style="font-size: 24px; margin: 0%; color: black;">Sign up</p>
+    </a>
+
+    <div style="max-width: fit-content; margin-left: auto; margin-right: auto;">
+        <p style="font-size: 40px; max-width: fit-content; margin-left: auto; margin-right: auto;">Login</p>
+        <form action="/login?in" method="post">
+            <p>
+                username:
+                <input type="text" name="username">
+            </p>
+            <p>
+                password:
+                <input type="password" name="password">
+            </p>
+            <input type="submit" value="login" style="position: relative; left: 50%;">
+        </form>
+    </div>
+
+    [NO_MATCH
+    <p style="max-width: fit-content; margin-left: auto; margin-right: auto; color: #d10000;">Username or password does not match!</p>
+    ]
+
+    [INVALID
+    <p style="max-width: fit-content; margin-left: auto; margin-right: auto; color: #d10000;">Something went wrong try filling the fields again!</p>
+    ]
+</body>

@@ -2,6 +2,7 @@ from flask import Flask, send_file, session, request
 from parse import cut, wash, config
 from profile import profile_page, profile_picture
 from signup import signup_page, signup_create
+from login import login_page, login_in
 import db
 
 app = Flask(__name__)
@@ -36,6 +37,16 @@ def profile():
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     JTABLE = { "": signup_page, "create": signup_create }
+
+    key = str(request.query_string, "utf-8")
+    try:
+        return JTABLE[key](app)
+    except:
+        return "<p>Failed to query " + key + "</p>", 400
+    
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    JTABLE = { "": login_page, "in": login_in }
 
     key = str(request.query_string, "utf-8")
     try:
