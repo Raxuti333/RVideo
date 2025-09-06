@@ -16,8 +16,7 @@ def signup_page(app: Flask):
     html: str = open(app.root_path + "/html/signup.html").read()
     
     if session.get("profile") != None:
-        return wash(cut(html, "PROFILE"))
-    html = cut(html, "NO_PROFILE")
+        return redirect("/")
 
     list = get_flashed_messages()
     if list != []:
