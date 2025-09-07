@@ -1,5 +1,5 @@
 from flask import Flask, session, request, send_file, redirect, flash, get_flashed_messages
-from parse import cut, wash
+from parse import cut, wash, validate
 import os
 from io import BytesIO
 import db
@@ -97,7 +97,7 @@ def profile_edit(app: Flask):
         return redirect("/")
 
     try:
-        new_username = request.form["username"]
+        new_username = validate(request.form["username"])
         token        = request.form["token"]
     except:
         flash("INVALID")
