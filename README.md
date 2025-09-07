@@ -66,6 +66,7 @@ Currently used fields are:
 ```
 PORT port which the program listens
 SECRET_KEY secret key of the program
+MAX_CONTENT_LENGTH maximum accepted file
 ```
 
 Now you need to edit the **env/.config** file and replace the secret key and set the port.
