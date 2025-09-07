@@ -6,7 +6,7 @@ RVideo on simple video sharing website.
 Features:
 * Creating profiles ✅
 * Adding profile picture ✅
-* Uploading videos ❌
+* Uploading videos ✅
 * Commenting on videos ❌
 * Searching for profiles and videos ❌
 
