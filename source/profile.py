@@ -4,16 +4,8 @@ import os
 from io import BytesIO
 import db
 
-def pid_get() -> str | None:
-    try:
-        return hex(int(db.query("SELECT pid FROM profile WHERE username = ?", (session["profile"]["username"],))[0][0]))
-    except:
-        return None
-    
 def file_get() -> str | None:
-    pid: str = pid_get()
-    if pid == None:
-        return None
+    pid: str = hex(session["profile"]["pid"])
 
     v: str = None
     for type in ["png", "jpg", "ico", "bmp"]:
@@ -29,10 +21,10 @@ def profile_page(app: Flask):
         return redirect("/")
 
     list = get_flashed_messages()
-    if list != []:
-        pass
-    
-    html = html.replace("$TOKEN", session["profile"]["token"])
+    if list != [] and list[0] in ["SUCCESS", "NO_SELECTED", "NO_SUPPORT"]:
+        html = cut(html, list[0])
+
+    html = html.replace("$TOKEN", session["profile"]["token"]).replace("$USERNAME", session["profile"]["username"])
     html = wash(html)
     return html
 
@@ -73,17 +65,12 @@ def profile_upload(app: Flask):
     if not type in ["png", "jpg", "ico", "bmp"]:
         flash("NO_SUPPORT")
         return redirect("/profile")
-    
-    pid: str = pid_get()
-    if pid == None:
-        flash("DB_FAIL")
-        return redirect("/")
 
     old: str = file_get()
     if old != None:
         os.remove(file_get())
 
-    picture.save("pfp/" + pid + "." + type)
+    picture.save("pfp/" + hex(session["profile"]["pid"]) + "." + type)
 
     flash("SUCCESS")
     return redirect("/profile")

@@ -7,12 +7,26 @@
 
     <div style="max-width: fit-content; margin-left: auto; margin-right: auto;">
         <div>
+            <p style="text-align: center; position: relative; right: 27%;">$USERNAME</p>
             <img src="profile?pfp" style="width: 128px; height: 128px;">
             <form action="/profile?upload" method="post" enctype="multipart/form-data" style="position: relative; right: 30%;">
                 <input type="file" name="picture">
                 <input type="hidden" name="token" value="$TOKEN">
                 <input type="submit" value="upload">
             </form>
+            
+            [SUCCESS 
+            <p style="position: relative; right: 20%; color: green;">Profile picture updated successfuly</p>
+            ]
+
+            [NO_SELECTED 
+            <p style="position: relative; right: 20%; color: red;">No File selected</p>
+            ]
+
+            [NO_SUPPORT
+            <p style="position: relative; right: 20%; color: red;">File type is not supported!</p>
+            <p style="position: relative; right: 20%; color: red;">Supported types are png, jpg, ico, and bmp.</p>
+            ]
         </div>
     </div>
 </body>
