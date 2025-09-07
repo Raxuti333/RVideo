@@ -4,11 +4,11 @@
 RVideo on simple video sharing website.
 
 Features:
-* Creating profiles
-* Adding profile picture
-* Uploading videos
-* Commenting on videos
-* Searching for profiles and videos
+* Creating profiles ✅
+* Adding profile picture ✅
+* Uploading videos ❌
+* Commenting on videos ❌
+* Searching for profiles and videos ❌
 
 ## Structure
 
