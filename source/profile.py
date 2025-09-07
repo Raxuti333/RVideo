@@ -36,7 +36,6 @@ def profile_page(app: Flask):
     html = wash(html)
     return html
 
-# Support profile pictures
 def profile_picture(app: Flask):
     if session.get("profile") == None:
         return send_file(app.root_path + "/images/no-pfp.png", mimetype='image/png')
@@ -80,11 +79,9 @@ def profile_upload(app: Flask):
         flash("DB_FAIL")
         return redirect("/")
 
-    # remove old pfp
-    for file in os.listdir("pfp"):
-        if pid == file.split(".")[0]:
-            os.remove("pfp/" + file)
-            break
+    old: str = file_get()
+    if old != None:
+        os.remove(file_get())
 
     picture.save("pfp/" + pid + "." + type)
 
