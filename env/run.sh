@@ -13,6 +13,7 @@ EOF
 fi
 
 mkdir -p pfp
+mkdir -p video
 
 # if moving env update these to point to the right files
 source ../.venv/bin/activate
