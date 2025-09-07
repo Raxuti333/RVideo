@@ -1,0 +1,45 @@
+<body>
+    <!-- Logo block -->
+    <a href="/" style="text-decoration: none; display: inline-block; width: 190px; height: 64px;">
+        <img src="favicon.ico" style="position: relative; width: 64px; height: 64px; image-rendering: pixelated;">
+        <p style="position: relative; left: 70px; top: -82px; font-size: 32px; color: black;">RVIDEO</p>
+    </a>
+
+    <!--- Profile block -->
+    <a href="profile" style="text-decoration: none; display: inline-block; position: fixed; right: 12px;">
+        <img src="profile?pfp=$PID" style="width: 64px; height: 64px;">
+        <p style="color: black; margin-top: 0px; position: relative; text-align: center;">$USERNAME</p>
+    </a>
+
+    <div style="max-width: fit-content; margin-left: auto; margin-right: auto;">
+        <form action="video?upload" method="post" enctype="multipart/form-data">
+            <p style="position: relative; left: 8.5%;">
+                video:
+                <input type="file" name="video">
+            </p>
+            <p style="position: relative; margin-left: 12%;">
+                title:
+                <input type="text" name="title">
+            </p>
+            <p style="position: relative;">
+                descrptio:
+                <textarea name="description" rows="5" cols="24"></textarea>
+            </p>
+            <input type="hidden" name="token" value="$TOKEN">
+            <input type="submit" value="upload" style="position: relative; margin-left: 33%;">
+        </form>
+    </div>
+
+    [INVALID 
+    <p style="max-width: fit-content; margin-left: auto; margin-right: auto; color: #d10000;">Something went wrong try filling the fields again!</p>
+    ]
+    [NO_SELECTED 
+    <p style="max-width: fit-content; margin-left: auto; margin-right: auto; color: #d10000;">No file selected</p>
+    ]
+    [WRONG_TITLE 
+    <p style="max-width: fit-content; margin-left: auto; margin-right: auto; color: #d10000;">Title is too short or long title has to bee between 1 and 128</p>
+    ]
+    [NO_SUPPORT 
+    <p style="max-width: fit-content; margin-left: auto; margin-right: auto; color: #d10000;">File type not supported. Supported types are mp4, avi and webm</p>
+    ]
+</body>

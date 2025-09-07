@@ -29,7 +29,6 @@ def profile_page(app: Flask):
     html = wash(html)
     return html
 
-# TODO use provided pid and not session pid
 def profile_picture(app: Flask):
     query: str = str(request.query_string, "utf-8").split("=")[-1]
 

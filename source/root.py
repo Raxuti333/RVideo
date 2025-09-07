@@ -13,5 +13,12 @@ def root_page(app: Flask):
     else:
         html = cut(html, "LOGIN")
 
-    html = wash(html)
-    return html
+    embed: str = ""
+
+    search = request.form.get("search")
+    if search == None:
+        videos = db.query("SELECT * FROM video ORDER BY datetime(date) DESC LIMIT 20", count=20)
+        for v in videos:
+            embed += "<a href=\"video?view=" + str(v["vid"]) + "\"><div style=\"display: inline-block; margin: 15px\">" + "<img src=\"profile?pfp=" + str(v["pid"]) + "\" style=\"display: inline-block; width: 48px; height: 48px;\"><p style=\"display: inline-block;\">" + v["name"] + "<p></div></a>"
+
+    return wash(html.replace("$VIDEOS", embed))
