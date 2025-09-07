@@ -1,5 +1,6 @@
-from flask import Flask, send_file, redirect, session, request
-from parse import cut, wash, config
+from flask import Flask, redirect, request
+from parse import config
+from root import root_page, root_favicon
 from profile import profile_page, profile_picture, profile_upload, profile_edit
 from signup import signup_page, signup_create
 from login import login_page, login_in, login_out
@@ -7,30 +8,21 @@ from login import login_page, login_in, login_out
 app = Flask(__name__)
 
 app.secret_key = config("SECRET_KEY")
+app.config['MAX_CONTENT_LENGTH'] = int(config("MAX_CONTENT_LENGTH"))
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def root():
-    # Replace with non-garbage collection reliant method
-    html: str = open(app.root_path + "/html/root.html").read()
-
-    # Add support embeding username
-    if session.get("profile") != None:
-        html = cut(html.replace("$USERNAME", session["profile"]["username"]), "Profile")
-    else:
-        html = cut(html, "Login")
-
-    html = wash(html)
-    return html
+    return root_page(app)
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
     JTABLE = { "": profile_page, "pfp" : profile_picture, "upload": profile_upload, "edit": profile_edit, "delete": profile_page }
 
-    key = str(request.query_string, "utf-8")
     try:
+        key = str(request.query_string, "utf-8").split("=")[0]
         return JTABLE[key](app)
     except:
-        return redirect("/profile")
+        return profile_page(app)
     
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -54,6 +46,6 @@ def login():
 
 @app.route("/favicon.ico")
 def favicon():
-    return send_file(app.root_path + "/images/favicon.ico", mimetype='image/vnd.microsoft.icon')
+    return root_favicon(app)
 
 app.run("0.0.0.0", config("PORT"))
