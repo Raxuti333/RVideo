@@ -84,3 +84,7 @@ Now you can just start the program with:
 ```
 env/run.sh
 ```
+
+## Security
+
+CSRF prevented with session token embeding on forms.
