@@ -12,6 +12,7 @@ CREATE TABLE comment ( vid INTEGER, pid INTEGER, text TEXT, date TEXT, FOREIGN K
 EOF
 fi
 
+mkdir -p pfp
 
 # if moving env update these to point to the right files
 source ../.venv/bin/activate
