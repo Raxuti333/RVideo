@@ -27,17 +27,19 @@ def login_in(app: Flask):
     except:
         flash("INVALID")
         return redirect("/login")
-
-    profile = db.query("SELECT password FROM profile WHERE username = ?", (username,))
     
-    if profile == []:
+    result = db.query("SELECT password, pid FROM profile WHERE username = ?", (username,))
+    
+    if result == []:
         flash("NO_MATCH")
         return redirect("/login")
 
-    if not check_password_hash(profile[0][0], password):
+    profile = result[0]
+
+    if not check_password_hash(profile["password"], password):
         flash("NO_MATCH")
         return redirect("/login")
 
-    session["profile"] = { "username": username, "token": token_hex(16) }
+    session["profile"] = { "pid": profile["pid"], "username": username, "token": token_hex(16) }
 
     return redirect("/")
