@@ -4,4 +4,15 @@
         <img src="favicon.ico" style="position: relative; width: 64px; height: 64px; image-rendering: pixelated;">
         <p style="position: relative; left: 70px; top: -82px; font-size: 32px; color: black;">RVIDEO</p>
     </a>
+
+    <div style="max-width: fit-content; margin-left: auto; margin-right: auto;">
+        <div>
+            <img src="profile?pfp" style="width: 128px; height: 128px;">
+            <form action="/profile?upload" method="post" enctype="multipart/form-data" style="position: relative; right: 30%;">
+                <input type="file" name="picture">
+                <input type="hidden" name="token" value="$TOKEN">
+                <input type="submit" value="upload">
+            </form>
+        </div>
+    </div>
 </body>
