@@ -4,9 +4,7 @@ import os
 from io import BytesIO
 import db
 
-def file_get() -> str | None:
-    pid: str = hex(session["profile"]["pid"])
-
+def file_get(pid: str) -> str | None:
     v: str = None
     for type in ["png", "jpg", "ico", "bmp"]:
         if os.path.isfile("pfp/" + pid + "." + type):
@@ -21,25 +19,33 @@ def profile_page(app: Flask):
         return redirect("/")
 
     list = get_flashed_messages()
-    if list != [] and list[0] in ["SUCCESS", "NO_SELECTED", "NO_SUPPORT", "NO_CHANGES", "NO_CHANGES"]:
+    if list != [] and list[0] in ["SUCCESS", "NO_SELECTED", "NO_SUPPORT", "NO_CHANGES", "NO_CHANGES", "TOO_LARGE"]:
         html = cut(html, list[0])
 
-    html = html.replace("$TOKEN", session["profile"]["token"]).replace("$USERNAME", session["profile"]["username"])
+
+    
+    # TODO abstract into a new function
+    html = html.replace("$TOKEN", session["profile"]["token"]).replace("$USERNAME", session["profile"]["username"]).replace("$PID", str(session["profile"]["pid"]))
     html = wash(html)
     return html
 
+# TODO use provided pid and not session pid
 def profile_picture(app: Flask):
-    if session.get("profile") == None:
+    query: str = str(request.query_string, "utf-8").split("=")[-1]
+
+    if not query.isdigit():
         return send_file(app.root_path + "/images/no-pfp.png", mimetype='image/png')
     
-    picutre: str = file_get()
+    pid: str = hex(int(query))
+
+    picutre: str = file_get(pid)
     if picutre == None:
         return send_file(app.root_path + "/images/no-pfp.png", mimetype='image/png')
     
-    TABLE: {str, str} = {"png": "image/png", "jpg": "image/jpeg", "ico": "image/vnd.microsoft.icon", "bmp": "image/bmp"}
+    MIMETYPE: {str, str} = {"png": "image/png", "jpg": "image/jpeg", "ico": "image/vnd.microsoft.icon", "bmp": "image/bmp"}
 
     with open(picutre, "rb") as f:
-        return send_file(BytesIO(f.read()), mimetype=TABLE[picutre.split(".")[1]])
+        return send_file(BytesIO(f.read()), mimetype=MIMETYPE[picutre.split(".")[1]])
 
 def profile_upload(app: Flask):
     if session.get("profile") == None:
@@ -60,15 +66,26 @@ def profile_upload(app: Flask):
         flash("NO_SELECTED")
         return redirect("/profile")
     
+    picture.seek(0, os.SEEK_END)
+
+    # Max pfp size is 1mb
+    if picture.tell() > 1000000:
+        flash("TOO_LARGE")
+        return redirect("/profile")
+
+    picture.seek(0, os.SEEK_SET)
+
     type: str = picture.filename.split(".")[-1]
 
     if not type in ["png", "jpg", "ico", "bmp"]:
         flash("NO_SUPPORT")
         return redirect("/profile")
 
-    old: str = file_get()
+    pid: str = hex(session["profile"]["pid"])
+
+    old: str = file_get(pid)
     if old != None:
-        os.remove(file_get())
+        os.remove(old)
 
     picture.save("pfp/" + hex(session["profile"]["pid"]) + "." + type)
 

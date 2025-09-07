@@ -30,7 +30,7 @@
                 <input type="submit" value="change">
             </form>
             <a href="/profile#upload_pfp" >
-                <img src="profile?pfp" style="width: 128px; height: 128px;">
+                <img src="profile?pfp=$PID" style="width: 128px; height: 128px;">
             </a>
             <form action="/profile?upload" method="post" enctype="multipart/form-data" id="upload_pfp" style="position: relative; right: 30%;">
                 <input type="file" name="picture">
@@ -49,6 +49,10 @@
             [NO_SUPPORT
             <p style="position: relative; right: 20%; color: red;">File type is not supported!</p>
             <p style="position: relative; right: 20%; color: red;">Supported types are png, jpg, ico, and bmp.</p>
+            ]
+
+            [TOO_LARGE 
+            <p style="position: relative; right: 20%; color: red;">File is too large maximun size is 1Mb</p>
             ]
         </div>
     </div>
