@@ -2,8 +2,7 @@ from flask import Flask, send_file, redirect, session, request
 from parse import cut, wash, config
 from profile import profile_page, profile_picture, profile_upload, profile_edit
 from signup import signup_page, signup_create
-from login import login_page, login_in
-import db
+from login import login_page, login_in, login_out
 
 app = Flask(__name__)
 
@@ -45,7 +44,7 @@ def signup():
     
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    JTABLE = { "": login_page, "in": login_in }
+    JTABLE = { "": login_page, "in": login_in, "out": login_out }
 
     key = str(request.query_string, "utf-8")
     try:

@@ -43,3 +43,9 @@ def login_in(app: Flask):
     session["profile"] = { "pid": profile["pid"], "username": username, "token": token_hex(16) }
 
     return redirect("/")
+
+def login_out(app: Flask):
+    if session.get("profile") == None:
+        return redirect("/")
+    session.clear()
+    return redirect("/login")
