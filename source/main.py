@@ -1,6 +1,6 @@
 from flask import Flask, send_file, redirect, session, request
 from parse import cut, wash, config
-from profile import profile_page, profile_picture, profile_upload
+from profile import profile_page, profile_picture, profile_upload, profile_edit
 from signup import signup_page, signup_create
 from login import login_page, login_in
 import db
@@ -21,12 +21,11 @@ def root():
         html = cut(html, "Login")
 
     html = wash(html)
-
     return html
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
-    JTABLE = { "": profile_page, "pfp" : profile_picture, "upload": profile_upload }
+    JTABLE = { "": profile_page, "pfp" : profile_picture, "upload": profile_upload, "edit": profile_edit, "delete": profile_page }
 
     key = str(request.query_string, "utf-8")
     try:

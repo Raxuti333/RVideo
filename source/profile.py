@@ -21,7 +21,7 @@ def profile_page(app: Flask):
         return redirect("/")
 
     list = get_flashed_messages()
-    if list != [] and list[0] in ["SUCCESS", "NO_SELECTED", "NO_SUPPORT"]:
+    if list != [] and list[0] in ["SUCCESS", "NO_SELECTED", "NO_SUPPORT", "NO_CHANGES", "NO_CHANGES"]:
         html = cut(html, list[0])
 
     html = html.replace("$TOKEN", session["profile"]["token"]).replace("$USERNAME", session["profile"]["username"])
@@ -73,4 +73,35 @@ def profile_upload(app: Flask):
     picture.save("pfp/" + hex(session["profile"]["pid"]) + "." + type)
 
     flash("SUCCESS")
+    return redirect("/profile")
+
+def profile_edit(app: Flask):
+    if session.get("profile") == None:
+        return redirect("/")
+
+    try:
+        new_username = request.form["username"]
+        token        = request.form["token"]
+    except:
+        flash("INVALID")
+        return redirect("/profile")
+    
+    # CSRF protection
+    if token != session["profile"]["token"]:
+        return redirect("/")
+    
+    if new_username == session["profile"]["username"]:
+        flash("NO_CHANGES")
+        return redirect("/profile")
+
+    # TODO check if this can raise exception
+    v = db.query("SELECT COUNT(username) FROM profile WHERE username = ?", (new_username,))[0][0]
+
+    if v != 0:
+        flash("TAKEN")
+        return redirect("/profile#edit_username")
+    
+    db.query("UPDATE profile SET username = ? WHERE pid = ?;", (new_username, session["profile"]["pid"]))
+    session["profile"] = { "pid": session["profile"]["pid"], "username": new_username, "token": session["profile"]["token"] }
+
     return redirect("/profile")
