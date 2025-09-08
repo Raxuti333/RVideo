@@ -11,6 +11,76 @@ def file_get(pid: str) -> str | None:
             v = "video/" + pid + "." + type
     return v
 
+def video_edit(app: Flask):
+    # Replace with non-garbage collection reliant method
+    html: str = open(app.root_path + "/html/edit.html").read()
+
+    if session.get("profile") == None:
+        return redirect("/")
+
+    key: str = str(request.query_string, "utf-8").split("=")[-1]
+    if not key.isdigit():
+        return abort(404)
+    
+    vid = int(key)
+    video = db.query("SELECT * FROM video WHERE vid = ?", [vid])
+
+    if video == []:
+        return abort(404)
+    
+    if video[0]["pid"] != session["profile"]["pid"]:
+        return abort(401)
+    
+    html = html.replace("$PID", str(session["profile"]["pid"])).replace("$USERNAME", session["profile"]["username"]).replace("$TITLE", video[0]["name"]).replace("$DESCRIPTION", video[0]["description"]).replace("$TOKEN", session["profile"]["token"]).replace("$VID", str(vid))
+    return html
+
+def video_update(app: Flask):
+    if session.get("profile") == None:
+        return abort(401)
+    
+    key: str = str(request.query_string, "utf-8").split("=")[-1]
+    if not key.isdigit():
+        return abort(404)
+    
+    vid = int(key)
+    video = db.query("SELECT * FROM video WHERE vid = ?", [vid])
+    
+    if video == []:
+        return abort(404)
+    
+    if video[0]["pid"] != session["profile"]["pid"]:
+        return abort(401)
+    
+    token = request.form.get("token")
+    delete = request.form.get("delete")
+
+    if token != session["profile"]["token"]:
+        return abort(400)
+
+    if delete != None:
+        if delete == "True":
+            db.query("DELETE FROM video WHERE vid = ?", [vid])
+            os.remove(file_get(hex(vid)))
+        return redirect("/profile")
+    
+    title = request.form.get("title")
+    description = request.form.get("description")
+
+    if title == None or description == None:
+        flash("INVALID")
+        return redirect("/video?edit=" + str(vid))
+    
+    title = validate(title)
+    description = validate(description)
+    
+    if len(title) == 0 or len(title) > 128:
+        flash("WRONG_TITLE")
+        return redirect("/video?edit=" + str(vid))
+    
+    db.query("UPDATE video SET name = ?, description = ? WHERE vid = ?", [title, description, vid])
+
+    return redirect("/video?view=" + str(vid))
+
 # TODO add commenting and comment view
 def video_view(app: Flask):
     # Replace with non-garbage collection reliant method
@@ -23,6 +93,10 @@ def video_view(app: Flask):
     
     if session.get("profile") != None:
         html = cut(html.replace("$PID", str(session["profile"]["pid"])).replace("$USERNAME", session["profile"]["username"]), "PROFILE")
+        if vid.isdigit():
+            pid: int = db.query("SELECT pid FROM video WHERE vid = ?", [int(vid)])[0][0]
+            if session["profile"]["pid"] == pid:
+               html = cut(html, "OWNER")
     else:
         html = cut(html, "LOGIN")
 

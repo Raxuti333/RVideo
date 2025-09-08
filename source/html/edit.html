@@ -1,0 +1,35 @@
+<body>
+    <!-- Logo block -->
+    <a href="/" style="text-decoration: none; display: inline-block; width: 190px; height: 64px;">
+        <img src="favicon.ico" style="position: relative; width: 64px; height: 64px; image-rendering: pixelated;">
+        <p style="position: relative; left: 70px; top: -82px; font-size: 32px; color: black;">RVIDEO</p>
+    </a>
+
+    <!--- Profile block -->
+    <a href="profile" style="text-decoration: none; display: inline-block; position: fixed; right: 12px;">
+        <img src="profile?pfp=$PID" style="width: 64px; height: 64px;">
+        <p style="color: black; margin-top: 0px; position: relative; text-align: center;">$USERNAME</p>
+    </a>
+
+    <div style="max-width: fit-content; margin-inline: auto; display: grid; align-items: center;">
+        <form action="video?update=$VID" method="post">
+            <p style="position: relative; display: block; text-align:center;">
+                title:
+                <textarea cols="30" name="title">$TITLE</textarea>
+            </p>
+            <p style="position: relative; display: block; text-align:center; right: 7%;">
+                description:
+                <textarea name="description" rows="10" cols="30">$DESCRIPTION</textarea>
+            </p>
+            <input type="hidden" name="token" value="$TOKEN">
+            <input style="position: relative; display: block; left: 45%;" type="submit" value="update">
+        </form>
+        <div style="max-width: fit-content; margin-inline: auto;">
+            <form action="video?update=$VID" method="post">
+                <input type="hidden" name="delete" value="True">
+                <input type="hidden" name="token" value="$TOKEN">
+                <input style="position: relative; display: block; left: 25%; color: red;" type="submit" value="delete">
+            </form>
+        </div>
+    </div>
+</body>

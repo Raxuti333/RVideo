@@ -4,7 +4,7 @@ from root import root_page, root_favicon
 from profile import profile_page, profile_picture, profile_upload, profile_edit
 from signup import signup_page, signup_create
 from login import login_page, login_in, login_out
-from video import video_page, video_upload, video_view, video_download
+from video import video_page, video_upload, video_view, video_download, video_edit, video_update
 
 app = Flask(__name__)
 
@@ -47,7 +47,7 @@ def login():
 
 @app.route("/video", methods=["GET", "POST"])
 def video():
-    JTABLE = { "": video_page, "upload": video_upload, "view": video_view, "download": video_download }
+    JTABLE = { "": video_page, "upload": video_upload, "view": video_view, "download": video_download, "edit": video_edit, "update": video_update }
 
     try:
         key = str(request.query_string, "utf-8").split("=")[0]
