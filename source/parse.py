@@ -42,10 +42,10 @@ def search(req: str):
         p = m.split("=")
         match(p[0]):
             case "BEFORE":
-                if re.match(r"^\d{4}-\d{2}-\d{2}$", p[-1]) or p[-1] == "now":
+                if re.match(r"^\d{4}-\d{2}-\d{2}$", p[-1]) != None or p[-1] == "now":
                     sql += f" timediff(date, '{p[-1]}') > 0 AND"
             case "AFTER":
-                if re.match(r"^\d{4}-\d{2}-\d{2}$", p[-1]) or p[-1] == "now":
+                if re.match(r"^\d{4}-\d{2}-\d{2}$", p[-1]) != None or p[-1] == "now":
                     sql += f" timediff(date, '{p[-1]}') < 0 AND"
             case "USER":
                 user = db.query("SELECT pid FROM profile WHERE LOWER(username) = LOWER(?)", [p[-1]])
