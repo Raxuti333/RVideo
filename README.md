@@ -66,7 +66,7 @@ Currently used fields are:
 ```
 PORT port which the program listens
 SECRET_KEY secret key of the program
-MAX_CONTENT_LENGTH maximum accepted file
+MAX_CONTENT_LENGTH maximum accepted file size
 ```
 
 Now you need to edit the **env/.config** file and replace the secret key and set the port.
@@ -76,6 +76,8 @@ Example **.config** file:
 [PORT 8080]
 
 [SECRET_KEY 1d7a6df767ab3fa7aa0377937632322f]
+
+[MAX_CONTENT_LENGTH 2000000000]
 ```
 The secret key is a random string with arbitary lenght.
 Note that the secret key should not be too short.
