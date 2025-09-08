@@ -1,5 +1,5 @@
 from flask import Flask, session, request, send_file, redirect, flash, get_flashed_messages
-from parse import cut, wash, validate
+from parse import cut, wash, validate, search
 import os
 from io import BytesIO
 import db
@@ -22,10 +22,8 @@ def profile_page(app: Flask):
     if list != [] and list[0] in ["SUCCESS", "NO_SELECTED", "NO_SUPPORT", "NO_CHANGES", "NO_CHANGES", "TOO_LARGE"]:
         html = cut(html, list[0])
 
-
-    
     # TODO abstract into a new function
-    html = html.replace("$TOKEN", session["profile"]["token"]).replace("$USERNAME", session["profile"]["username"]).replace("$PID", str(session["profile"]["pid"]))
+    html = html.replace("$TOKEN", session["profile"]["token"]).replace("$USERNAME", session["profile"]["username"]).replace("$PID", str(session["profile"]["pid"])).replace("$VIDEOS", search("USER=" + session["profile"]["username"]))
     html = wash(html)
     return html
 
