@@ -43,7 +43,7 @@ def signup_create(app: Flask):
         return redirect("/signup", 303)
     
     # Check if username is taken
-    v = db.query("SELECT COUNT(username) FROM profile WHERE username = ?", [username])[0][0]
+    v = db.query("SELECT COUNT(username) FROM profile WHERE LOWER(username) = LOWER(?)", [username])[0][0]
     if v != 0:
         flash("EXISTS")
         flash(username)
