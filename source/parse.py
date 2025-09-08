@@ -71,9 +71,6 @@ def search(req: str):
 
     sql = sql[:len(sql) - 4]
 
-    print(params)
-    print(sql)
-
     videos = db.query(sql, params, limit)
     for v in videos:
         html += VIDEO_HTML.replace("$VID", str(v["vid"])).replace("$PID", str(v["pid"])).replace("$TITLE", v["name"])
