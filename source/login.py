@@ -28,7 +28,7 @@ def login_in(app: Flask):
         flash("INVALID")
         return redirect("/login")
     
-    result = db.query("SELECT password, pid FROM profile WHERE username = ?", (username,))
+    result = db.query("SELECT password, pid FROM profile WHERE username = ?", [username])
     
     if result == []:
         flash("NO_MATCH")

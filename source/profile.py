@@ -111,13 +111,13 @@ def profile_edit(app: Flask):
         return redirect("/profile")
 
     # TODO check if this can raise exception
-    v = db.query("SELECT COUNT(username) FROM profile WHERE username = ?", (new_username,))[0][0]
+    v = db.query("SELECT COUNT(username) FROM profile WHERE username = ?", [new_username])[0][0]
 
     if v != 0:
         flash("TAKEN")
         return redirect("/profile#edit_username")
     
-    db.query("UPDATE profile SET username = ? WHERE pid = ?;", (new_username, session["profile"]["pid"]))
+    db.query("UPDATE profile SET username = ? WHERE pid = ?;", [new_username, session["profile"]["pid"]])
     session["profile"] = { "pid": session["profile"]["pid"], "username": new_username, "token": session["profile"]["token"] }
 
     return redirect("/profile")

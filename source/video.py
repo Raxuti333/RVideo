@@ -26,8 +26,8 @@ def video_view(app: Flask):
     else:
         html = cut(html, "LOGIN")
 
-    row: int = db.query("SELECT pid, name, description FROM video WHERE vid = ?", (int(vid),))[0]
-    auth_username: str = db.query("SELECT username FROM profile WHERE pid = ?", (row["pid"],))[0][0]
+    row: int = db.query("SELECT pid, name, description FROM video WHERE vid = ?", [int(vid)])[0]
+    auth_username: str = db.query("SELECT username FROM profile WHERE pid = ?", [row["pid"]])[0][0]
 
     html = wash(html.replace("$VID", vid).replace("$AUTH_PID", str(row["pid"])).replace("$AUTH_USERNAME", auth_username)).replace("$TITLE", row["name"]).replace("$DESCRIPTION", row["description"])
     return html
@@ -77,7 +77,7 @@ def video_upload(app: Flask):
         flash("NO_SUPPORT")
         return redirect("/video")
     
-    vid: int = db.query("INSERT INTO video (pid, name, description, date) VALUES(?, ?, ?, datetime('now')) RETURNING vid", (session["profile"]["pid"], title, description))[0][0]
+    vid: int = db.query("INSERT INTO video (pid, name, description, date) VALUES(?, ?, ?, datetime('now')) RETURNING vid", [session["profile"]["pid"], title, description])[0][0]
 
     video.save("video/" + hex(vid) + "." + type)
 
