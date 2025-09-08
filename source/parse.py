@@ -1,7 +1,7 @@
 import db, re
 
 VIDEO_HTML: str = """ 
-<a href=\"video?view=$VID\" style=\"text-decoration: none; display: inline;\">
+<a href=\"video?view=$VID\" class="video">
     <img style=\"display: inline; width: 48px; heigth: 48px\" src=\"profile?pfp=$PID\">
     <p style=\"display: inline; position: relative; bottom: 15px;\">$TITLE</p>
 </a>
