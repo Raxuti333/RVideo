@@ -23,12 +23,30 @@ The **env** folder contains an example environment for the program.
 
 The point of the **env** is to contain the running enviroment of the program. Such as DB and video and dynamic images.
 
+The **env** has contains:
+* db    - [database](#database)
+* pfp   - user profile pictures
+* video - video files
+
 The **env** contains the **.config** files where the program configurations are stored more about the **.config** in the [Runnig:Config](#config) section.
 
 #### Scripts
-In the **env** folder there are script **run.sh** the script can be used to run the program. If you move the **env** folder remember to update the paths in the script.
+In the **env** folder there is a script. the **run.sh** script can be used to run the program. If you move the **env** folder remember to update the paths in **run.sh**
 
-The script creates the **db** if one is not found in the environment folder.
+**run.sh** creates the **db** if one is not found in the environment folder.
+
+#### database
+The **db** is automaticaly created by **run.sh** if one is not found in "env/db"
+
+The database has 3 tables **profile**, **video** and **comment**.
+
+simplified **db** structure:
+```
+profile ( pid INTEGER, username TEXT, password TEXT );
+video   ( vid INTEGER, pid INTEGER, name TEXT, description TEXT, date TEXT );
+comment ( vid INTEGER, pid INTEGER, text TEXT, date TEXT );
+```
+See **run.sh** for the **db** creation.
 
 ## Running
 
