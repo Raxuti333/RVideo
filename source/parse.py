@@ -43,12 +43,12 @@ def search(req: str):
         match(p[0]):
             case "BEFORE":
                 if re.match(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$", p[-1]) != None or p[-1] == "now":
-                    sql += f" (strftime(\"%s\", date) - strftime(\"%s\", \"{p[1]}\")) < 0"
+                    sql += f" (strftime(\"%s\", date) - strftime(\"%s\", \"{p[-1]}\")) < 0"
                 else: sql += " 1"
                 sql += " AND"
             case "AFTER":
                 if re.match(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$", p[-1]) != None or p[-1] == "now":
-                    sql += f" (strftime(\"%s\", date) - strftime(\"%s\", \"{p[1]}\")) > 0"
+                    sql += f" (strftime(\"%s\", date) - strftime(\"%s\", \"{p[-1]}\")) > 0"
                 else: sql += " 1"
                 sql += " AND"
             case "USER":
