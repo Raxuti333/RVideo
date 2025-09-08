@@ -51,14 +51,14 @@ def search(req: str):
                 user = db.query("SELECT pid FROM profile WHERE LOWER(username) = LOWER(?)", [p[-1]])
                 if user != []:
                     sql += f" pid = {user[0]["pid"]} AND"
-                else:
-                    sql += " pid = 0 AND"
+                else: sql += " pid = 0 AND"
             case "USERS":
-                users = db.query("SELECT pid FROM profile WHERE username LIKE ?", ["%" + p[-1] + "%"], 10)
+                users = db.query("SELECT pid FROM profile WHERE LOWER(username) LIKE LOWER(?)", [p[-1] + "%"], 10)
                 if users != []:
                     for u in users:
                         sql += f" pid = {u["pid"]} OR"
                     sql = sql[:len(sql) - 2] + " AND"
+                else: sql += " pid = 0 AND"
             case "LIMIT":
                 if p[-1].isdigit(): 
                     if int(p[-1]) < 100:
