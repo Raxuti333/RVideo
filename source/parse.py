@@ -35,7 +35,7 @@ def search(req: str):
 
     limit = 20
     params = []
-    sql: str = "SELECT * FROM video"
+    sql: str = "SELECT * FROM video WHERE"
 
     # Generate sql query with parameters 
     for m in req.split(","):
@@ -43,33 +43,36 @@ def search(req: str):
         match(p[0]):
             case "BEFORE":
                 if re.match(r"^\d{2}-\d{2}-\d{4}$", p[-1]) or p[-1] == "now":
-                    sql += f" WHERE timediff(date, '{p[-1]}') > 0"
+                    sql += f" timediff(date, '{p[-1]}') > 0 AND"
             case "AFTER":
                 if re.match(r"^\d{2}-\d{2}-\d{4}$", p[-1]) or p[-1] == "now":
-                    sql += f" WHERE timediff(date, '{p[-1]}') < 0"
+                    sql += f" timediff(date, '{p[-1]}') < 0 AND"
             case "USER":
                 user = db.query("SELECT pid FROM profile WHERE LOWER(username) = LOWER(?)", [p[-1]])
                 if user != []:
-                    sql += f" WHERE pid = {user[0]["pid"]}"
+                    sql += f" pid = {user[0]["pid"]} AND"
                 else:
-                    sql += " WHERE pid = 0"
+                    sql += " pid = 0 AND"
             case "USERS":
-                users = db.query("SELECT pid FROM profile WHERE username LIKE ?", ["%" + p[-1] + "%"], 5)
+                users = db.query("SELECT pid FROM profile WHERE username LIKE ?", ["%" + p[-1] + "%"], 10)
                 if users != []:
-                    sql += " WHERE"
                     for u in users:
                         sql += f" pid = {u["pid"]} OR"
-                    sql = sql[:len(sql) - 2]
+                    sql = sql[:len(sql) - 2] + " AND"
             case "LIMIT":
                 if p[-1].isdigit(): 
                     if int(p[-1]) < 100:
                         limit = int(p[-1])
             case _:
-                sql += " WHERE"
                 for x in m.split(" "):
                     params.append("%"+x+"%")
                     sql += " name LIKE ? OR"
-                sql = sql[:len(sql) - 2]
+                sql = sql[:len(sql) - 2] + "AND"
+
+    sql = sql[:len(sql) - 4]
+
+    print(params)
+    print(sql)
 
     videos = db.query(sql, params, limit)
     for v in videos:
