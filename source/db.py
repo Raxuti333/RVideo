@@ -2,7 +2,7 @@
 
 import sqlite3
 
-def query(sql: str, params: list = [], count: int = 1) -> sqlite3.Row | sqlite3.Cursor:
+def query(sql: str, params: list = None, count: int = 1) -> sqlite3.Row | sqlite3.Cursor:
     """ query data from sqlite3 db
     count = 1: fetchone()
     count = -1: fetchall()
