@@ -1,6 +1,7 @@
 """ TODO """
 
 from flask import Flask
+from util import config
 import root, account, video
 
 app: Flask = Flask(__name__, "/static", template_folder="html")
@@ -25,4 +26,5 @@ def route_comment():
     """ TODO """
     return ""
 
-app.run("0.0.0.0", 3000)
+app.secret_key = config("SECRET_KEY")
+app.run("0.0.0.0", config("PORT"))
