@@ -9,6 +9,12 @@ def get_session_token() -> str:
         session["token"] = token_hex(16)
     return session["token"]
 
+def get_account() -> dict | None:
+    """ returns account or none isn't found """
+    if session.get("account") is None:
+        return None
+    return session["account"]
+
 def config(field: str) -> str:
     """ returns fields value from .config """
     with open(".config", encoding="utf-8") as fd:
