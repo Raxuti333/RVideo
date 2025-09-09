@@ -1,7 +1,56 @@
 <!DOCTYPE html>
-<head>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-</head>
-<body>
-    <p>hello World!</p>
-</body>
+<html>
+    <head>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='logo.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='root.css') }}">
+    </head>
+    <body>
+        <div class="topbar">
+            <!-- Logo block  -->
+            <a href="/" class="rvideo_logo">
+                <img class="rvideo_logo_img" src="{{ url_for('static', filename='favicon.ico') }}">
+                <p class="rvideo_logo_text">RVIDEO</p>
+            </a>
+            
+            <!-- Search block  -->
+            <div id="advanced" class="search">
+                <form action="/" method="post">
+                    <div  class="search_normal" >
+
+                        <a class="search_hide_advanced" href="#">↑</a>
+                        <a class="search_show_advanced" href="#advanced">↓</a>
+                        
+                        <input type="text" name="search">
+                        <input type="submit" value="search">
+                    </div>
+
+                    <div class="search_advanced">
+                        <div class="search_advanced_item">
+                            <input id="selector" class="search_date" type="checkbox" name="before">
+                            <p class="search_date_before">before:</p>
+                            <p class="search_date_after">after:</p>
+                            <input style="display: inline;" type="date" name="date">
+                        </div>
+                        <div class="search_advanced_item">
+                            <p style="display: inline;">users:</p>
+                            <input class="search_user" type="text" name="user">
+                        </div>
+                    </div>
+                    <input type="hidden" value="{{ token }}">
+                </form>
+            </div>
+        
+            {% if account.pid %}
+            <div class="rvideo_account">
+                <img class=".rvideo_account_picture" src="/profile={{ account.pid }}">
+                <p>{{ account.username }}</p>
+            </div>
+            {% else %}
+            <a href="/login">
+                <p class="login">Login</p>
+            </a>
+            {% endif %}
+        </div>
+    </body>
+</html>

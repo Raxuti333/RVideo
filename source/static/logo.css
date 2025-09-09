@@ -1,0 +1,41 @@
+.rvideo_logo
+{
+    display: inline-flex;
+    text-decoration: none;
+    align-items: center;
+    margin: 0%;
+    user-select: none;
+}
+
+.rvideo_logo_img
+{
+    display: inline-block;
+    width: 5vw;
+    margin: 0%;
+    image-rendering: pixelated;
+}
+
+.rvideo_logo_text
+{
+    display: inline;
+    color: black;
+    margin: 0%;
+    font-size: 2vw;
+    font-family: monospace;
+}
+
+.rvideo_account
+{
+    margin-left: auto;
+    margin-right: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: grid;
+    align-content: center;
+}
+
+.rvideo_account_picture
+{
+    width: 1vw;
+    height: auto;
+}
