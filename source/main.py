@@ -2,7 +2,7 @@
 
 from flask import Flask
 from util import config
-import root, account, video
+import root, account, login, video
 
 app: Flask = Flask(__name__, "/static", template_folder="html")
 
@@ -13,17 +13,22 @@ def route_root():
 
 @app.route("/account", methods=["GET", "POST"])
 def route_account():
-    """ TODO """
+    """ routes account requests """
     return ""
+
+@app.route("/login", methods=["GET", "POST"])
+def route_login():
+    """ routes login requests """
+    return login.login_page()
 
 @app.route("/video", methods=["GET", "POST"])
 def route_video():
-    """ TODO """
+    """ routes video requests """
     return ""
 
 @app.route("/comment", methods=["POST"])
 def route_comment():
-    """ TODO """
+    """ routes comment requests """
     return ""
 
 app.secret_key = config("SECRET_KEY")
