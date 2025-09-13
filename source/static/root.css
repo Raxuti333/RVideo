@@ -49,10 +49,16 @@
 
 .search_advanced_item{ display: block; }
 
+.login_a
+{
+    text-decoration: none;
+}
+
 .login
 {
     display: inline;
     position: relative;
     font-size: 2vw;
     margin: 0;
+    color: black;
 }

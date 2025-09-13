@@ -27,7 +27,7 @@
 
                     <div class="search_advanced">
                         <div class="search_advanced_item">
-                            <input id="selector" class="search_date" type="checkbox" name="before">
+                            <input id="selector" class="search_date" type="checkbox" name="select">
                             <p class="search_date_before">before:</p>
                             <p class="search_date_after">after:</p>
                             <input style="display: inline;" type="date" name="date">
@@ -37,7 +37,7 @@
                             <input class="search_user" type="text" name="user">
                         </div>
                     </div>
-                    <input type="hidden" value="{{ token }}">
+                    <input type="hidden" name="token" value="{{ token }}">
                 </form>
             </div>
         
@@ -47,7 +47,7 @@
                 <p>{{ account.username }}</p>
             </div>
             {% else %}
-            <a href="/login">
+            <a class="login_a" href="/login">
                 <p class="login">Login</p>
             </a>
             {% endif %}
