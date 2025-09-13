@@ -39,3 +39,17 @@
     width: 1vw;
     height: auto;
 }
+
+.rvideo_login
+{
+    text-decoration: none;
+}
+
+.rvideo_login_text
+{
+    display: inline;
+    position: relative;
+    font-size: 2vw;
+    margin: 0;
+    color: black;
+}
