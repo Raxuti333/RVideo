@@ -14,7 +14,7 @@ def route_root():
 @app.route("/account", methods=["GET", "POST"])
 def route_account():
     """ routes account requests """
-    return ""
+    return account.account_page()
 
 @app.route("/login", methods=["GET", "POST"])
 def route_login():
