@@ -1,0 +1,73 @@
+.rvideo_topbar
+{
+    display: flex;
+}
+
+.rvideo_logo
+{
+    display: inline-flex;
+    text-decoration: none;
+    align-items: center;
+    margin: 0%;
+    user-select: none;
+}
+
+.rvideo_logo_img
+{
+    display: inline-block;
+    width: 5vw;
+    margin: 0%;
+    image-rendering: pixelated;
+}
+
+.rvideo_logo_text
+{
+    display: inline;
+    color: black;
+    margin: 0%;
+    font-size: 2vw;
+    font-family: monospace;
+}
+
+.rvideo_account
+{
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: grid;
+    align-content: center;
+    justify-content: center;
+
+    border-style: outset;
+    border-color: black;
+    border-width: 1px;
+}
+
+.rvideo_account_text
+{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: fit-content;
+    color: black;
+}
+
+.rvideo_login
+{
+    text-decoration: none;
+    margin: 0;
+    right: 0;
+    top: 0;
+    position: fixed;
+}
+
+.rvideo_login_text
+{
+    display: inline;
+    position: relative;
+    font-size: 2vw;
+    margin: 0;
+    color: black;
+}

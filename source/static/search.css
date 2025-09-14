@@ -1,0 +1,50 @@
+.search
+{
+    display: block;
+    margin: auto;
+    max-width: fit-content;
+    height: 100%;
+}
+
+.search_bar 
+{
+    width: 15vw;
+}
+
+.search_normal { display: inline-block; }
+
+.search_hide_advanced { display: none; }
+#advanced:target .search_hide_advanced
+{
+    display: inline;
+    padding: 1px 6px;
+    border: 1px outset buttonborder;
+    border-radius: 3px;
+    color: buttontext;
+    background-color: buttonface;
+    text-decoration: none;
+}
+
+#advanced:target .search_show_advanced { display: none; }
+.search_show_advanced
+{
+    padding: 1px 6px;
+    border: 1px outset buttonborder;
+    border-radius: 3px;
+    color: buttontext;
+    background-color: buttonface;
+    text-decoration: none;
+}
+
+.search_advanced { display: none; }
+#advanced:target .search_advanced { display: grid; }
+
+#selector:checked + .search_date_before{ display: none; }
+.search_date_before{ display: inline; }
+
+.search_date_after{ display: none; }
+#selector:checked ~ .search_date_after{ display: inline; }
+
+.search_user{ display: inline; width: 50%;}
+
+.search_advanced_item{ display: block; }

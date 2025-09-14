@@ -2,11 +2,11 @@
 <html>
     <head>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='logo.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='root.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='topbar.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
     </head>
     <body>
-        <div class="topbar">
+        <div class="rvideo_topbar">
             <!-- Logo block  -->
             <a href="/" class="rvideo_logo">
                 <img class="rvideo_logo_img" src="{{ url_for('static', filename='favicon.ico') }}">
@@ -41,7 +41,6 @@
                             <input class="search_user" type="text" name="tags">
                         </div>
                     </div>
-                    <input type="hidden" name="token" value="{{ token }}">
                 </form>
             </div>
         
