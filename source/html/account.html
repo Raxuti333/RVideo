@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='topbar.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='account.css') }}">
+    </head>
+    <body>
+        <div class="rvideo_topbar">
+            <!-- Logo block  -->
+            <a href="/" class="rvideo_logo">
+                <img class="rvideo_logo_img" src="{{ url_for('static', filename='favicon.ico') }}">
+                <p class="rvideo_logo_text">RVIDEO</p>
+            </a>
+            
+            <!-- Search block  -->
+            <div class="search">
+                <form action="account">
+                    <div class="search_normal" >
+                        <input class="search_bar" type="text" name="search">
+                        <input type="submit" value="search">
+                    </div>
+                </form>
+            </div>
+        
+            {% if account.pid == target.pid %}
+            <a class="rvideo_login" href="login?out">
+                <p class="rvideo_login_text">Logout</p>
+            </a>
+            {% elif account %}
+            <div class="rvideo_account">
+                <a style="text-decoration: none;" href="account?page={{ account.pid }}">
+                    <img src="account?picture={{ account.pid }}">
+                    <p class="rvideo_account_text">{{ account.username }}</p>
+                </a>
+            </div>
+            {% else %}
+            <a class="rvideo_login" href="login">
+                <p class="rvideo_login_text">Login</p>
+            </a>
+            {% endif %}
+        </div>
+        {% if account.pid == target.pid %}
+        <div id="edit" class="profile_block">
+            <!-- profile picture form  -->
+            <form action="account" method="post">
+                <img class="profile_block_picture" src="account?picture={{ target.pid }}">
+                <input class="profile_block_upload" type="file" name="picture">
+                <input class="profile_block_upload_submit" type="submit" value="upload">
+                <input type="hidden" name="token" value="{{ token }}">
+            </form>
+
+            <div class="profile_block_div">
+                <a style="text-decoration: none;" href="#edit">
+                    <p class="profile_block_text">{{ target.username }}</p>
+                </a>
+
+                <!-- username form  -->
+                <form action="account" method="post" class="profile_block_form_username">
+                    <input style="width: 4vw;" type="text" name="username" value="{{ target.username }}">
+                    <input type="submit" value="change">
+                    <input type="hidden" name="token" value="{{ token }}">
+                </form>
+            </div>
+            <div style="display: grid;">
+                <!-- password form  -->
+                <form class="profile_block_form_password">
+                    <p style="margin-left: auto; margin-right: auto; max-width: fit-content; margin-bottom: 0;">change password</p>
+                    <div style="display: block;">
+                        <p style="margin-left: auto; margin-right: auto; max-width: fit-content; margin-top: 2px; margin-bottom: 2px;">old:</p>
+                        <input style="margin-left: 5px; margin-right: auto; max-width: fit-content;" type="password" name="oldpaswd">
+                    </div>
+                    <div style="display: block;">
+                        <p style="margin-left: auto; margin-right: auto; max-width: fit-content; margin-top: 2px; margin-bottom: 2px;">new:</p>
+                        <input style="margin-left: 5px; margin-right: auto; max-width: fit-content;" type="password" name="newpaswd">
+                    </div>
+                    <input style="display: block; margin-top: 2px; margin-left: auto; margin-right: auto; max-width: fit-content;" type="submit" value="change">
+                    <input type="hidden" name="token" value="{{ token }}">
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="profile_block">
+            <img class="profile_block_picture" src="account?picture={{ target.pid }}">
+            <div class="profile_block_div">
+                <p class="profile_block_text">{{ target.username }}</p>
+            </div>
+        </div>
+        {% endif %}
+        <div class="video_grid">
+            {% for video in videos %}
+            <a href="video?view={{ video.vid }}">
+                <div>
+                    Hello World
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </body>
+</html>

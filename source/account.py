@@ -41,9 +41,17 @@ def account_profile(query: list[str], account: dict | None):
     """ TODO """
 
     token = get_session_token()
+    
     target = db.query("SELECT pid, username FROM profile WHERE pid = ?", [query[-1]])
 
-    return render_template("account.html", account = account, target = target, token = token)
+    videos = db.query("SELECT vid, name FROM video WHERE pid = ?", [query[-1]], -1)
+
+    return render_template("account.html",
+                           account = account,
+                           target = target,
+                           token = token,
+                           videos = videos
+                           )
 
 def account_picture(query: list[str]):
     """ serve account picture  """
