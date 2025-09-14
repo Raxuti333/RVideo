@@ -32,12 +32,21 @@
     margin-bottom: auto;
     display: grid;
     align-content: center;
+    justify-content: center;
+
+    border-style: outset;
+    border-color: black;
+    border-width: 1px;
 }
 
-.rvideo_account_picture
+.rvideo_account_text
 {
-    width: 1vw;
-    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: fit-content;
+    color: black;
 }
 
 .rvideo_login

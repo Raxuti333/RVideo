@@ -21,7 +21,7 @@
                         <a class="search_hide_advanced" href="#">↑</a>
                         <a class="search_show_advanced" href="#advanced">↓</a>
                         
-                        <input type="text" name="search">
+                        <input class="search_bar" type="text" name="search">
                         <input type="submit" value="search">
                     </div>
 
@@ -47,8 +47,10 @@
         
             {% if account %}
             <div class="rvideo_account">
-                <img class=".rvideo_account_picture" src="account={{ account.pid }}">
-                <p>{{ account.username }}</p>
+                <a style="text-decoration: none;" href="account">
+                    <img src="account?picture={{ account.pid }}">
+                    <p class="rvideo_account_text">{{ account.username }}</p>
+                </a>
             </div>
             {% else %}
             <a class="rvideo_login" href="login">

@@ -11,6 +11,11 @@
     height: 100%;
 }
 
+.search_bar 
+{
+    width: 15vw;
+}
+
 .search_normal { display: inline-block; }
 
 .search_hide_advanced { display: none; }
