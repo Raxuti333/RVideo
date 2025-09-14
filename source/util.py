@@ -1,7 +1,11 @@
 """ TODO """
 
+#from os import stat
+import builtins
+from os.path import isfile
 from secrets import token_hex
-from flask import session, request, flash, get_flashed_messages
+from io import BytesIO
+from flask import session, request, flash, get_flashed_messages, send_file
 
 def get_flash() -> list[str]:
     """ get messages from flash """
@@ -29,7 +33,7 @@ def set_account(account: dict) -> None:
     """ sets value to account if it's found """
     session["account"] = account
 
-def get_form(fields: list[(str, type)]) -> dict:
+def get_form(fields: list[tuple[str, type]]) -> dict:
     """ returns dictionary containing fields values """
     form: dict = {}
     for f, t in fields:
@@ -52,6 +56,29 @@ def get_query() -> list[str]:
 def get_method() -> str:
     """ returns request method """
     return request.method
+
+def get_filename(fid, root: str, types: list[str]) -> str | None:
+    """ returns files relative path """
+    match(type(fid)):
+        case builtins.int:
+            hex_fid = hex(fid)
+        case builtins.str:
+            if not fid.isdigit():
+                return None
+            hex_fid = hex(int(fid))
+        case _:
+            return None
+
+    for t in types:
+        path: str = root + "/" + hex_fid + "." + t
+        if isfile(path):
+            return path
+    return None
+
+def send_data(path: str, mimetype: str):
+    """ sends file with mimetype """
+    with open(path, "rb") as fd:
+        return send_file(BytesIO(fd.read()), mimetype=mimetype)
 
 def check_password(password: str) -> tuple[bool, str]:
     """ checks if password is acceptable """
