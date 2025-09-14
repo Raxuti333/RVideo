@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='topbar.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='account_search.css') }}">
+    </head>
+    <body>
+        <div class="rvideo_topbar">
+            <!-- Logo block  -->
+            <a href="/" class="rvideo_logo">
+                <img class="rvideo_logo_img" src="{{ url_for('static', filename='favicon.ico') }}">
+                <p class="rvideo_logo_text">RVIDEO</p>
+            </a>
+            
+            <!-- Search block  -->
+            <div class="search">
+                <form>
+                    <div class="search_normal" >
+                        <input class="search_bar" type="text" name="search">
+                        <input type="submit" value="search">
+                    </div>
+                </form>
+            </div>
+        
+            {% if account %}
+            <div class="rvideo_account">
+                <a style="text-decoration: none;" href="account?page={{ account.pid }}">
+                    <img src="account?picture={{ account.pid }}">
+                    <p class="rvideo_account_text">{{ account.username }}</p>
+                </a>
+            </div>
+            {% else %}
+            <a class="rvideo_login" href="login">
+                <p class="rvideo_login_text">Login</p>
+            </a>
+            {% endif %}
+        </div>
+        <div class="profile_grid">
+            {% for target in accounts %}
+            <a href="account?page={{ target.pid }}">
+                <div class="profile_item">
+                    <img src="account?picture={{ target.pid }}">
+                    <p class="profile_item_text">{{ target.username }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </body>
+</html>
