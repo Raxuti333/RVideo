@@ -33,6 +33,10 @@ def set_account(account: dict) -> None:
     """ sets value to account if it's found """
     session["account"] = account
 
+def clear_account() -> None:
+    """ clears account from session """
+    session.pop("account")
+
 def get_form(fields: list[tuple[str, type]]) -> dict:
     """ returns dictionary containing fields values """
     form: dict = {}
