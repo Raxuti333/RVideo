@@ -1,6 +1,5 @@
 """ Handle login, logout and signup requests """
 
-
 from flask import render_template, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from util import get_session_token, get_account, set_account
@@ -89,7 +88,7 @@ def login_page():
     query   = get_query()
 
     if account is not None:
-        return redirect("/account")
+        return redirect("/account?page=" + str(account["pid"]))
 
     if query[0] == "form":
         return handle_form(token)
