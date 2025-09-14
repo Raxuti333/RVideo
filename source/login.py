@@ -38,12 +38,12 @@ def signup(form: dict):
              [form["username"], generate_password_hash(form["password"])],
              0)
 
-    set_flash(["account succesfully created!", "#ff0033"])
+    set_flash(["account succesfully created!", "#00b500"])
     return redirect("/login")
 
 def handle_form(token: str):
-    """ TODO """
-    target: dict = { True: "#signup", False: "#" }
+    """ Handle form and select signup or login """
+    target: dict = { False: "/login#signup", True: "/login#" }
 
     form = get_form([
                      ("username", str),
@@ -55,7 +55,7 @@ def handle_form(token: str):
 
     if form["token"] != token:
         set_flash(["CSRF ERROR", "#ff0033"])
-        return redirect("/login" + target[form["signup"]])
+        return redirect(target[form["signup"]])
 
     user = db.query("SELECT pid, username, password FROM profile WHERE username = ?",
                     [form["username"]])
@@ -72,7 +72,7 @@ def handle_form(token: str):
             True: "username is already taken"
             }
         set_flash([error[form["signup"]], "#ff0033"])
-        return redirect("/login" + target[form["signup"]])
+        return redirect(target[form["signup"]])
 
     if form["signup"]:
         return signup(form)
