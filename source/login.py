@@ -2,8 +2,8 @@
 
 from flask import render_template, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
-from util import get_session_token, get_account, set_account
-from util import get_form, get_flash, set_flash, get_query, check_password
+from util import get_session_token, get_account, set_account, check_username
+from util import get_form, get_flash, set_flash, get_method, check_password
 import db
 
 def login(user: dict, form: dict):
@@ -29,8 +29,9 @@ def signup(form: dict):
         set_flash(["passwords don't match", "#ff0033"])
         return redirect("/login#signup")
 
-    if len(form["username"]) == 0:
-        set_flash(["username too short", "#ff0033"])
+    verdict = check_username(form["username"])
+    if not verdict[0]:
+        set_flash([verdict[1], "#ff0033"])
         return redirect("/login#signup")
 
     db.query("INSERT INTO profile (username, password, date) VALUES(?, ?, unixepoch('now'))",
@@ -85,12 +86,11 @@ def login_page():
     flash   = get_flash()
     token   = get_session_token()
     account = get_account()
-    query   = get_query()
 
     if account is not None:
         return redirect("/account?page=" + str(account["pid"]))
 
-    if query[0] == "form":
+    if get_method() == "POST":
         return handle_form(token)
 
     return render_template("login.html", token = token, message = flash)
