@@ -27,11 +27,11 @@ def get_account() -> dict | None:
         return None
     return session["account"]
 
-def set_account(key: str, value) -> None:
+def set_account(account: dict) -> None:
     """ sets value to account if it's found """
     if session.get("account") is None:
         return
-    session["account"][key] = value
+    session["account"] = account
 
 def get_form(fields: list[(str, type)]) -> dict:
     """ returns dictionary containing fields values """
