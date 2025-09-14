@@ -2,8 +2,8 @@
 
 from flask import render_template, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
-from util import get_session_token, get_account, set_account, check_username
-from util import get_form, get_flash, set_flash, get_method, check_password
+from util import get_session_token, get_account, set_account, check_username, clear_account
+from util import get_form, get_flash, set_flash, get_method, get_query, check_password
 import db
 
 def login(user: dict, form: dict):
@@ -88,7 +88,11 @@ def login_page():
     account = get_account()
 
     if account is not None:
-        return redirect("/account?page=" + str(account["pid"]))
+        if get_query()[0] == "out":
+            clear_account()
+            return redirect("/")
+        else:
+            return redirect("/account?page=" + str(account["pid"]))
 
     if get_method() == "POST":
         return handle_form(token)
