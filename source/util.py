@@ -57,7 +57,7 @@ def check_password(password: str) -> tuple[bool, str]:
         return (False, "password must contain at leas one special character")
     return (True, "Success")
 
-def config(field: str) -> str:
+def config(field: str) -> str | int:
     """ returns fields value from .config """
     with open(".config", encoding="utf-8") as fd:
         file: str = fd.read()
@@ -65,4 +65,26 @@ def config(field: str) -> str:
     begin: int = file.find("[" + field)
     end: int = file.find("]", begin)
 
-    return file[:end][begin + len(field) + 2:]
+    type_begin: int = file.find(":", begin)
+    type_end: int = file.find(" ", type_begin)
+
+    type_info: str = file[:type_end][type_begin + 1:]
+
+    data: str = file[:end][type_end + 1:]
+
+    match(type_info):
+        case "INTEGER":
+            return int(data)
+        case "SIZE":
+            multiplier: dict[str, int] = {
+                "B": 1,
+                "K": 1024,
+                "M": 1048576,
+                "G": 1073741824,
+                "T": 1099511627776,
+                "P": 1125899906842624
+            }
+            return int(data.replace(data[-1], "")) * multiplier[data[-1]]
+        # TEXT is default case
+        case _:
+            return data
