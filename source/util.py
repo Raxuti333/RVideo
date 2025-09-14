@@ -37,7 +37,9 @@ def get_form(fields: list[tuple[str, type]]) -> dict:
     """ returns dictionary containing fields values """
     form: dict = {}
     for f, t in fields:
-        if t is bool:
+        if t == "FILE":
+            form[f] = request.files.get(f)
+        elif t is bool:
             form[f] = request.form.get(f, type=str) == "True"
         else:
             form[f] = request.form.get(f, type=t)
