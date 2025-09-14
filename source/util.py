@@ -23,14 +23,10 @@ def get_session_token() -> str:
 
 def get_account() -> dict | None:
     """ returns account or none if it isn't found """
-    if session.get("account") is None:
-        return None
-    return session["account"]
+    return session.get("account")
 
 def set_account(account: dict) -> None:
     """ sets value to account if it's found """
-    if session.get("account") is None:
-        return
     session["account"] = account
 
 def get_form(fields: list[(str, type)]) -> dict:
