@@ -49,6 +49,10 @@ def get_query() -> list[str]:
         return [""]
     return str(binary, encoding="utf-8").split("=")
 
+def get_method() -> str:
+    """ returns request method """
+    return request.method
+
 def check_password(password: str) -> tuple[bool, str]:
     """ checks if password is acceptable """
     if len(password) < 4:
