@@ -57,6 +57,12 @@ def check_password(password: str) -> tuple[bool, str]:
         return (False, "password must contain at leas one special character")
     return (True, "Success")
 
+def check_username(username: str) -> tuple[bool, str]:
+    """ checks if username is acceptable """
+    if len(username) == 0:
+        return (False, "username too short")
+    return (True, "Success")
+
 def config(field: str) -> str | int:
     """ returns fields value from .config """
     with open(".config", encoding="utf-8") as fd:
