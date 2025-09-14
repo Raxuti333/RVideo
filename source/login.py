@@ -34,7 +34,7 @@ def signup(form: dict):
         set_flash(["username too short", "#ff0033"])
         return redirect("/login#signup")
 
-    db.query("INSERT INTO profile (username, password) VALUES(?, ?)",
+    db.query("INSERT INTO profile (username, password, date) VALUES(?, ?, unixepoch('now'))",
              [form["username"], generate_password_hash(form["password"])],
              0)
 
@@ -81,7 +81,7 @@ def handle_form(token: str):
 
 
 def login_page():
-    """ TODO """
+    """ serve page or process form """
 
     flash   = get_flash()
     token   = get_session_token()
