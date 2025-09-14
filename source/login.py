@@ -2,12 +2,20 @@
 
 
 from flask import render_template, redirect
-from werkzeug.security import generate_password_hash
-from util import get_session_token, get_account, get_form, get_flash, set_flash, get_query, check_password
+from werkzeug.security import generate_password_hash, check_password_hash
+from util import get_session_token, get_account, set_account
+from util import get_form, get_flash, set_flash, get_query, check_password
 import db
 
-def login(user, form: dict):
-    """ TODO """
+def login(user: dict, form: dict):
+    """ process login form """
+
+    if not check_password_hash(user["password"], form["password"]):
+        set_flash(["incorrect password", "#ff0033"])
+        return redirect("/login")
+
+    set_account({"pid": user["pid"], "username": user["username"]})
+
     return redirect("/")
 
 def signup(form: dict):
@@ -49,7 +57,8 @@ def handle_form(token: str):
         set_flash(["CSRF ERROR", "#ff0033"])
         return redirect("/login" + target[form["signup"]])
 
-    user = db.query("SELECT password FROM profile WHERE username = ?", [form["username"]])
+    user = db.query("SELECT pid, username, password FROM profile WHERE username = ?",
+                    [form["username"]])
 
     # Truth table
     # !user | signup | value
