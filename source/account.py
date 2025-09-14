@@ -1,16 +1,16 @@
 """ TODO """
 
 from flask import render_template, redirect
-from util import get_query, get_method, get_filename, get_form, get_account, send_data, get_session_token
+from werkzeug.security import generate_password_hash, check_password_hash
+from util import get_query, get_method, get_filename, get_form
+from util import set_flash, get_flash, check_password, check_username
+from util import get_session_token, send_data, set_account, get_account
 import db
-
-from sqlite3 import Row, Cursor
 
 def account_page():
     """ account page """
 
     query = get_query()
-
     account = get_account()
 
     if get_method() == "POST":
@@ -29,7 +29,7 @@ def account_page():
 
     select: bool = query[0] == "search"
 
-    accounts: Cursor = db.query(
+    accounts = db.query(
         "SELECT pid, username FROM profile " + 
         condition[select],
         [query[-1] + "%"] if select else [],
@@ -41,16 +41,16 @@ def account_profile(query: list[str], account: dict | None):
     """ TODO """
 
     token = get_session_token()
-    
+    error = get_flash()
     target = db.query("SELECT pid, username FROM profile WHERE pid = ?", [query[-1]])
-
     videos = db.query("SELECT vid, name FROM video WHERE pid = ?", [query[-1]], -1)
 
     return render_template("account.html",
                            account = account,
                            target = target,
                            token = token,
-                           videos = videos
+                           videos = videos,
+                           error = error
                            )
 
 def account_picture(query: list[str]):
@@ -72,14 +72,78 @@ def account_picture(query: list[str]):
 def account_edit(account: dict):
     """ edit account """
 
+    token = get_session_token()
+
     if account is None:
         return redirect("/")
 
     form = get_form([
+        ("type",     str),
+        ("token",    str),
         ("username", str),
         ("oldpaswd", str),
         ("newpaswd", str),
         ("picture",  "FILE")
         ])
 
-    return redirect("/account?page=" + account["pid"])
+    if token != form["token"]:
+        set_flash(["CSRF", "#ff0033"])
+        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+
+    functions: dict = {
+        "picture": edit_picture,
+        "username": edit_username,
+        "password": edit_password
+        }
+
+    func = functions.get(form["type"])
+    if func is None:
+        set_flash(["Edited hidden form field", "#ff0033"])
+        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+
+    return func(account, form)
+
+def edit_picture(account: dict, form: dict):
+    """ change profile picutre if suitable """
+    return ""
+
+def edit_username(account: dict, form: dict):
+    """ chages username if suitable """
+
+    verdict = check_username(form["username"])
+    if not verdict[0]:
+        set_flash([verdict[1], "#ff0033"])
+        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+
+    users = db.query("SELECT COUNT(pid) FROM profile WHERE username = ?", [form["username"]])
+
+    if users[0] != 0:
+        set_flash(["username is taken", "#ff0033"])
+        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+
+    db.query("UPDATE profile SET username = ? WHERE pid = ?", [form["username"], account["pid"]], 0)
+
+    account["username"] = form["username"]
+    set_account(account)
+
+    return redirect("/account?page=" + str(account["pid"]))
+
+def edit_password(account: dict, form: dict):
+    """ change password if suitable """
+
+    password = db.query("SELECT password FROM profile WHERE pid = ?", [account["pid"]])
+
+    if not check_password_hash(password[0], form["oldpaswd"]):
+        set_flash(["old password does not match", "#ff0033"])
+        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+
+    verdict = check_password(form["newpaswd"])
+    if not verdict[0]:
+        set_flash([verdict[1], "#ff0033"])
+        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+
+    db.query("UPDATE profile SET password = ? WHERE pid = ?",
+             [generate_password_hash(form["newpaswd"]), account["pid"]],
+             0)
+
+    return redirect("/account?page=" + str(account["pid"]))
