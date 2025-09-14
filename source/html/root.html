@@ -34,7 +34,11 @@
                         </div>
                         <div class="search_advanced_item">
                             <p style="display: inline;">users:</p>
-                            <input class="search_user" type="text" name="user">
+                            <input class="search_user" type="text" name="users">
+                        </div>
+                        <div class="search_advanced_item">
+                            <p style="display: inline;">tags:</p>
+                            <input class="search_user" type="text" name="tags">
                         </div>
                     </div>
                     <input type="hidden" name="token" value="{{ token }}">
@@ -43,11 +47,11 @@
         
             {% if account %}
             <div class="rvideo_account">
-                <img class=".rvideo_account_picture" src="/profile={{ account.pid }}">
+                <img class=".rvideo_account_picture" src="account={{ account.pid }}">
                 <p>{{ account.username }}</p>
             </div>
             {% else %}
-            <a class="rvideo_login" href="/login">
+            <a class="rvideo_login" href="login">
                 <p class="rvideo_login_text">Login</p>
             </a>
             {% endif %}
