@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='topbar.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='video.css') }}">
+    </head>
+    <body>
+        <div class="rvideo_topbar">
+            <!-- Logo block  -->
+            <a href="/" class="rvideo_logo">
+                <img class="rvideo_logo_img" src="{{ url_for('static', filename='favicon.ico') }}">
+                <p class="rvideo_logo_text">RVIDEO</p>
+            </a>
+    
+            <div style="margin-left: auto;" class="rvideo_account">
+                <a style="text-decoration: none;" href="account?page={{ account.pid }}">
+                    <img class="rvideo_account_image" src="account?picture={{ account.pid }}">
+                    <p class="rvideo_account_text">{{ account.username }}</p>
+                </a>
+            </div>
+        </div>
+
+        <form action="video" method="post" enctype="multipart/form-data">
+            <div class="upload_grid">
+                <div style="margin-right: 25%;" class="upload_grid_item">
+                    <p>Upload</p>
+                </div>
+                <div class="upload_grid_item">
+                    <p class="upload_grid_item_text">Video:</p>
+                    <input style="width: 181px;" type="file" name="video">
+                </div>
+                <div class="upload_grid_item">
+                    <p class="upload_grid_item_text">Title:</p>
+                    <input type="text" name="title">
+                </div>
+                <div class="upload_grid_description">
+                    <p class="upload_grid_description_text">Description:</p>
+                    <textarea name="description" rows="5" cols="24"></textarea>
+                </div>
+                <div style="margin-right: 25%;" class="upload_grid_item">
+                    <input type="submit" value="upload">
+                </div>
+            </div>
+        </form>
+    </body>
+</html>
