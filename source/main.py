@@ -2,11 +2,15 @@
 
 from flask import Flask
 from util import config
-import root, account, login, video
+import root
+import account
+import login
+import video
+import comment
 
 app: Flask = Flask(__name__, "/static", template_folder="html")
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def route_root():
     """ route to landing page """
     return root.root_page()
@@ -24,12 +28,12 @@ def route_login():
 @app.route("/video", methods=["GET", "POST"])
 def route_video():
     """ routes video requests """
-    return ""
+    return video.video_page()
 
 @app.route("/comment", methods=["POST"])
 def route_comment():
     """ routes comment requests """
-    return ""
+    return comment.comment_form()
 
 app.secret_key = config("SECRET_KEY")
 app.config["MAX_CONTENT_SIZE"] = config("MAX_FILE_SIZE")
