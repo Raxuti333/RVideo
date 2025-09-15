@@ -13,7 +13,6 @@ def query(sql: str, params: list = None, count: int = 1) -> sqlite3.Row | sqlite
     db.row_factory = sqlite3.Row
 
     cursor = db.execute(sql, params)
-    db.commit()
 
     match(count):
         case 1: result = cursor.fetchone()
@@ -21,6 +20,7 @@ def query(sql: str, params: list = None, count: int = 1) -> sqlite3.Row | sqlite
         case 0: result = None
         case _: result = cursor.fetchmany(count)
 
+    db.commit()
     db.close()
 
     return result
