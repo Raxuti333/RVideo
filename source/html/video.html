@@ -42,6 +42,9 @@
                 <div style="margin-right: 25%;" class="upload_grid_item">
                     <input type="submit" value="upload">
                 </div>
+                <div class="upload_grid_item">
+                    <p style="color: {{ message[1] }};" class="upload_grid_item_text">{{ message[0] }}</p>
+                </div>
             </div>
             <input type="hidden" name="token" value="{{ token }}">
         </form>
