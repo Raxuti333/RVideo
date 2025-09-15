@@ -1,4 +1,4 @@
-""" TODO """
+""" account.html and accounts_search.html rendering and form handling """
 
 from os import remove
 from flask import render_template, redirect
@@ -41,7 +41,7 @@ def account_page():
     return render_template("account_search.html", account = account, accounts = accounts)
 
 def account_profile(query: list[str], account: dict | None):
-    """ TODO """
+    """ server profile page """
 
     token = get_session_token()
     error = get_flash()
