@@ -74,6 +74,30 @@ def get_method() -> str:
     """ returns request method """
     return request.method
 
+def get_tags(text: str) -> str:
+    """ returns a string only containing tags found in text """
+    tags: str = ""
+    index: int = text.find("#")
+    while index != -1:
+        space = text.find(" ", index)
+        next_htag = text.find("#", index + 1)
+
+        key: int = 2 * (space == -1) + (next_htag == -1)
+
+        match(key):
+            case 0:
+                end = space if space < next_htag else next_htag
+            case 1:
+                end = space
+            case 2:
+                end = next_htag
+            case 3:
+                end = len(text)
+
+        tags += text[index:end]
+        index = next_htag
+    return tags
+
 def get_filename(fid, root: str, types: list[str]) -> str | None:
     """ returns files relative path """
     match(type(fid)):
