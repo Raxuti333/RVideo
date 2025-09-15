@@ -44,7 +44,7 @@
         {% if account.pid == target.pid %}
         <div id="edit" class="profile_block">
             <!-- profile picture form  -->
-            <form action="account" method="post">
+            <form action="account" method="post" enctype="multipart/form-data">
                 <img class="profile_block_picture" src="account?picture={{ target.pid }}">
                 <input class="profile_block_upload" type="file" name="picture">
                 <input class="profile_block_upload_submit" type="submit" value="upload">
