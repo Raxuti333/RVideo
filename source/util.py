@@ -2,10 +2,12 @@
 
 #from os import stat
 import builtins
+from os import SEEK_SET, SEEK_END
 from os.path import isfile
 from secrets import token_hex
 from io import BytesIO
 from flask import session, request, flash, get_flashed_messages, send_file
+from werkzeug.datastructures import FileStorage
 
 def get_flash() -> list[str]:
     """ get messages from flash """
@@ -80,6 +82,23 @@ def get_filename(fid, root: str, types: list[str]) -> str | None:
         if isfile(path):
             return path
     return None
+
+def check_file(file: FileStorage, max_size: int, types: list[str]) -> tuple[bool, str]:
+    """ checks if file is acceptable """
+
+    if file.filename == "":
+        return (False, "No file selected")
+
+    file_type: str = file.filename.split(".")[-1]
+    if file_type not in types:
+        return (False, f"file type f{ file_type } is not supported")
+
+    file.seek(0, SEEK_END)
+    if file.tell() > max_size:
+        return (False, f"File is f{ file.tell() } while maximum is f{ max_size }")
+    file.seek(0, SEEK_SET)
+
+    return True
 
 def send_data(path: str, mimetype: str):
     """ sends file with mimetype """
