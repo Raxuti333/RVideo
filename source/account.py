@@ -48,7 +48,7 @@ def account_profile(query: list[str], account: dict | None):
     target = db.query("SELECT pid, username FROM profile WHERE pid = ?", [query[-1]])
     videos = db.query("SELECT vid, name FROM video WHERE pid = ?", [query[-1]], -1)
 
-# TODO videos from user 
+# TODO videos from user
     return render_template("account.html",
                            account = account,
                            target = target,
@@ -74,9 +74,7 @@ def account_picture(query: list[str]):
     return send_data(path, mimetype[path.split(".")[-1]])
 
 def account_edit(account: dict):
-    """ edit account 
-        TODO check if form fields being none breaks shit
-    """
+    """ edit account """
 
     token = get_session_token()
 
@@ -112,6 +110,10 @@ def account_edit(account: dict):
 def edit_picture(account: dict, form: dict):
     """ change profile picutre if suitable """
 
+    if form["picture"] is None:
+        set_flash(["Wrong form", "#ff0033"])
+        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+
     verdict = check_file(form["picture"], config("MAX_PFP_SIZE"), pfp_file_types)
     if not verdict[0]:
         set_flash([verdict[1], "#ff0033"])
@@ -130,6 +132,10 @@ def edit_picture(account: dict, form: dict):
 
 def edit_username(account: dict, form: dict):
     """ chages username if suitable """
+
+    if form["username"] is None:
+        set_flash(["Wrong form", "#ff0033"])
+        return redirect("/account?page=" + str(account["pid"]) + "#edit")
 
     verdict = check_username(form["username"])
     if not verdict[0]:
@@ -151,6 +157,10 @@ def edit_username(account: dict, form: dict):
 
 def edit_password(account: dict, form: dict):
     """ change password if suitable """
+
+    if form["oldpaswd"] is None or form["newpaswd"] is None:
+        set_flash(["Wrong form", "#ff0033"])
+        return redirect("/account?page=" + str(account["pid"]) + "#edit")
 
     password = db.query("SELECT password FROM profile WHERE pid = ?", [account["pid"]])
 
