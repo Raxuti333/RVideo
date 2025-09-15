@@ -32,4 +32,5 @@ def route_comment():
     return ""
 
 app.secret_key = config("SECRET_KEY")
-app.run("0.0.0.0", config("PORT"))
+app.config["MAX_CONTENT_SIZE"] = config("MAX_FILE_SIZE")
+app.run("0.0.0.0", config("PORT"), threaded=True)
