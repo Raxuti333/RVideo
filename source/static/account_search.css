@@ -26,6 +26,13 @@
     margin: 1vw;
 }
 
+.profile_item_image
+{
+    width: 5vw;
+    height: auto;
+    image-rendering: pixelated;
+}
+
 .profile_item_text
 {
     margin-left: auto;
