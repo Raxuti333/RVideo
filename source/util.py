@@ -9,6 +9,15 @@ from io import BytesIO
 from flask import session, request, flash, get_flashed_messages, send_file
 from werkzeug.datastructures import FileStorage
 
+sizes: dict[str, int] = {
+    "B": 1,
+    "K": 1024,
+    "M": 1048576,
+    "G": 1073741824,
+    "T": 1099511627776,
+    "P": 1125899906842624
+}
+
 def get_flash() -> list[str]:
     """ get messages from flash """
     flashed = get_flashed_messages()
@@ -91,14 +100,16 @@ def check_file(file: FileStorage, max_size: int, types: list[str]) -> tuple[bool
 
     file_type: str = file.filename.split(".")[-1]
     if file_type not in types:
-        return (False, f"file type f{ file_type } is not supported")
+        return (False, f"file type { file_type } is not supported")
 
     file.seek(0, SEEK_END)
     if file.tell() > max_size:
-        return (False, f"File is f{ file.tell() } while maximum is f{ max_size }")
+        return (False,
+                f"File is { int_to_size(file.tell()) } while maximum is { int_to_size(max_size) }"
+               )
     file.seek(0, SEEK_SET)
 
-    return True
+    return (True, "Success")
 
 def send_data(path: str, mimetype: str):
     """ sends file with mimetype """
@@ -138,15 +149,16 @@ def config(field: str) -> str | int:
         case "INTEGER":
             return int(data)
         case "SIZE":
-            multiplier: dict[str, int] = {
-                "B": 1,
-                "K": 1024,
-                "M": 1048576,
-                "G": 1073741824,
-                "T": 1099511627776,
-                "P": 1125899906842624
-            }
-            return int(data.replace(data[-1], "")) * multiplier[data[-1]]
+            return int(data.replace(data[-1], "")) * sizes[data[-1]]
         # TEXT is default case
         case _:
             return data
+
+def int_to_size(number: int) -> str:
+    """ converts integer to human readable size """
+    for size in sizes.items().__reversed__():
+        if number >= size[1]:
+            value: str = str(float(number) / float(size[1]))
+            return value[:value.find(".") + 2] + size[0]
+
+    return "NaS"
