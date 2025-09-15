@@ -141,9 +141,9 @@ def config(field: str) -> str | int:
     type_begin: int = file.find(":", begin)
     type_end: int = file.find(" ", type_begin)
 
-    type_info: str = file[:type_end][type_begin + 1:]
+    type_info: str = file[type_begin + 1:type_end]
 
-    data: str = file[:end][type_end + 1:]
+    data: str = file[type_end + 1:end]
 
     match(type_info):
         case "INTEGER":
