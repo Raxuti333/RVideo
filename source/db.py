@@ -3,10 +3,10 @@
 import sqlite3
 
 def query(sql: str, params: list = None, count: int = 1) -> sqlite3.Row | sqlite3.Cursor | None:
-    """ query data from sqlite3 db
-    count = 1: fetchone()
-    count = -1: fetchall()
-    count = n: fetchmany(n)
+    """ query data from sqlite3 db\n
+    count = 1: fetchone()\n
+    count = -1: fetchall()\n
+    count = n: fetchmany(n)\n
     count = 0: None
     """
     db = sqlite3.connect("db")
