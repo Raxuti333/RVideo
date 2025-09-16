@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='topbar.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='view.css') }}">
+    </head>
+    <body>
+        <div class="rvideo_topbar">
+            <!-- Logo block  -->
+            <a href="/" class="rvideo_logo">
+                <img class="rvideo_logo_img" src="{{ url_for('static', filename='favicon.ico') }}">
+                <p class="rvideo_logo_text">RVIDEO</p>
+            </a>
+    
+            <div style="margin-left: auto;" class="rvideo_account">
+                <a style="text-decoration: none;" href="account?page={{ account.pid }}">
+                    <img class="rvideo_account_image" src="account?picture={{ account.pid }}">
+                    <p class="rvideo_account_text">{{ account.username }}</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="video_container">
+            <div style="display: grid;">
+                <video controls width="auto" height="420vh" style="margin: 0;">
+                    <source src="video?stream={{ vid }}">
+                </video>
+                <div style="display: flex;">
+                    <div class="rvideo_account">
+                        <a style="text-decoration: none;" href="account?page={{ target.pid }}">
+                            <img class="rvideo_account_image" src="account?picture={{ target.pid }}">
+                            <p class="rvideo_account_text">{{ target.username }}</p>
+                        </a>
+                    </div>
+                    <div style="display: grid; margin-left: 10px;">
+                        <p>{{ video.name }}</p>
+                        <p>{{ video.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -33,7 +33,20 @@ def video_view(account: dict, token: str, query: list[str]):
     """ TODO """
     vid: str = query[-1]
 
-    return render_template("view.html", token = token, account = account, vid = vid)
+    video = db.query("SELECT name, description, pid FROM video WHERE vid = ?", [vid])
+
+    if video is None:
+        return redirect("/")
+
+    target = db.query("SELECT pid, username FROM profile WHERE pid = ?", [video["pid"]])
+
+    return render_template("view.html",
+                           token = token,
+                           account = account,
+                           video = video,
+                           target = target,
+                           vid = vid
+                          )
 
 def video_stream(query: str):
     """ 
