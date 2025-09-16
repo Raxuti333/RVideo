@@ -74,6 +74,14 @@ def get_method() -> str:
     """ returns request method """
     return request.method
 
+def get_range() -> int:
+    """ gets range from header """
+    hrange: str = request.headers.get("range")
+    if hrange is None:
+        return 0
+
+    return int(hrange[6:hrange.find("-")])
+
 def get_tags(text: str) -> str:
     """ returns a string only containing tags found in text """
     tags: str = ""
