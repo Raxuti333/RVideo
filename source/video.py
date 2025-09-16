@@ -1,4 +1,4 @@
-""" TODO """
+""" server and handle video pages and forms """
 
 from os import remove, SEEK_SET, SEEK_END
 from flask import render_template, redirect, abort, Response
@@ -30,7 +30,7 @@ def video_page():
     return render_template("video.html", token = token, account = account, message = message)
 
 def video_view(account: dict, token: str, query: list[str]):
-    """ TODO """
+    """ servers view page queried by user """
     vid: str = query[-1]
 
     video = db.query("SELECT name, description, pid FROM video WHERE vid = ?", [vid])
