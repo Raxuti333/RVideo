@@ -4,6 +4,7 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='topbar.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='root.css') }}">
     </head>
     <body>
         <div class="rvideo_topbar">
@@ -57,9 +58,14 @@
                 </a>
             </div>
             {% else %}
-            <a class="rvideo_login" href="login">
-                <p class="rvideo_login_text">Login</p>
-            </a>
+            <div class="rvideo_login">
+                <a style="text-decoration: none;" href="login">
+                    <p class="rvideo_login_text">Login</p>
+                </a>
+                <a style="text-decoration: none;" href="account">
+                    <p style="color: black;">account search</p>
+                </a>
+            </div>
             {% endif %}
         </div>
     </body>

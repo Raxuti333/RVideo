@@ -63,6 +63,7 @@
 
 .rvideo_login
 {
+    display: grid;
     text-decoration: none;
     margin: 0;
     right: 0;
