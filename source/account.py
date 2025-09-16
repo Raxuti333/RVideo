@@ -46,9 +46,11 @@ def account_profile(query: list[str], account: dict | None):
     token = get_session_token()
     error = get_flash()
     target = db.query("SELECT pid, username FROM profile WHERE pid = ?", [query[-1]])
-    videos = db.query("SELECT vid, name FROM video WHERE pid = ?", [query[-1]], -1)
+    videos = db.query("SELECT vid, name, pid FROM video WHERE pid = ?", [query[-1]], -1)
 
-# TODO videos from user
+    if target is None:
+        return redirect("/account")
+
     return render_template("account.html",
                            account = account,
                            target = target,
