@@ -1,0 +1,31 @@
+.video_grid
+{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+    align-content: center;
+    justify-content: center;
+}
+
+.video_item
+{
+    display: grid;
+    align-content: center;
+    justify-content: center;
+
+    width: 10vw;
+    height: 10vw;
+
+    margin: 0.5vw;
+    border-width: 1px;
+    border-color: black;
+    border-style: outset;
+}
+
+.video_item_text
+{
+    display: block;
+
+    margin-left: auto;
+    margin-right: auto;
+    max-width: fit-content;
+}
