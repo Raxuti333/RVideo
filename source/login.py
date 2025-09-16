@@ -43,7 +43,7 @@ def signup(form: dict):
 
 def handle_form(token: str):
     """ Handle form and select signup or login """
-    target: dict = { False: "/login#signup", True: "/login#" }
+    target: dict = { False: "/login#", True: "/login#signup" }
 
     form = get_form([
                      ("username", str),
