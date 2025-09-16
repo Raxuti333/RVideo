@@ -1,10 +1,10 @@
 """ TODO """
 
-from os import remove
-from flask import render_template, redirect
+from os import remove, SEEK_SET, SEEK_END
+from flask import render_template, redirect, abort, Response
 from util import get_query, get_method, get_filename, get_form, check_file
-from util import set_flash, get_flash, check_password, check_username, config
-from util import get_session_token, send_data, set_account, get_account, get_tags
+from util import set_flash, get_flash, config, get_range
+from util import get_session_token, get_account, get_tags
 import db
 
 def video_page():
@@ -16,7 +16,10 @@ def video_page():
     query   = get_query()
 
     if query[0] == "view":
-        return ""
+        return video_view(account, token, query)
+
+    if query[0] == "stream":
+        return video_stream(query)
 
     if account is None:
         return redirect("/")
@@ -26,9 +29,44 @@ def video_page():
 
     return render_template("video.html", token = token, account = account, message = message)
 
-def video_stream():
-    """ stream requested video """
-    return ""
+def video_view(account: dict, token: str, query: list[str]):
+    """ TODO """
+    vid: str = query[-1]
+
+    return render_template("view.html", token = token, account = account, vid = vid)
+
+def video_stream(query: str):
+    """ 
+    stream requested video 
+    TODO optimize
+    """
+
+    path: str = get_filename(query[-1], "video", ["mp4"])
+    if path is None:
+        return abort(404)
+
+    # If shit hits fan its this thing! <-
+    start: int = get_range()
+    if start is None:
+        start = 0
+
+    with open(path, "rb") as video:
+        chunk_size: int = config("CHUNK_SIZE")
+        video.seek(0, SEEK_END)
+        size: int = video.tell()
+        end: int = min(start + chunk_size, size - 1)
+
+        video.seek(start, SEEK_SET)
+        chunk: bytes = video.read(chunk_size)
+
+    headers = {
+        "Content-Range": f"bytes {start}-{end}/{size}",
+        "Accept-Ranges": "bytes",
+        "Content-Length": end - start + 1,
+        "Content-Type": "video/mp4",
+    }
+
+    return Response(chunk, 206, headers)
 
 def video_upload(account: dict, token: str):
     """ create and edit video """
