@@ -15,7 +15,7 @@
             
             <!-- Search block  -->
             <div id="advanced" class="search">
-                <form action="/" method="post">
+                <form action="/">
                     <div  class="search_normal" >
 
                         <a class="search_hide_advanced" href="#">↑</a>
@@ -45,6 +45,11 @@
             </div>
         
             {% if account %}
+            <div style="display: flex; margin-top: auto; margin-bottom: auto; margin-right: 10px;">
+                <a style="text-decoration: none;" href="video">
+                    <p style="font-size: 2vw;">+</p>
+                </a>
+            </div>
             <div class="rvideo_account">
                 <a style="text-decoration: none;" href="account?page={{ account.pid }}">
                     <img class="rvideo_account_image" src="account?picture={{ account.pid }}">
