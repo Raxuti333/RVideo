@@ -45,15 +45,14 @@ def video_stream(query: str):
     if path is None:
         return abort(404)
 
-    # If shit hits fan its this thing! <-
     start: int = get_range()
-    if start is None:
-        start = 0
 
     with open(path, "rb") as video:
         chunk_size: int = config("CHUNK_SIZE")
+
         video.seek(0, SEEK_END)
         size: int = video.tell()
+
         end: int = min(start + chunk_size, size - 1)
 
         video.seek(start, SEEK_SET)
