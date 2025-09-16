@@ -13,18 +13,23 @@
                 <img class="rvideo_logo_img" src="{{ url_for('static', filename='favicon.ico') }}">
                 <p class="rvideo_logo_text">RVIDEO</p>
             </a>
-    
+            {% if account %}
             <div style="margin-left: auto;" class="rvideo_account">
                 <a style="text-decoration: none;" href="account?page={{ account.pid }}">
                     <img class="rvideo_account_image" src="account?picture={{ account.pid }}">
                     <p class="rvideo_account_text">{{ account.username }}</p>
                 </a>
             </div>
+            {% else %}
+            <a class="rvideo_login" href="login">
+                <p class="rvideo_login_text">Login</p>
+            </a>
+            {% endif %}
         </div>
 
         <div class="video_container">
             <div style="display: grid;">
-                <video controls width="auto" height="420vh" style="margin: 0;">
+                <video controls width="auto" height="600vw" style="margin: 0;">
                     <source src="video?stream={{ vid }}">
                 </video>
                 <div style="display: flex;">
