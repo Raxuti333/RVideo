@@ -61,14 +61,18 @@ def get_form(fields: list[tuple[str, type]]) -> dict:
     return form
 
 def get_query() -> list[str]:
-    """ 
-        returns query strings list 
-        TODO support complex queries
-    """
+    """ returns query strings list """
     binary: bytes = request.query_string
     if not binary:
         return [""]
     return str(binary, encoding="utf-8").split("=")
+
+def get_query_raw() -> str | None:
+    """ return query string unmanipulated """
+    binary: bytes = request.query_string
+    if not binary:
+        return None
+    return str(binary, encoding="utf-8")
 
 def get_method() -> str:
     """ returns request method """
