@@ -32,7 +32,7 @@ def set_flash(messages: list[str]) -> None:
     for msg in messages:
         flash(msg)
 
-def get_session_token() -> str:
+def get_token() -> str:
     """ return existing session token or create a session token """
     if session.get("token") is None:
         session["token"] = token_hex(16)

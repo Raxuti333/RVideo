@@ -2,7 +2,7 @@
 
 from flask import render_template, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
-from util import get_session_token, get_account, set_account, check_username, clear_account
+from util import get_token, get_account, set_account, check_username, clear_account
 from util import get_form, get_flash, set_flash, get_method, get_query, check_password
 import db
 
@@ -84,11 +84,11 @@ def login_page():
     """ serve page or process form """
 
     flash   = get_flash()
-    token   = get_session_token()
+    token   = get_token()
     account = get_account()
 
     if account is not None:
-        if get_query()[0] == "out":
+        if get_query("=")[0] == "out":
             clear_account()
             return redirect("/")
         else:

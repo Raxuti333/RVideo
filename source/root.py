@@ -2,13 +2,13 @@
 
 import re
 from flask import render_template
-from util import get_session_token, get_account, get_query
+from util import get_token, get_account, get_query
 import db
 
 def root_page() -> str:
     """ service function for landing page """
 
-    token   = get_session_token()
+    token   = get_token()
     account = get_account()
 
     condition = search(get_query("&"))

@@ -5,7 +5,7 @@ from flask import render_template, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from util import get_query, get_method, get_filename, get_form, check_file
 from util import set_flash, get_flash, check_password, check_username, config
-from util import get_session_token, send_data, set_account, get_account
+from util import get_token, send_data, set_account, get_account
 import db
 
 pfp_file_types: list[str] = ["png", "jpg", "ico", "bmp"]
@@ -43,7 +43,7 @@ def account_page():
 def account_profile(query: list[str], account: dict | None):
     """ server profile page """
 
-    token = get_session_token()
+    token = get_token()
     error = get_flash()
     target = db.query("SELECT pid, username FROM profile WHERE pid = ?", [query[-1]])
     videos = db.query("SELECT vid, name, pid FROM video WHERE pid = ?", [query[-1]], -1)
@@ -78,7 +78,7 @@ def account_picture(query: list[str]):
 def account_edit(account: dict):
     """ edit account """
 
-    token = get_session_token()
+    token = get_token()
 
     if account is None:
         return redirect("/")

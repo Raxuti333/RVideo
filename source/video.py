@@ -4,13 +4,13 @@ from os import remove, SEEK_SET, SEEK_END
 from flask import render_template, redirect, abort, Response
 from util import get_query, get_method, get_filename, get_form, check_file
 from util import set_flash, get_flash, config, get_range
-from util import get_session_token, get_account, get_tags
+from util import get_token, get_account, get_tags
 import db
 
 def video_page():
     """ serve video page """
 
-    token   = get_session_token()
+    token   = get_token()
     account = get_account()
     message = get_flash()
     query   = get_query("=")

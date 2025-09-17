@@ -1,14 +1,14 @@
 """ process comment forms """
 
 from flask import redirect
-from util import get_form, get_account, get_session_token
+from util import get_form, get_account, get_token
 import db
 
 def comment_form():
     """ process comment form """
 
     account = get_account()
-    token   = get_session_token()
+    token   = get_token()
     form    = get_form([
     ("vid", int),
     ("token", str),
