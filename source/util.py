@@ -18,6 +18,8 @@ sizes: dict[str, int] = {
     "P": 1125899906842624
 }
 
+configs: dict[str, str | int] = {}
+
 def get_flash() -> list[str]:
     """ get messages from flash """
     flashed = get_flashed_messages()
@@ -168,6 +170,11 @@ def check_username(username: str) -> tuple[bool, str]:
 
 def config(field: str) -> str | int:
     """ returns fields value from .config """
+
+    value = configs.get(field)
+    if value is not None:
+        return value
+
     with open(".config", encoding="utf-8") as fd:
         file: str = fd.read()
 
@@ -183,12 +190,15 @@ def config(field: str) -> str | int:
 
     match(type_info):
         case "INTEGER":
-            return int(data)
+            value = int(data)
         case "SIZE":
-            return int(data.replace(data[-1], "")) * sizes[data[-1]]
+            value = int(data.replace(data[-1], "")) * sizes[data[-1]]
         # TEXT is default case
         case _:
-            return data
+            value = data
+
+    configs[field] = value
+    return value
 
 def int_to_size(number: int) -> str:
     """ converts integer to human readable size """
