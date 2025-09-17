@@ -30,4 +30,4 @@ mkdir -p video
 
 # if moving env update these to point to the right files
 source $venv
-python3 $main
+python $main
