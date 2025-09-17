@@ -20,7 +20,7 @@ def root_page() -> str:
 def search(query: list[str]) -> tuple[str, list]:
     """ generate sql search condition from query """
 
-    if query[0] is "":
+    if query[0] == "":
         return ("", [])
 
     params = []
