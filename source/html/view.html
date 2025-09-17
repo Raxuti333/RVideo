@@ -47,23 +47,23 @@
             </div>
             <div style="margin-left: auto; margin-right: auto;">
                 {% if account %}
-                <header>         
+                <div>         
                     <form action="comment" method="post">
                         <textarea style="display: block; width: 20vw;" name="comment" rows="5"></textarea>
                         <input style="display: block; margin-left: auto; margin-right: auto; max-width: fit-content;" type="submit" value="comment">
                         <input type="hidden" name="vid" value="{{ vid }}">
                         <input type="hidden" name="token" value="{{ token }}">
                     </form>
-                </header>
+                </div>
                 {% endif %}
-                <nav>
+                <div style="overflow: auto; height: 50vh;">
                     {% for comment in comments %}
                     <div style="display: flex; width: 20vw; border-style: outset; border-color: black; border-width: 1px;">
                         <img style="height: 3vw;" src="account?picture={{ comment.pid }}">
                         <p style="display: inline; overflow-inline: scroll;">{{ comment.text }}</p>
                     </div>
                     {% endfor %}
-                </nav>
+                </div>
             </div>
         </div>
     </body>
