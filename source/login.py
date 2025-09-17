@@ -34,9 +34,12 @@ def signup(form: dict):
         set_flash([verdict[1], "#ff0033"])
         return redirect("/login#signup")
 
-    db.query("INSERT INTO profile (username, password, date) VALUES(?, ?, unixepoch('now'))",
-             [form["username"], generate_password_hash(form["password"])],
-             0)
+    db.query(
+    "INSERT INTO profile (username, password, timestamp, date) "
+    "VALUES(?, ?, unixepoch('now'), date('now'))",
+    [form["username"], generate_password_hash(form["password"])],
+    0
+    )
 
     set_flash(["account succesfully created!", "#00b500"])
     return redirect("/login")

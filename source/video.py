@@ -33,7 +33,12 @@ def video_view(account: dict, token: str, query: list[str]):
     """ servers view page queried by user """
     vid: str = query[-1]
 
-    video = db.query("SELECT name, description, pid FROM video WHERE vid = ?", [vid])
+    #  "SELECT name, description, pid FROM video WHERE vid = ?"
+    video = db.query(
+    "UPDATE video SET views = views + 1 WHERE vid = ? "
+    "RETURNING name, description, pid, views, date",
+    [vid]
+    )
 
     if video is None:
         return redirect("/")
@@ -112,8 +117,8 @@ def video_upload(account: dict, token: str):
     tags: str = get_tags(form["description"])
 
     vid: int = db.query(
-    "INSERT INTO video (pid, name, description, tags, date)" 
-    "VALUES(?, ?, ?, ?, unixepoch('now')) RETURNING vid", 
+    "INSERT INTO video (pid, name, description, tags, views, timestamp, date)" 
+    "VALUES(?, ?, ?, ?, 0, unixepoch('now'), date('now')) RETURNING vid", 
     [account["pid"], form["title"], form["description"], tags]
     )[0]
 

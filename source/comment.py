@@ -27,7 +27,8 @@ def comment_form():
         return redirect(link)
 
     db.query(
-    "INSERT INTO comment (vid, pid, text, date) VALUES(?, ?, ?, unixepoch('now'))",
+    "INSERT INTO comment (vid, pid, text, timestamp, date) "
+    "VALUES(?, ?, ?, unixepoch('now'), date('now'))",
     [form["vid"], account["pid"], form["comment"]],
     0
     )
