@@ -13,7 +13,7 @@ def video_page():
     token   = get_session_token()
     account = get_account()
     message = get_flash()
-    query   = get_query()
+    query   = get_query("=")
 
     if query[0] == "view":
         return video_view(account, token, query)

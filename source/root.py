@@ -2,7 +2,7 @@
 
 import re
 from flask import render_template
-from util import get_session_token, get_account, get_query_raw
+from util import get_session_token, get_account, get_query
 import db
 
 def root_page() -> str:
@@ -11,16 +11,16 @@ def root_page() -> str:
     token   = get_session_token()
     account = get_account()
 
-    condition = search(get_query_raw())
+    condition = search(get_query("&"))
 
     videos = db.query("SELECT vid, name FROM video " + condition[0], condition[1], 20)
 
     return render_template("root.html", token=token, account=account, videos = videos)
 
-def search(query: str | None) -> tuple[str, list]:
+def search(query: list[str]) -> tuple[str, list]:
     """ generate sql search condition from query """
 
-    if query is None:
+    if query[0] is "":
         return ("", [])
 
     params = []
@@ -29,7 +29,7 @@ def search(query: str | None) -> tuple[str, list]:
     after: bool = False
 
     # Generate sql query with parameters
-    for m in query.split("&"):
+    for m in query:
         p = m.split("=")
 
         if len(p) != 2 or p[-1] == "":

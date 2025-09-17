@@ -13,7 +13,7 @@ pfp_file_types: list[str] = ["png", "jpg", "ico", "bmp"]
 def account_page():
     """ account page """
 
-    query = get_query()
+    query = get_query("=")
     account = get_account()
 
     if get_method() == "POST":

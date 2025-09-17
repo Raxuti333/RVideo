@@ -62,19 +62,12 @@ def get_form(fields: list[tuple[str, type]]) -> dict:
             form[f] = request.form.get(f, type=t)
     return form
 
-def get_query() -> list[str]:
+def get_query(seperator: str) -> list[str]:
     """ returns query strings list """
     binary: bytes = request.query_string
     if not binary:
         return [""]
-    return str(binary, encoding="utf-8").split("=")
-
-def get_query_raw() -> str | None:
-    """ return query string unmanipulated """
-    binary: bytes = request.query_string
-    if not binary:
-        return None
-    return str(binary, encoding="utf-8")
+    return str(binary, encoding="utf-8").split(seperator)
 
 def get_method() -> str:
     """ returns request method """
