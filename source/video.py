@@ -39,12 +39,14 @@ def video_view(account: dict, token: str, query: list[str]):
         return redirect("/")
 
     target = db.query("SELECT pid, username FROM profile WHERE pid = ?", [video["pid"]])
+    comments = db.query("SELECT pid, text FROM comment WHERE vid = ?", [vid], -1)
 
     return render_template("view.html",
                            token = token,
                            account = account,
                            video = video,
                            target = target,
+                           comments = comments,
                            vid = vid
                           )
 
