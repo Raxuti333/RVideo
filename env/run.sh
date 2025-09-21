@@ -1,5 +1,6 @@
 #!/bin/sh
 
+db=db.sql
 venv=../.venv/bin/activate
 main=../source/main.py
 
@@ -8,11 +9,7 @@ cd "$(dirname "$0")"
 
 if [ ! -f db ]; then
     echo "creating new database to $PWD/db"
-    sqlite3 db <<EOF
-CREATE TABLE profile ( pid INTEGER PRIMARY KEY, username TEXT, password TEXT, timestamp INTEGER, date TEXT );
-CREATE TABLE video ( vid INTEGER PRIMARY KEY, pid INTEGER, views INTEGER, name TEXT, description TEXT, timestamp INTEGER, date TEXT, tags TEXT, FOREIGN KEY(pid) REFERENCES profile(pid) );
-CREATE TABLE comment ( vid INTEGER, pid INTEGER, text TEXT, timestamp INTEGER, date TEXT, FOREIGN KEY(vid) REFERENCES video(vid), FOREIGN KEY(pid) REFERENCES profile(pid) );
-EOF
+    cat $db | sqlite3 db
 fi
 
 if [ ! -f $venv ]; then
