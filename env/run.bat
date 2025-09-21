@@ -8,7 +8,7 @@ cd %~dp0
 
 if not exist "db" (
     echo creating new database to %CD%\db
-    TYPE %db% | sqlite3.exe db
+    type %db% | sqlite3.exe db
 )
 
 if not exist %venv% (
