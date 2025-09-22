@@ -56,7 +56,7 @@ def search(query: list[str]) -> tuple[str, list]:
                     )
                 if users != []:
                     for u in users:
-                        sql += f" pid = {u["pid"]} OR"
+                        sql += f" pid = {u['pid']} OR"
                     sql = sql[:len(sql) - 2] + " AND"
                 else: sql += " pid = 0 AND"
             case "SEARCH":
