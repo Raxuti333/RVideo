@@ -50,16 +50,17 @@ def clear_account() -> None:
     """ clears account from session """
     session.pop("account")
 
-def get_form(fields: list[tuple[str, type]]) -> dict:
+def get_form(fields: list[tuple[str, type | str]]) -> dict:
     """ returns dictionary containing fields values """
     form: dict = {}
     for f, t in fields:
-        if t == "FILE":
-            form[f] = request.files.get(f)
-        elif t is bool:
-            form[f] = request.form.get(f, type=str) == "True"
-        else:
-            form[f] = request.form.get(f, type=t)
+        match(t):
+            case "FILE":
+                form[f] = request.files.get(f)
+            case builtins.bool:
+                form[f] = request.form.get(f, type=str) == "True"
+            case _:
+                form[f] = request.form.get(f, type=t)
     return form
 
 def get_query(seperator: str) -> list[str]:
