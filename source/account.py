@@ -112,14 +112,16 @@ def account_edit(account: dict):
 def edit_picture(account: dict, form: dict):
     """ change profile picutre if suitable """
 
+    link: str = "/account?page=" + str(account["pid"])
+
     if form["picture"] is None:
         set_flash(["Wrong form", "#ff0033"])
-        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+        return redirect(link + "#edit")
 
     verdict = check_file(form["picture"], config("MAX_PFP_SIZE"), pfp_file_types)
     if not verdict[0]:
         set_flash([verdict[1], "#ff0033"])
-        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+        return redirect(link + "#edit")
 
     old_pfp = get_filename(account["pid"], "pfp", pfp_file_types)
     if old_pfp is not None:
@@ -130,53 +132,57 @@ def edit_picture(account: dict, form: dict):
 
     form["picture"].save("pfp/" + hex_pid + "." + file_type)
 
-    return redirect("/account?page=" + str(account["pid"]))
+    return redirect(link)
 
 def edit_username(account: dict, form: dict):
     """ chages username if suitable """
 
+    link: str = "/account?page=" + str(account["pid"])
+
     if form["username"] is None:
         set_flash(["Wrong form", "#ff0033"])
-        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+        return redirect(link + "#edit")
 
     verdict = check_username(form["username"])
     if not verdict[0]:
         set_flash([verdict[1], "#ff0033"])
-        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+        return redirect(link + "#edit")
 
     users = db.query("SELECT COUNT(pid) FROM profile WHERE username = ?", [form["username"]])
 
     if users[0] != 0:
         set_flash(["username is taken", "#ff0033"])
-        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+        return redirect(link + "#edit")
 
     db.query("UPDATE profile SET username = ? WHERE pid = ?", [form["username"], account["pid"]], 0)
 
     account["username"] = form["username"]
     set_account(account)
 
-    return redirect("/account?page=" + str(account["pid"]))
+    return redirect(link)
 
 def edit_password(account: dict, form: dict):
     """ change password if suitable """
 
+    link: str = "/account?page=" + str(account["pid"])
+
     if form["oldpaswd"] is None or form["newpaswd"] is None:
         set_flash(["Wrong form", "#ff0033"])
-        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+        return redirect(link + "#edit")
 
     password = db.query("SELECT password FROM profile WHERE pid = ?", [account["pid"]])
 
     if not check_password_hash(password[0], form["oldpaswd"]):
         set_flash(["old password does not match", "#ff0033"])
-        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+        return redirect(link + "#edit")
 
     verdict = check_password(form["newpaswd"])
     if not verdict[0]:
         set_flash([verdict[1], "#ff0033"])
-        return redirect("/account?page=" + str(account["pid"]) + "#edit")
+        return redirect(link + "#edit")
 
     db.query("UPDATE profile SET password = ? WHERE pid = ?",
              [generate_password_hash(form["newpaswd"]), account["pid"]],
              0)
 
-    return redirect("/account?page=" + str(account["pid"]))
+    return redirect(link)
