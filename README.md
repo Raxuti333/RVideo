@@ -160,3 +160,31 @@ if you wish to run the program "manually" read the contents of **run.sh**
 
 you can now access the website from address "http://127.0.0.1:8080"
 if you have changed the port in the **.conf** use it instead of the 8080
+
+## .config
+
+The **.config** file has a simple format:
+
+```
+[KEY:TYPE DATA]
+```
+### Key
+
+Supported keys are:
+```
+PORT - Port that the program listens to.
+CHUNK_SIZE - Max stream chunks size
+MAX_PFP_SIZE - Max profile picture size
+MAX_FILE_SIZE - Max uploaded file size accepted by flask
+SECRET_KEY - Secret key used by flask for secure session storage
+```
+
+### Type
+
+Types tell the parser how to process data.
+
+```
+INTEGER - Data is cast to int
+TEXT - Data is returned as is.
+SIZE - Data is returned as bytes supported scalars [B, K, M, G, T, P]
+```
