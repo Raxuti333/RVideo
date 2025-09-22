@@ -161,6 +161,10 @@ if you wish to run the program "manually" read the contents of **run.sh**
 you can now access the website from address "http://127.0.0.1:8080"
 if you have changed the port in the **.conf** use it instead of the 8080
 
+### Trouble shooting
+
+If the program is crashing check your python version and see if it is at least >= 3.13.5!
+
 ## .config
 
 The **.config** file has a simple format:
