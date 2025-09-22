@@ -1,4 +1,4 @@
-""" TODO """
+""" all utility functions and frequently used functions """
 
 #from os import stat
 import builtins

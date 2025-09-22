@@ -1,4 +1,4 @@
-""" TODO """
+""" database query function """
 
 import sqlite3
 

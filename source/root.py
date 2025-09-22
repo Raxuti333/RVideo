@@ -1,4 +1,4 @@
-""" Landing page processing i.e video search functions """
+""" Landing page processing and video search functions """
 
 import re
 from flask import render_template

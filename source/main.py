@@ -1,4 +1,4 @@
-""" TODO """
+""" Handles http routing """
 
 from flask import Flask
 from util import config
