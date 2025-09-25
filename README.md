@@ -4,21 +4,21 @@ RVideo is a simple video sharing website!
 ## Features
 
 ```
-Signing up and Loging in ✅
-Uploading videos ✅
-Commenting ✅
-Searching for videos ✅
-Advanced video search ✅
-Hastag system ✅
-Editing User profile ✅
-Video streaming ✅
-Users combined views ❌
-Editing video information ❌
-Deleting profile ❌
-Deleting video ❌
-Deleting comment ❌
+✅ Signing up and Loging in
+✅ Uploading videos 
+✅ Commenting 
+✅ Searching for videos 
+✅ Advanced video search 
+✅ Hastag system 
+✅ Editing User profile 
+✅ Video streaming 
+❌ Users combined views 
+❌ Editing video information 
+❌ Deleting profile 
+❌ Deleting video 
+❌ Deleting comment 
 
-All forms use session tokens ✅
+✅ All forms use session tokens
 ```
 
 ✅ - feature is complete
