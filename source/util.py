@@ -20,6 +20,17 @@ sizes: dict[str, int] = {
 
 configs: dict[str, str | int] = {}
 
+# all registered mp4 types with mimetype of video/mp4
+# https://www.ftyps.com/#2
+video_types: list[bytes] = [
+    bytes("avc1", "utf-8"),
+    bytes("iso2", "utf-8"),
+    bytes("isom", "utf-8"),
+    bytes("mmp4", "utf-8"),
+    bytes("mp41", "utf-8"),
+    bytes("mp42", "utf-8"),
+]
+
 def get_flash() -> list[str]:
     """ get messages from flash """
     flashed = get_flashed_messages()
@@ -133,6 +144,37 @@ def check_file(file: FileStorage, max_size: int, types: list[str]) -> tuple[bool
     file_type: str = file.filename.split(".")[-1]
     if file_type not in types:
         return (False, f"file type { file_type } is not supported")
+
+    file.seek(0, SEEK_END)
+    if file.tell() > max_size:
+        return (False,
+                f"File is { int_to_size(file.tell()) } while maximum is { int_to_size(max_size) }"
+               )
+    file.seek(0, SEEK_SET)
+
+    return (True, "Success")
+
+def check_video(file: FileStorage, max_size: int) -> tuple[bool, str]:
+    """ checks if video is acceptable """
+
+    if file.filename == "":
+        return (False, "No file selected")
+
+    file_type: str = file.filename.split(".")[-1].lower()
+    if file_type != "mp4":
+        return (False, f"file type { file_type } is not supported")
+
+    file.seek(4, SEEK_SET)
+    ftyp: bytes = file.read(8)
+
+    if ftyp[:4] != bytes("ftyp", "utf-8"):
+        return (False, "file header is non-standard mp4")
+
+    if ftyp[4:] not in video_types:
+        return (False,
+        "Not supported mp4 type see https://www.ftyps.com/#2"
+        "for all registered mp4 types with mimetype video/mp4"
+        )
 
     file.seek(0, SEEK_END)
     if file.tell() > max_size:
