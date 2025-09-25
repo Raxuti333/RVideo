@@ -172,15 +172,14 @@ def check_video(file: FileStorage, max_size: int) -> tuple[bool, str]:
 
     if ftyp[4:] not in video_types:
         return (False,
-        "Not supported mp4 type see https://www.ftyps.com/#2"
-        "for all registered mp4 types with mimetype video/mp4"
+        f"mp4's with ftyp: { str(ftyp[4:], 'utf-8') } are not supported"
         )
 
     file.seek(0, SEEK_END)
     if file.tell() > max_size:
         return (False,
-                f"File is { int_to_size(file.tell()) } while maximum is { int_to_size(max_size) }"
-               )
+        f"File is { int_to_size(file.tell()) } while maximum is { int_to_size(max_size) }"
+        )
     file.seek(0, SEEK_SET)
 
     return (True, "Success")
