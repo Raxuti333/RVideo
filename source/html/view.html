@@ -40,11 +40,49 @@
                         </a>
                     </div>
                     <div style="display: grid; margin-left: 10px;">
-                        <p>{{ video.name }}</p>
-                        <p>{{ video.description }}</p>
+                        <div id="title">
+                            {% if account.pid == video.pid %}
+                            <a class="title_text" style="text-decoration: none;" href="#title">
+                                <p style="color: black;">{{ video.name }}</p>
+                            </a>
+                            <form class="title_edit" action="/video" method="post">
+                                <input type="text" name="title" value="{{ video.name }}">
+                                <input type="submit" value="change">
+                                <input type="hidden" name="vid" value="{{ vid }}">
+                                <input type="hidden" name="select" value="title">
+                                <input type="hidden" name="token" value="{{ token }}">
+                            </form>
+                            {% else %}
+                            <p>{{ video.name }}</p>
+                            {% endif %}
+                        </div>
+                        <div id="description">
+                            {% if account.pid == video.pid %}
+                            <a class="description_text" style="text-decoration: none;" href="#description">
+                                <p style="color: black;">{{ video.description }}</p>
+                            </a>
+                            <form class="description_edit" action="/video" method="post">
+                                <input type="text" name="description" value="{{ video.description }}">
+                                <input type="submit" value="change">
+                                <input type="hidden" name="vid" value="{{ vid }}">
+                                <input type="hidden" name="select" value="description">
+                                <input type="hidden" name="token" value="{{ token }}">
+                            </form>
+                            {% else %}
+                            <p>{{ video.description }}</p>
+                            {% endif %}
+                        </div>
                         <div style="display: block; margin-top: 0;">
                             <p style="display: inline; margin-top: 0;">date: {{ video.date }}</p>
                             <p style="display: inline; margin-top: 0;">views: {{ video.views }}</p>
+                            {% if account.pid == video.pid %}
+                            <form style="display: inline;" action="/video" method="post">
+                                <input style="color: #ff0033; margin-left: 10px;" type="submit" value="Delete">
+                                <input type="hidden" name="vid" value="{{ vid }}">
+                                <input type="hidden" name="select" value="delete">
+                                <input type="hidden" name="token" value="{{ token }}">
+                            </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

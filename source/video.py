@@ -2,9 +2,9 @@
 
 from os import remove, SEEK_SET, SEEK_END
 from flask import render_template, redirect, abort, Response
-from util import get_query, get_method, get_filename, get_form, check_file
+from util import get_query, get_method, get_filename, get_form
 from util import set_flash, get_flash, config, get_range
-from util import get_token, get_account, get_tags
+from util import get_token, get_account, get_tags, check_video
 import db
 
 def video_page():
@@ -25,7 +25,7 @@ def video_page():
         return redirect("/")
 
     if get_method() == "POST":
-        return video_upload(account, token)
+        return video_form(account, token)
 
     return render_template("video.html", token = token, account = account, message = message)
 
@@ -87,19 +87,84 @@ def video_stream(query: str):
 
     return Response(chunk, 206, headers)
 
-def video_upload(account: dict, token: str):
-    """ create and edit video """
+def video_form(account: dict, token: str):
+    """ selector function """
 
-    form = get_form([
+    form    = get_form([
     ("video", "FILE"),
     ("title", str),
     ("description", str),
-    ("token", str)
+    ("token", str),
+
+    ("vid", int),
+    ("select", str)
     ])
 
     if token != form["token"]:
         set_flash(["CSRF", "#ff0033"])
         return redirect("/video")
+
+    if form["vid"] is None:
+        return video_upload(account, form)
+
+    edit: dict[int] = {"title": title, "description": description, "delete": delete}
+
+    editing = edit.get(form["select"])
+    if editing is None:
+        return redirect("/")
+
+    return editing(account, form)
+
+def title(account: dict, form: dict):
+    """ change title """
+
+    link: str = "/video?view=" + str(form["vid"])
+
+    if form["title"] is None:
+        set_flash(["title is empty", "#ff0033"])
+        return redirect(link)
+
+    db.query("UPDATE video SET name = ? WHERE vid = ? AND pid = ?",
+    [form["title"], form["vid"], account["pid"]],
+    0)
+
+    return redirect(link)
+
+def description(account: dict, form: dict):
+    """ change description redo tags 
+        TODO update tags
+    """
+    link: str = "/video?view=" + str(form["vid"])
+
+    if form["description"] is None:
+        set_flash(["description is empty", "#ff0033"])
+        return redirect(link)
+
+    db.query("UPDATE video SET description = ? WHERE vid = ? AND pid = ?",
+    [form["description"], form["vid"], account["pid"]],
+    0)
+
+    return redirect(link)
+
+def delete(account: dict, form: dict):
+    """ remove video """
+
+    path: str = get_filename(form["vid"], "video", ["mp4"])
+    if path is None:
+        return redirect("/")
+
+    vid: int = db.query("DELETE FROM video WHERE vid = ? AND pid = ? RETURNING vid",
+    [form["vid"], account["pid"]])
+
+    if vid is None:
+        return redirect("/video?view=" + str(form["vid"]))
+
+    remove(path)
+
+    return redirect("/account?page=" + str(account["pid"]))
+
+def video_upload(account: dict, form: dict):
+    """ create and edit video """
 
     if form["title"] is None or form["description"] is None:
         set_flash(["No title or description", "#ff0033"])
@@ -109,7 +174,7 @@ def video_upload(account: dict, token: str):
         set_flash(["No video file", "#ff0033"])
         return redirect("/video")
 
-    verdict = check_file(form["video"], config("MAX_FILE_SIZE"), ["mp4"])
+    verdict = check_video(form["video"], config("MAX_FILE_SIZE"))
     if not verdict[0]:
         set_flash([verdict[1], "#ff0033"])
         return redirect("/video")

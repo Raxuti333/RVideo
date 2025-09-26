@@ -2,3 +2,13 @@
 {
     display: flex;
 }
+
+#title:target .title_text { display: none; }
+
+.title_edit { display: none; }
+#title:target .title_edit { display: block; }
+
+#description:target .description_text { display: none; }
+
+.description_edit { display: none; }
+#description:target .description_edit { display: block; }
