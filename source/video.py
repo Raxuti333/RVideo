@@ -159,6 +159,8 @@ def delete(account: dict, form: dict):
     if vid is None:
         return redirect("/video?view=" + str(form["vid"]))
 
+    db.query("DELETE FROM comment WHERE vid = ?", [form["vid"]], 0)
+
     remove(path)
 
     return redirect("/account?page=" + str(account["pid"]))
