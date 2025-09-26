@@ -2,7 +2,7 @@
 
 from flask import redirect
 from util import get_form, get_account, get_token
-import db
+from db import db
 
 def comment_form():
     """ process comment form """

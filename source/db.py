@@ -1,26 +1,38 @@
 """ database query function """
 
 import sqlite3
+from threading import Lock
 
-def query(sql: str, params: list = None, count: int = 1) -> sqlite3.Row | sqlite3.Cursor | None:
-    """ query data from sqlite3 db\n
-    count = 1: fetchone()\n
-    count = -1: fetchall()\n
-    count = n: fetchmany(n)\n
-    count = 0: None
-    """
-    db = sqlite3.connect("db")
-    db.row_factory = sqlite3.Row
+class Database:
+    """ Hold database information """
+    def __init__(self):
+        self.db = sqlite3.connect("db", check_same_thread=False)
+        self.db.row_factory = sqlite3.Row
+        self.lock = Lock()
 
-    cursor = db.execute(sql, params)
+    def __del__(self):
+        self.db.close()
 
-    match(count):
-        case 1: result = cursor.fetchone()
-        case -1: result = cursor.fetchall()
-        case 0: result = None
-        case _: result = cursor.fetchmany(count)
+    def query(self, sql: str, params: list = None, count: int = 1):
+        """ query data from sqlite3 db\n
+        count = 1: fetchone()\n
+        count = -1: fetchall()\n
+        count = n: fetchmany(n)\n
+        count = 0: None
+        """
 
-    db.commit()
-    db.close()
+        self.lock.acquire()
+        cursor = self.db.execute(sql, params)
 
-    return result
+        match(count):
+            case 1: result = cursor.fetchone()
+            case -1: result = cursor.fetchall()
+            case 0: result = None
+            case _: result = cursor.fetchmany(count)
+
+        self.db.commit()
+        self.lock.release()
+
+        return result
+
+db: Database = Database()

@@ -3,7 +3,7 @@
 import re
 from flask import render_template
 from util import get_token, get_account, get_query
-import db
+from db import db
 
 def root_page() -> str:
     """ service function for landing page """

@@ -5,7 +5,7 @@ from flask import render_template, redirect, abort, Response
 from util import get_query, get_method, get_filename, get_form
 from util import set_flash, get_flash, config, get_range
 from util import get_token, get_account, get_tags, check_video
-import db
+from db import db
 
 def video_page():
     """ serve video page """
@@ -33,7 +33,6 @@ def video_view(account: dict, token: str, query: list[str]):
     """ servers view page queried by user """
     vid: str = query[-1]
 
-    #  "SELECT name, description, pid FROM video WHERE vid = ?"
     video = db.query(
     "UPDATE video SET views = views + 1 WHERE vid = ? "
     "RETURNING name, description, pid, views, date",

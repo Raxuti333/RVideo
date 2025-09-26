@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from util import get_query, get_method, get_filename, get_form, check_file
 from util import set_flash, get_flash, check_password, check_username, config
 from util import get_token, send_data, set_account, get_account
-import db
+from db import db
 
 pfp_file_types: list[str] = ["png", "jpg", "ico", "bmp"]
 
