@@ -13,7 +13,7 @@ RVideo is a simple video sharing website!
 ✅ Editing User profile 
 ✅ Video streaming 
 ❌ Users combined views 
-❌ Editing video information 
+✅ Editing video information 
 ❌ Deleting profile 
 ❌ Deleting video 
 ❌ Deleting comment 
