@@ -196,6 +196,7 @@ def edit_password(account: dict, form: dict):
 def delete_profile(account: dict, form: dict):
     """ deletes profile """
 
+    del form
     clear_account()
 
     db.query("DELETE FROM comment WHERE pid = ?", [account["pid"]], 0)
