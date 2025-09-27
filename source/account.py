@@ -5,7 +5,7 @@ from flask import render_template, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from util import get_query, get_method, get_filename, get_form, check_file
 from util import set_flash, get_flash, check_password, check_username, config
-from util import get_token, send_data, set_account, get_account
+from util import get_token, send_data, set_account, get_account, clear_account
 from db import db
 
 pfp_file_types: list[str] = ["png", "jpg", "ico", "bmp"]
@@ -45,19 +45,24 @@ def account_profile(query: list[str], account: dict | None):
 
     token = get_token()
     error = get_flash()
-    target = db.query("SELECT pid, username FROM profile WHERE pid = ?", [query[-1]])
+    target = db.query("SELECT pid, username, date FROM profile WHERE pid = ?", [query[-1]])
     videos = db.query("SELECT vid, name, pid FROM video WHERE pid = ?", [query[-1]], -1)
+    views  = db.query("SELECT SUM(views) FROM video WHERE pid = ?", [query[-1]])[0]
 
     if target is None:
         return redirect("/account")
 
+    if views is None:
+        views = 0
+
     return render_template("account.html",
-                           account = account,
-                           target = target,
-                           token = token,
-                           videos = videos,
-                           error = error
-                           )
+    account = account,
+    target = target,
+    token = token,
+    videos = videos,
+    views = views,
+    error = error
+    )
 
 def account_picture(query: list[str]):
     """ serve account picture  """
@@ -99,7 +104,8 @@ def account_edit(account: dict):
     functions: dict = {
         "picture": edit_picture,
         "username": edit_username,
-        "password": edit_password
+        "password": edit_password,
+        "delete": delete_profile,
         }
 
     func = functions.get(form["type"])
@@ -186,3 +192,24 @@ def edit_password(account: dict, form: dict):
              0)
 
     return redirect(link)
+
+def delete_profile(account: dict, form: dict):
+    """ deletes profile """
+
+    clear_account()
+
+    db.query("DELETE FROM comment WHERE pid = ?", [account["pid"]], 0)
+    db.query("DELETE FROM profile WHERE pid = ?", [account["pid"]], 0)
+
+    pfp = get_filename(account["pid"], "pfp", pfp_file_types)
+    if pfp is not None:
+        remove(pfp)
+
+    videos: list[int] = db.query("SELECT vid FROM video WHERE pid = ?", [account["pid"]], -1)
+
+    for video in videos:
+        db.query("DELETE FROM video WHERE vid = ?", [video["vid"]], 0)
+        db.query("DELETE FROM comment WHERE vid = ?", [video["vid"]], 0)
+        remove(get_filename(video["vid"], "video", ["mp4"]))
+
+    return redirect("/")
