@@ -1,6 +1,5 @@
 """ all utility functions and frequently used functions """
 
-#from os import stat
 import builtins
 from os import SEEK_SET, SEEK_END
 from os.path import isfile
@@ -33,7 +32,7 @@ video_types: list[bytes] = [
 
 def get_flash() -> list[str]:
     """ get messages from flash """
-    flashed = get_flashed_messages()
+    flashed: list[str] = get_flashed_messages()
     if flashed == []:
         return [""]
     return flashed
@@ -61,9 +60,9 @@ def clear_account() -> None:
     """ clears account from session """
     session.pop("account")
 
-def get_form(fields: list[tuple[str, type | str]]) -> dict:
+def get_form(fields: list[tuple[str, type | str]]) -> dict[str, builtins.any]:
     """ returns dictionary containing fields values """
-    form: dict = {}
+    form: dict[str, builtins.any] = {}
     for f, t in fields:
         match(t):
             case "FILE":
@@ -90,7 +89,7 @@ def get_range() -> int:
     hrange: str = request.headers.get("range")
     if hrange is None:
         return 0
-
+    # Todo add checks
     return int(hrange[6:hrange.find("-")])
 
 def get_tags(text: str) -> str:
@@ -151,8 +150,8 @@ def check_file(file: FileStorage, max_size: int, types: list[str]) -> tuple[bool
     file.seek(0, SEEK_END)
     if file.tell() > max_size:
         return (False,
-                f"File is { int_to_size(file.tell()) } while maximum is { int_to_size(max_size) }"
-               )
+        f"File is { int_to_size(file.tell()) } while maximum is { int_to_size(max_size) }"
+        )
     file.seek(0, SEEK_SET)
 
     return (True, "Success")
