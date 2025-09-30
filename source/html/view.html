@@ -101,7 +101,17 @@
                 <div style="overflow: auto; height: 50vh;">
                     {% for comment in comments %}
                     <div style="display: flex; width: 20vw; border-style: outset; border-color: black; border-width: 1px;">
-                        <img style="height: 3vw;" src="account?picture={{ comment.pid }}">
+                        <div>
+                            <img style="height: 3vw;" src="account?picture={{ comment.pid }}">
+                            {% if comment.pid == account.pid %}
+                            <form action="comment" method="post">
+                                <input type="submit" value="delete">
+                                <input type="hidden" name="cid" value="{{ comment.cid }}">
+                                <input type="hidden" name="vid" value="{{ vid }}">
+                                <input type="hidden" name="token" value="{{ token }}">
+                            </form>
+                            {% endif %}
+                        </div>
                         <p style="display: inline; overflow-inline: scroll;">{{ comment.text }}</p>
                     </div>
                     {% endfor %}
