@@ -12,11 +12,11 @@ RVideo is a simple video sharing website!
 ✅ Hastag system 
 ✅ Editing User profile 
 ✅ Video streaming 
-❌ Users combined views 
+✅ Users combined views 
 ✅ Editing video information 
-❌ Deleting profile 
-❌ Deleting video 
-❌ Deleting comment 
+✅ Deleting profile 
+✅ Deleting video 
+✅ Deleting comment 
 
 ✅ All forms use session tokens
 ```
