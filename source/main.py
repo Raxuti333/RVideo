@@ -5,8 +5,8 @@ from util import config
 import root
 import account
 import login
-import video
 import comment
+import video
 
 app: Flask = Flask(__name__, "/static", template_folder="html")
 
