@@ -17,11 +17,9 @@ SIZES: dict[str, int] = {
     "P": 1125899906842624
 }
 
-configs: dict[str, str | int] = {}
-
 # all registered mp4 types with mimetype of video/mp4
 # https://www.ftyps.com/#2
-video_types: list[bytes] = [
+VIDEO_TYPES: list[bytes] = [
     bytes("avc1", "utf-8"),
     bytes("iso2", "utf-8"),
     bytes("isom", "utf-8"),
@@ -29,6 +27,8 @@ video_types: list[bytes] = [
     bytes("mp41", "utf-8"),
     bytes("mp42", "utf-8"),
 ]
+
+configs: dict[str, str | int] = {}
 
 def get_flash() -> list[str]:
     """ get messages from flash """
@@ -177,7 +177,7 @@ def check_video(file: FileStorage, max_size: int) -> tuple[bool, str]:
     if ftyp[:4] != bytes("ftyp", "utf-8"):
         return (False, "file header is non-standard mp4")
 
-    if ftyp[4:] not in video_types:
+    if ftyp[4:] not in VIDEO_TYPES:
         return (False,
         f"mp4's with ftyp: { str(ftyp[4:], 'utf-8') } are not supported"
         )

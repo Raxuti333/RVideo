@@ -8,7 +8,7 @@ from util import set_flash, get_flash, check_password, check_username, config
 from util import get_token, send_data, set_account, get_account, clear_account
 from db import db
 
-pfp_file_types: list[str] = ["png", "jpg", "ico", "bmp"]
+IMAGE_FILE_TYPES: list[str] = ["png", "jpg", "ico", "bmp"]
 
 def account_page():
     """ account page """
@@ -74,7 +74,7 @@ def account_picture(query: list[str]):
         "bmp": "image/bmp"
         }
 
-    path = get_filename(query[-1], "pfp", pfp_file_types)
+    path = get_filename(query[-1], "pfp", IMAGE_FILE_TYPES)
     if path is None:
         return redirect("/static/no-pfp.png")
 
@@ -124,12 +124,12 @@ def edit_picture(account: dict, form: dict):
         set_flash(["Wrong form", "#ff0033"])
         return redirect(link + "#edit")
 
-    verdict = check_file(form["picture"], config("MAX_PFP_SIZE"), pfp_file_types)
+    verdict = check_file(form["picture"], config("MAX_PFP_SIZE"), IMAGE_FILE_TYPES)
     if not verdict[0]:
         set_flash([verdict[1], "#ff0033"])
         return redirect(link + "#edit")
 
-    old_pfp = get_filename(account["pid"], "pfp", pfp_file_types)
+    old_pfp = get_filename(account["pid"], "pfp", IMAGE_FILE_TYPES)
     if old_pfp is not None:
         remove(old_pfp)
 
@@ -202,7 +202,7 @@ def delete_profile(account: dict, form: dict):
     db.query("DELETE FROM comment WHERE pid = ?", [account["pid"]], 0)
     db.query("DELETE FROM profile WHERE pid = ?", [account["pid"]], 0)
 
-    pfp = get_filename(account["pid"], "pfp", pfp_file_types)
+    pfp = get_filename(account["pid"], "pfp", IMAGE_FILE_TYPES)
     if pfp is not None:
         remove(pfp)
 
