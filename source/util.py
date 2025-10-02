@@ -89,8 +89,13 @@ def get_range() -> int:
     hrange: str = request.headers.get("range")
     if hrange is None:
         return 0
-    # Todo add checks
-    return int(hrange[6:hrange.find("-")])
+
+    hrange = hrange[6:hrange.find("-")]
+
+    if hrange.isdigit():
+        return int(hrange)
+
+    return 0
 
 def get_tags(text: str) -> str:
     """ returns a string only containing tags found in text """
