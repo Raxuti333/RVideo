@@ -118,7 +118,7 @@ if you don't want to add sqlite3.exe to your **PATH** you can also set the exe i
 
 ### Config
 
-read more about configuration in [.config](#.config)
+read more about configuration in [.config](#config-1)
 
 open env/.config in a text editor.
 
