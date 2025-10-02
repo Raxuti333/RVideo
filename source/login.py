@@ -79,8 +79,7 @@ def handle_form(token: str):
 
     if form["signup"]:
         return signup(form)
-    else:
-        return login(user, form)
+    return login(user, form)
 
 
 def login_page():
@@ -94,8 +93,8 @@ def login_page():
         if get_query("=")[0] == "out":
             clear_account()
             return redirect("/")
-        else:
-            return redirect("/account?page=" + str(account["pid"]))
+
+        return redirect("/account?page=" + str(account["pid"]))
 
     if get_method() == "POST":
         return handle_form(token)

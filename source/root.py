@@ -39,10 +39,7 @@ def search(query: list[str]) -> tuple[str, list]:
             case "DATE":
                 if re.match(r"^\d{4}-\d{2}-\d{2}$", p[1]) is not None:
                     sql += f" timestamp - unixepoch('{p[1]}')"
-                    if after:
-                        sql += " > 0"
-                    else:
-                        sql += " < 0"
+                    sql += " > 0" if after else " < 0"
                 else: sql += " 1"
                 sql += " AND"
             case "AFTER":

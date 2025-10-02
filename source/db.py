@@ -5,6 +5,7 @@ from threading import Lock
 
 class Database:
     """ Hold database information """
+
     def __init__(self):
         self.db = sqlite3.connect("db", check_same_thread=False)
         self.db.row_factory = sqlite3.Row
@@ -21,17 +22,16 @@ class Database:
         count = 0: None
         """
 
-        self.lock.acquire()
-        cursor = self.db.execute(sql, params)
+        with self.lock:
+            cursor = self.db.execute(sql, params)
 
-        match(count):
-            case 1: result = cursor.fetchone()
-            case -1: result = cursor.fetchall()
-            case 0: result = None
-            case _: result = cursor.fetchmany(count)
+            match(count):
+                case 1: result = cursor.fetchone()
+                case -1: result = cursor.fetchall()
+                case 0: result = None
+                case _: result = cursor.fetchmany(count)
 
-        self.db.commit()
-        self.lock.release()
+            self.db.commit()
 
         return result
 
