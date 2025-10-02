@@ -9,8 +9,8 @@ class Database:
     """
     Database class exists to hold speed up db queries by removing db.connect calls.
     Instead using Locks to prevent simulatinous access.
-    The class also exists to utilize pythons garbage collector to automatically call self.db.close 
-    when program is shutdown
+    The class also exists to utilize pythons garbage collector to automatically call db.close 
+    on program shutdown
     """
 
     def __init__(self):

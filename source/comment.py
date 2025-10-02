@@ -43,7 +43,7 @@ def comment_form():
     return redirect(link)
 
 def comment_delete(form: dict, account: dict, link: str):
-    """ deletes selected comment """
+    """ deletes selected comment if allowed """
 
     db.query(
     "DELETE FROM comment WHERE cid = ? AND pid = ? AND vid = ?",

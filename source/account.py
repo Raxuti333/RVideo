@@ -11,7 +11,7 @@ from db import db
 IMAGE_FILE_TYPES: list[str] = ["png", "jpg", "ico", "bmp"]
 
 def account_page():
-    """ account page """
+    """ account page and sub resource routing """
 
     query = get_query("=")
     account = get_account()
@@ -41,7 +41,7 @@ def account_page():
     return render_template("account_search.html", account = account, accounts = accounts)
 
 def account_profile(query: list[str], account: dict | None):
-    """ server profile page """
+    """ profile page """
 
     token = get_token()
     error = get_flash()
@@ -65,7 +65,7 @@ def account_profile(query: list[str], account: dict | None):
     )
 
 def account_picture(query: list[str]):
-    """ serve account picture  """
+    """ fetch account picture """
 
     mimetype: dict[str, str] = {
         "png": "image/png", 

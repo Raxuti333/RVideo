@@ -28,7 +28,6 @@ def search(query: list[str]) -> tuple[str, list]:
 
     after: bool = False
 
-    # Generate sql query with parameters
     for m in query:
         p = m.split("=")
 
