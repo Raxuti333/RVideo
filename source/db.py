@@ -1,10 +1,17 @@
-""" database query function """
+""" 
+database class and query functions
+"""
 
 import sqlite3
 from threading import Lock
 
 class Database:
-    """ Hold database information """
+    """
+    Database class exists to hold speed up db queries by removing db.connect calls.
+    Instead using Locks to prevent simulatinous access.
+    The class also exists to utilize pythons garbage collector to automatically call self.db.close 
+    when program is shutdown
+    """
 
     def __init__(self):
         self.db = sqlite3.connect("db", check_same_thread=False)
@@ -15,7 +22,8 @@ class Database:
         self.db.close()
 
     def query(self, sql: str, params: list = None, count: int = 1):
-        """ query data from sqlite3 db\n
+        """ 
+        query data from sqlite3 db\n
         count = 1: fetchone()\n
         count = -1: fetchall()\n
         count = n: fetchmany(n)\n
