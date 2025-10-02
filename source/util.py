@@ -8,7 +8,7 @@ from io import BytesIO
 from flask import session, request, flash, get_flashed_messages, send_file
 from werkzeug.datastructures import FileStorage
 
-sizes: dict[str, int] = {
+SIZES: dict[str, int] = {
     "B": 1,
     "K": 1024,
     "M": 1048576,
@@ -234,7 +234,7 @@ def config(field: str) -> str | int:
         case "INTEGER":
             value = int(data)
         case "SIZE":
-            value = int(data.replace(data[-1], "")) * sizes[data[-1]]
+            value = int(data.replace(data[-1], "")) * SIZES[data[-1]]
         # TEXT is default case
         case _:
             value = data
@@ -244,7 +244,7 @@ def config(field: str) -> str | int:
 
 def int_to_size(number: int) -> str:
     """ converts integer to human readable size """
-    for size in sizes.items().__reversed__():
+    for size in SIZES.items().__reversed__():
         if number >= size[1]:
             value: str = str(float(number) / float(size[1]))
             return value[:value.find(".") + 2] + size[0]
