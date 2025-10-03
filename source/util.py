@@ -1,5 +1,6 @@
 """ all utility functions and frequently used functions """
 
+import re
 import builtins
 from os import SEEK_SET, SEEK_END
 from os.path import isfile
@@ -7,6 +8,8 @@ from secrets import token_hex
 from io import BytesIO
 from flask import session, request, flash, get_flashed_messages, send_file
 from werkzeug.datastructures import FileStorage
+
+EXPRESSION = re.compile(r"^(\d{1,}|\d{1,}_\d{1,})$")
 
 SIZES: dict[str, int] = {
     "B": 1,
@@ -121,20 +124,22 @@ def get_tags(text: str) -> str:
         index = next_htag
     return tags
 
-def get_filename(fid, root: str, types: list[str]) -> str | None:
+def get_filename(fid: int | str, root: str, types: list[str]) -> str | None:
     """ returns files relative path """
+
     match(type(fid)):
         case builtins.int:
-            hex_fid = hex(fid)
-        case builtins.str:
-            if not fid.isdigit():
-                return None
-            hex_fid = hex(int(fid))
+            fid = str(fid)
         case _:
-            return None
+            pass
+
+    if EXPRESSION.match(fid) is None:
+        return None
+
+    print(fid)
 
     for t in types:
-        path: str = root + "/" + hex_fid + "." + t
+        path: str = root + "/" + fid + "." + t
         if isfile(path):
             return path
     return None
