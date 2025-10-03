@@ -134,9 +134,8 @@ def edit_picture(account: dict, form: dict):
         remove(old_pfp)
 
     file_type: str = form["picture"].filename.split(".")[-1]
-    hex_pid: str = hex(account["pid"])
 
-    form["picture"].save("pfp/" + hex_pid + "." + file_type)
+    form["picture"].save("pfp/" + str(account["pid"]) + "." + file_type)
 
     return redirect(link)
 

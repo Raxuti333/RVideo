@@ -1,11 +1,14 @@
 """ server and handle video pages and forms """
 
+import re
 from os import remove, SEEK_SET, SEEK_END
 from flask import render_template, redirect, abort, Response
 from util import get_query, get_method, get_filename, get_form
 from util import set_flash, get_flash, config, get_range
 from util import get_token, get_account, get_tags, check_video
 from db import db
+
+EXPRESSION = re.compile(r"^\d+_")
 
 def video_page():
     """ serve video page """
@@ -60,7 +63,16 @@ def video_stream(query: str):
     TODO optimize
     """
 
-    path: str = get_filename(query[-1], "video", ["mp4"])
+    account = get_account()
+
+    vid = query[-1]
+    pid = EXPRESSION.match(vid)
+    if pid is not None and account is not None:
+        pid = int(pid[0][:pid.span()[1] - 1])
+        if pid != account["pid"]:
+            return abort(403)
+
+    path: str = get_filename(vid, "video", ["mp4"])
     if path is None:
         return abort(404)
 
@@ -189,8 +201,7 @@ def video_upload(account: dict, form: dict):
     )[0]
 
     file_type: str = form["video"].filename.split(".")[-1]
-    hex_vid: str = hex(vid)
 
-    form["video"].save("video/" + hex_vid + "." + file_type)
+    form["video"].save("video/" + str(vid) + "." + file_type)
 
     return redirect("/video?view=" + str(vid))

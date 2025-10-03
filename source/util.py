@@ -9,7 +9,7 @@ from io import BytesIO
 from flask import session, request, flash, get_flashed_messages, send_file
 from werkzeug.datastructures import FileStorage
 
-EXPRESSION = re.compile(r"^(\d{1,}|\d{1,}_\d{1,})$")
+EXPRESSION = re.compile(r"^(\d+|\d+_\d+)$")
 
 SIZES: dict[str, int] = {
     "B": 1,

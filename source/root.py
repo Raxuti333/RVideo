@@ -5,7 +5,7 @@ from flask import render_template
 from util import get_token, get_account, get_query
 from db import db
 
-expression = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+EXPRESSION = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 def root_page() -> str:
     """ service function for landing page """
@@ -38,7 +38,7 @@ def search(query: list[str]) -> tuple[str, list]:
 
         match(p[0]):
             case "DATE":
-                if expression.match(p[1]) is not None:
+                if EXPRESSION.match(p[1]) is not None:
                     sql += f" timestamp - unixepoch('{p[1]}')"
                     sql += " > 0" if after else " < 0"
                 else: sql += " 1"
