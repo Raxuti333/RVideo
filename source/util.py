@@ -136,8 +136,6 @@ def get_filename(fid: int | str, root: str, types: list[str]) -> str | None:
     if EXPRESSION.match(fid) is None:
         return None
 
-    print(fid)
-
     for t in types:
         path: str = root + "/" + fid + "." + t
         if isfile(path):
