@@ -28,7 +28,7 @@ def search(query: list[str], account: dict) -> tuple[str, list]:
         return ("WHERE private = 0 OR pid == ?", [pid])
 
     params = [pid]
-    sql: str = "WHERE private = 0 OR pid == ? AND"
+    sql: str = "WHERE (private = 0 OR pid == ?) AND"
 
     after: bool = False
 
