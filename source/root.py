@@ -13,20 +13,22 @@ def root_page() -> str:
     token   = get_token()
     account = get_account()
 
-    condition = search(get_query("&"))
+    condition = search(get_query("&"), account)
 
-    videos = db.query("SELECT vid, name FROM video " + condition[0], condition[1], 20)
+    videos = db.query("SELECT vid, name, private FROM video " + condition[0], condition[1], 20)
 
     return render_template("root.html", token=token, account=account, videos = videos)
 
-def search(query: list[str]) -> tuple[str, list]:
+def search(query: list[str], account: dict) -> tuple[str, list]:
     """ generate sql search condition from query """
 
-    if query[0] == "":
-        return ("", [])
+    pid: int = account["pid"] if account is not None else -1
 
-    params = []
-    sql: str = "WHERE"
+    if query[0] == "":
+        return ("WHERE private = 0 OR pid == ?", [pid])
+
+    params = [pid]
+    sql: str = "WHERE private = 0 OR pid == ? AND"
 
     after: bool = False
 

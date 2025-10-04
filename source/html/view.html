@@ -76,6 +76,9 @@
                             <p style="display: inline; margin-top: 0;">date: {{ video.date }}</p>
                             <p style="display: inline; margin-top: 0;">views: {{ video.views }}</p>
                             {% if account.pid == video.pid %}
+                            {% if video.private == 1 %}
+                            <p style="display: inline; margin-top: 0;">[Private]</p>
+                            {% endif %}
                             <form style="display: inline;" action="/video" method="post">
                                 <input style="color: #ff0033; margin-left: 10px;" type="submit" value="Delete">
                                 <input type="hidden" name="vid" value="{{ vid }}">

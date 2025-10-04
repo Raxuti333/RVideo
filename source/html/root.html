@@ -72,6 +72,15 @@
         <div class="video_grid">
             {% for video in videos %}
             <div class="video_item">
+                {% if video.private == 1 %}
+                <a href="video?view={{ account.pid }}_{{ video.vid }}">
+                    <!-- figure out how to properly resize -->
+                    <video height="100vw">
+                        <source src="video?stream={{ account.pid }}_{{ video.vid }}">
+                    </video>
+                    <p class="video_item_text">{{ video.name }}</p>
+                </a>
+                {% else %}
                 <a href="video?view={{ video.vid }}">
                     <!-- figure out how to properly resize -->
                     <video height="100vw">
@@ -79,6 +88,7 @@
                     </video>
                     <p class="video_item_text">{{ video.name }}</p>
                 </a>
+                {% endif %}
             </div>
             {% endfor %}
         </div>

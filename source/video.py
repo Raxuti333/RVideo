@@ -34,11 +34,20 @@ def video_page():
 
 def video_view(account: dict, token: str, query: list[str]):
     """ servers view page queried by user """
-    vid: str = query[-1]
+
+    vid = EXPRESSION.match(query[-1])
+    if vid is not None:
+        if account is None:
+            return abort(403)
+        if account["pid"] != int(vid[0][:vid.span()[1] - 1]):
+            return abort(403)
+        vid: str = query[-1][vid.span()[1]:]
+    else:
+        vid = query[-1]
 
     video = db.query(
     "UPDATE video SET views = views + 1 WHERE vid = ? "
-    "RETURNING name, description, pid, views, date",
+    "RETURNING name, description, pid, views, private, date",
     [vid]
     )
 
@@ -54,7 +63,7 @@ def video_view(account: dict, token: str, query: list[str]):
                            video = video,
                            target = target,
                            comments = comments,
-                           vid = vid
+                           vid = query[-1]
                           )
 
 def video_stream(query: str):
@@ -105,6 +114,7 @@ def video_form(account: dict, token: str):
     ("video", "FILE"),
     ("title", str),
     ("description", str),
+    ("private", str),
     ("token", str),
 
     ("vid", int),
@@ -194,14 +204,20 @@ def video_upload(account: dict, form: dict):
 
     tags: str = get_tags(form["description"])
 
+    private: bool = form["private"] == "on"
+
     vid: int = db.query(
-    "INSERT INTO video (pid, name, description, tags, views, timestamp, date)" 
-    "VALUES(?, ?, ?, ?, 0, unixepoch('now'), date('now')) RETURNING vid", 
-    [account["pid"], form["title"], form["description"], tags]
+    "INSERT INTO video (pid, name, description, tags, private, views, timestamp, date)" 
+    "VALUES(?, ?, ?, ?, ?, 0, unixepoch('now'), date('now')) RETURNING vid", 
+    [account["pid"], form["title"], form["description"], tags, private]
     )[0]
+
+    path: str = str(vid)
+    if private:
+        path = str(account["pid"]) + "_" + path
 
     file_type: str = form["video"].filename.split(".")[-1]
 
-    form["video"].save("video/" + str(vid) + "." + file_type)
+    form["video"].save("video/" + path + "." + file_type)
 
-    return redirect("/video?view=" + str(vid))
+    return redirect("/video?view=" + path)

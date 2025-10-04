@@ -17,7 +17,7 @@ RVideo is a simple video sharing website!
 ✅ Deleting profile 
 ✅ Deleting video 
 ✅ Deleting comment 
-❌ Private videos
+✅ Private videos
 
 ✅ All forms use session tokens
 ```

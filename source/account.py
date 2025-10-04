@@ -43,10 +43,23 @@ def account_page():
 def account_profile(query: list[str], account: dict | None):
     """ profile page """
 
+    pid: int = -1
+    if account is not None:
+        pid = account["pid"]
+
     token = get_token()
     error = get_flash()
     target = db.query("SELECT pid, username, date FROM profile WHERE pid = ?", [query[-1]])
-    videos = db.query("SELECT vid, name, pid FROM video WHERE pid = ?", [query[-1]], -1)
+
+    condition: str = " AND private = 0"
+    if target["pid"] == pid:
+        condition = ""
+
+    videos = db.query(
+    "SELECT vid, name, pid, private FROM video WHERE pid = ?" + condition,
+    [query[-1]],
+    -1
+    )
     views  = db.query("SELECT SUM(views) FROM video WHERE pid = ?", [query[-1]])[0]
 
     if target is None:

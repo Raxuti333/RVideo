@@ -9,12 +9,14 @@ CREATE TABLE profile
 
 CREATE TABLE video 
 ( 
-    vid INTEGER PRIMARY KEY, 
-    pid INTEGER, views INTEGER, 
-    name TEXT, description TEXT, 
-    timestamp INTEGER, date TEXT, 
-    tags TEXT, 
-    FOREIGN KEY(pid) REFERENCES profile(pid) 
+    vid INTEGER PRIMARY KEY,
+    pid INTEGER,
+    private INTEGER,
+    views INTEGER,
+    name TEXT, description TEXT,
+    timestamp INTEGER, date TEXT,
+    tags TEXT,
+    FOREIGN KEY(pid) REFERENCES profile(pid)
 );
 
 CREATE TABLE comment 
