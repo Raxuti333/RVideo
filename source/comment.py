@@ -1,8 +1,11 @@
 """ process comment forms """
 
+import re
 from flask import redirect, abort
 from util import get_form, get_account, get_token
 from db import db
+
+EXPRESSION = re.compile(r"\d+_\d+")
 
 def comment_form():
     """ process comment form """
@@ -11,7 +14,7 @@ def comment_form():
     token   = get_token()
     form    = get_form([
     ("cid", int),
-    ("vid", int),
+    ("vid", str),
     ("token", str),
     ("comment", str),
     ])
@@ -25,6 +28,13 @@ def comment_form():
     if form["vid"] is None:
         return redirect("/")
 
+    if EXPRESSION.match(form["vid"]) is not None:
+        vid = int(form["vid"].split('_')[1])
+    else:
+        if not form["vid"].isdigit():
+            return redirect("/")
+        vid: int = int(form["vid"])
+
     link: str = "/video?view=" + str(form["vid"])
 
     if form["cid"] is not None:
@@ -36,7 +46,7 @@ def comment_form():
     db.query(
     "INSERT INTO comment (vid, pid, text, timestamp, date) "
     "VALUES(?, ?, ?, unixepoch('now'), date('now'))",
-    [form["vid"], account["pid"], form["comment"]],
+    [vid, account["pid"], form["comment"]],
     0
     )
 
@@ -46,8 +56,8 @@ def comment_delete(form: dict, account: dict, link: str):
     """ deletes selected comment if allowed """
 
     db.query(
-    "DELETE FROM comment WHERE cid = ? AND pid = ? AND vid = ?",
-    [form["cid"], account["pid"], form["vid"]],
+    "DELETE FROM comment WHERE cid = ? AND pid = ?",
+    [form["cid"], account["pid"]],
     0
     )
 
