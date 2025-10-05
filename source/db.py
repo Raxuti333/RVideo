@@ -43,4 +43,17 @@ class Database:
 
         return result
 
+    def multi_query(self, sql: str, params: list[list] = None):
+        """ 
+        multi query data from sqlite3 db\n
+        count = 1: fetchone()\n
+        count = -1: fetchall()\n
+        count = n: fetchmany(n)\n
+        count = 0: None
+        """
+
+        with self.lock:
+            self.db.executemany(sql, params)
+            self.db.commit()
+
 db: Database = Database()
