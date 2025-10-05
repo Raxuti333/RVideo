@@ -254,7 +254,7 @@ def config(field: str) -> str | int:
             value = int(data)
         case "SIZE":
             value = int(data.replace(data[-1], "")) * SIZES[data[-1]]
-        case "BOOL":
+        case "BOOLEAN":
             value = data == "TRUE"
         # TEXT is default case
         case _:
