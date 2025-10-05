@@ -55,7 +55,7 @@ def video_view(account: dict, token: str):
     target = db.query("SELECT pid, username FROM profile WHERE pid = ?", [video["pid"]])
     comments = db.query(
     "SELECT cid, pid, text FROM comment WHERE vid = ?" +
-    f"ORDER BY timestamp ASC LIMIT { LIMIT } OFFSET { offset * LIMIT }",
+    f" ORDER BY timestamp ASC LIMIT { LIMIT } OFFSET { offset * LIMIT }",
     [vid],
     LIMIT
     )
