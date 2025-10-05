@@ -5,6 +5,7 @@ from flask import render_template
 from util import get_token, get_account, get_query
 from db import db
 
+LIMIT = 24
 EXPRESSION = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 def root_page() -> str:
@@ -15,22 +16,35 @@ def root_page() -> str:
 
     condition = search(get_query("&"), account)
 
-    videos = db.query("SELECT vid, name, private FROM video " + condition[0], condition[1], 20)
+    videos = db.query(
+    "SELECT vid, name, private FROM video " + condition[0],
+    condition[1],
+    LIMIT
+    )
 
-    return render_template("root.html", token=token, account=account, videos = videos)
+    return render_template(
+    "root.html",
+    token=token,
+    account=account,
+    videos=videos,
+    searches=condition[2]
+    )
 
-def search(query: list[str], account: dict) -> tuple[str, list]:
+def search(query: list[str], account: dict) -> tuple[str, list, dict]:
     """ generate sql search condition from query """
 
+    searched: dict = {}
     pid: int = account["pid"] if account is not None else -1
 
     if query[0] == "":
-        return ("WHERE private = 0 OR pid = ?", [pid])
+        return ("WHERE private = 0 OR pid = ?", [pid], searched)
 
     params = [pid]
     sql: str = "WHERE (private = 0 OR pid = ?) AND"
 
+    page = 0
     after: bool = False
+    date: bool = False
 
     for m in query:
         p = m.split("=")
@@ -43,11 +57,14 @@ def search(query: list[str], account: dict) -> tuple[str, list]:
                 if EXPRESSION.match(p[1]) is not None:
                     sql += f" timestamp - unixepoch('{p[1]}')"
                     sql += " > 0" if after else " < 0"
+                    searched["DATE"] = p[1]
                 else: sql += " 1"
                 sql += " AND"
+                date = True
             case "AFTER":
                 if p[1] == "on":
                     after = True
+                    searched["AFTER"] = "checked"
             case "USERS":
                 users = db.query(
                     "SELECT pid FROM profile WHERE LOWER(username) LIKE LOWER(?)",
@@ -55,23 +72,42 @@ def search(query: list[str], account: dict) -> tuple[str, list]:
                     10
                     )
                 if users != []:
+                    searched["USERS"] = p[1]
                     for u in users:
                         sql += f" pid = {u['pid']} OR"
                     sql = sql[:len(sql) - 2] + " AND"
                 else: sql += " pid = 0 AND"
             case "SEARCH":
-                for x in p[1].split(" "):
+                search_query: str = ""
+                for x in p[1].split("+"):
+                    if x == "":
+                        continue
                     params.append("%"+x+"%")
                     sql += " name LIKE ? OR"
-                sql = sql[:len(sql) - 2] + "AND"
+                    search_query += x + " "
+                searched["SEARCH"] = search_query
+                sql = sql[:-2] + "AND"
             case "TAGS":
+                searched["TAGS"] = p[1].replace("%23", "#")
                 sql += search_tags(p[1].split("%23"))
+            case "PAGE":
+                if p[1].isdigit():
+                    searched["PAGE"] = p[1]
+                    page = int(p[1])
             case _:
                 pass
 
-    sql = sql[:len(sql) - 4]
+    sql = sql[:-4]
 
-    return (sql, params)
+    if date:
+        if after:
+            sql += " ORDER BY timestamp ASC"
+        else:
+            sql += " ORDER BY timestamp DESC"
+
+    sql += f" LIMIT { LIMIT } OFFSET { page * LIMIT }"
+
+    return (sql, params, searched)
 
 def search_tags(tags: list[str]) -> str:
     """ return search condition for tags """

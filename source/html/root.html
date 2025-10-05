@@ -22,24 +22,28 @@
                         <a class="search_hide_advanced" href="#">↑</a>
                         <a class="search_show_advanced" href="#advanced">↓</a>
                         
-                        <input class="search_bar" type="text" name="SEARCH">
+                        <input class="search_bar" type="text" name="SEARCH" value="{{ searches.SEARCH }}">
                         <input type="submit" value="search">
                     </div>
 
                     <div class="search_advanced">
                         <div class="search_advanced_item">
-                            <input id="selector" class="search_date" type="checkbox" name="AFTER">
+                            <input id="selector" class="search_date" type="checkbox" name="AFTER" {{ searches.AFTER }}>
                             <p class="search_date_before">before:</p>
                             <p class="search_date_after">after:</p>
-                            <input style="display: inline;" type="date" name="DATE">
+                            <input style="display: inline;" type="date" name="DATE" value="{{ searches.DATE }}">
                         </div>
                         <div class="search_advanced_item">
                             <p style="display: inline;">users:</p>
-                            <input class="search_user" type="text" name="USERS">
+                            <input class="search_user" type="text" name="USERS" value="{{ searches.USERS }}">
                         </div>
                         <div class="search_advanced_item">
                             <p style="display: inline;">tags:</p>
-                            <input class="search_user" type="text" name="TAGS">
+                            <input class="search_user" type="text" name="TAGS" value="{{ searches.TAGS }}">
+                        </div>
+                            <div class="search_advanced_item">
+                            <p style="display: inline;">page:</p>
+                            <input class="search_user" type="number" name="PAGE" value="{{ searches.PAGE }}">
                         </div>
                     </div>
                 </form>
