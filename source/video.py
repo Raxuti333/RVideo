@@ -211,15 +211,20 @@ def video_upload(account: dict, form: dict):
         set_flash([verdict[1], "#ff0033"])
         return redirect("/video")
 
-    tags: str = get_tags(form["description"])
-
     private: bool = form["private"] == "on"
 
     vid: int = db.query(
-    "INSERT INTO video (pid, name, description, tags, private, views, timestamp, date)" 
-    "VALUES(?, ?, ?, ?, ?, 0, unixepoch('now'), date('now')) RETURNING vid", 
-    [account["pid"], form["title"], form["description"], tags, private]
+    "INSERT INTO video (pid, name, description, private, views, timestamp, date)" 
+    "VALUES(?, ?, ?, ?, 0, unixepoch('now'), date('now')) RETURNING vid", 
+    [account["pid"], form["title"], form["description"], private]
     )[0]
+
+    queries: list[tuple[int, str]] = []
+    tags: list[str] = get_tags(form["description"])
+    for tag in tags:
+        queries.append((vid, tag))
+
+    db.multi_query("INSERT INTO tag (vid, text) VALUES(?, ?)", queries)
 
     path: str = str(vid)
     if private:

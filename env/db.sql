@@ -15,7 +15,6 @@ CREATE TABLE video
     views INTEGER,
     name TEXT, description TEXT,
     timestamp INTEGER, date TEXT,
-    tags TEXT,
     FOREIGN KEY(pid) REFERENCES profile(pid)
 );
 
@@ -29,4 +28,11 @@ CREATE TABLE comment
     date TEXT, 
     FOREIGN KEY(vid) REFERENCES video(vid), 
     FOREIGN KEY(pid) REFERENCES profile(pid) 
+);
+
+CREATE TABLE tag
+(
+    vid INTEGER,
+    text TEXT,
+    FOREIGN KEY(vid) REFERENCES video(vid)
 );
