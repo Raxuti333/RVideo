@@ -9,6 +9,7 @@ from util import get_token, get_account, get_tags, check_video
 from db import db
 
 EXPRESSION = re.compile(r"^\d+_")
+VALID_VID  = re.compile(r"^(\d+|\d+_\d+)$")
 
 def video_page():
     """ serve video page """
@@ -117,7 +118,7 @@ def video_form(account: dict, token: str):
     ("private", str),
     ("token", str),
 
-    ("vid", int),
+    ("vid", str),
     ("select", str)
     ])
 
@@ -127,6 +128,9 @@ def video_form(account: dict, token: str):
 
     if form["vid"] is None:
         return video_upload(account, form)
+
+    if VALID_VID.match(form["vid"]) is None:
+        return redirect("/")
 
     edit: dict[int] = {"title": title, "description": description, "delete": delete}
 
@@ -141,12 +145,18 @@ def title(account: dict, form: dict):
 
     link: str = "/video?view=" + str(form["vid"])
 
+    vid = EXPRESSION.match(form["vid"])
+    if vid is not None:
+        vid: str = form["vid"][vid.span()[1]:]
+    else:
+        vid = form["vid"]
+
     if form["title"] is None:
         set_flash(["title is empty", "#ff0033"])
         return redirect(link)
 
     db.query("UPDATE video SET name = ? WHERE vid = ? AND pid = ?",
-    [form["title"], form["vid"], account["pid"]],
+    [form["title"], vid, account["pid"]],
     0)
 
     return redirect(link)
@@ -157,12 +167,18 @@ def description(account: dict, form: dict):
     """
     link: str = "/video?view=" + str(form["vid"])
 
+    vid = EXPRESSION.match(form["vid"])
+    if vid is not None:
+        vid: str = form["vid"][vid.span()[1]:]
+    else:
+        vid = form["vid"]
+
     if form["description"] is None:
         set_flash(["description is empty", "#ff0033"])
         return redirect(link)
 
     db.query("UPDATE video SET description = ? WHERE vid = ? AND pid = ?",
-    [form["description"], form["vid"], account["pid"]],
+    [form["description"], vid, account["pid"]],
     0)
 
     return redirect(link)
@@ -170,12 +186,18 @@ def description(account: dict, form: dict):
 def delete(account: dict, form: dict):
     """ remove video """
 
+    vid = EXPRESSION.match(form["vid"])
+    if vid is not None:
+        vid: str = form["vid"][vid.span()[1]:]
+    else:
+        vid = form["vid"]
+
     path: str = get_filename(form["vid"], "video", ["mp4"])
     if path is None:
         return redirect("/")
 
     vid: int = db.query("DELETE FROM video WHERE vid = ? AND pid = ? RETURNING vid",
-    [form["vid"], account["pid"]])
+    [vid, account["pid"]])
 
     if vid is None:
         return redirect("/video?view=" + str(form["vid"]))
