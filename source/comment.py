@@ -1,11 +1,8 @@
 """ process comment forms """
 
-import re
 from flask import redirect, abort
 from util import get_form, get_account, get_token, get_vid
 from db import db
-
-EXPRESSION = re.compile(r"\d+_\d+")
 
 def comment_form():
     """ process comment form """
