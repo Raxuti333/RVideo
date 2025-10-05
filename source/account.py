@@ -8,6 +8,7 @@ from util import set_flash, get_flash, check_password, check_username, config
 from util import get_token, send_data, set_account, get_account, clear_account
 from db import db
 
+LIMIT = 20
 IMAGE_FILE_TYPES: list[str] = ["png", "jpg", "ico", "bmp"]
 
 def account_page():
@@ -33,10 +34,11 @@ def account_page():
     select: bool = query[0] == "search"
 
     accounts = db.query(
-        "SELECT pid, username FROM profile " + 
-        condition[select],
-        [query[-1] + "%"] if select else [],
-        5*5)
+    "SELECT pid, username FROM profile " + 
+    condition[select] + f" LIMIT { LIMIT }",
+    [query[-1] + "%"] if select else [],
+    LIMIT
+    )
 
     return render_template("account_search.html", account = account, accounts = accounts)
 
