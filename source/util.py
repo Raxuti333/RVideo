@@ -2,6 +2,7 @@
 
 import re
 import builtins
+from string import ascii_uppercase, ascii_lowercase
 from os import SEEK_SET, SEEK_END
 from os.path import isfile
 from secrets import token_hex
@@ -213,7 +214,11 @@ def send_data(path: str, mimetype: str):
 def check_password(password: str) -> tuple[bool, str]:
     """ checks if password is acceptable """
     if len(password) < 4:
-        return (False, "password needs to be more than 4 characaters long")
+        return (False, "Password must be longer than 3 character")
+    if not any(ch in password for ch in ascii_lowercase):
+        return (False, "passoword must contain at least 1 lowercase letter")
+    if not any(ch in password for ch in ascii_uppercase):
+        return (False, "passoword must contain at least 1 uppercase letter")
     if not any(ch in password for ch in r"1234567890 _\?!@$%{}[]\+-/\\"):
         return (False, "password must contain at leas one special character")
     return (True, "Success")
