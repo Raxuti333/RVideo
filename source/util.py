@@ -213,7 +213,7 @@ def send_data(path: str, mimetype: str):
 def check_password(password: str) -> tuple[bool, str]:
     """ checks if password is acceptable """
     if len(password) < 4:
-        return (False, "password too short")
+        return (False, "password needs to be more than 4 characaters long")
     if not any(ch in password for ch in r"1234567890 _\?!@$%{}[]\+-/\\"):
         return (False, "password must contain at leas one special character")
     return (True, "Success")
