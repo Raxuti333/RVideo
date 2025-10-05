@@ -101,9 +101,9 @@ def get_range() -> int:
 
     return 0
 
-def get_tags(text: str) -> str:
+def get_tags(text: str) -> list[str]:
     """ returns a string only containing tags found in text """
-    tags: str = ""
+    tags: list[str] = []
     index: int = text.find("#")
     while index != -1:
         space = text.find(" ", index)
@@ -121,7 +121,7 @@ def get_tags(text: str) -> str:
             case 3:
                 end = len(text)
 
-        tags += text[index:end]
+        tags.append(text[index:end].replace("\n", ""))
         index = next_htag
     return tags
 
