@@ -218,11 +218,15 @@ def delete_profile(account: dict, form: dict):
     if pfp is not None:
         remove(pfp)
 
-    videos: list[int] = db.query("SELECT vid FROM video WHERE pid = ?", [account["pid"]], -1)
+    videos: list[list[int]] = [[vid["vid"]]
+    for vid in db.query("SELECT vid FROM video WHERE pid = ?", [account["pid"]], -1)
+    ]
+
+    db.query("DELETE FROM video WHERE pid = ?", [account["pid"]])
+    db.multi_query("DELETE FROM comment WHERE vid = ?", videos)
+    db.multi_query("DELETE FROM tag WHERE vid = ?", videos)
 
     for video in videos:
-        db.query("DELETE FROM video WHERE vid = ?", [video["vid"]], 0)
-        db.query("DELETE FROM comment WHERE vid = ?", [video["vid"]], 0)
-        remove(get_filename(video["vid"], "video", ["mp4"]))
+        remove(get_filename(video[0], "video", ["mp4"]))
 
     return redirect("/")
