@@ -89,7 +89,7 @@
 .video_grid
 {
     display: grid;
-    grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto auto auto auto;
     align-content: center;
     justify-content: center;
 }
