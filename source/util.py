@@ -33,7 +33,7 @@ VIDEO_TYPES: list[bytes] = [
     bytes("mp42", "utf-8"),
 ]
 
-configs: dict[str, str | int] = {}
+configs: dict[str, str | int | bool] = {}
 
 def get_flash() -> list[str]:
     """ get messages from flash """
@@ -254,6 +254,8 @@ def config(field: str) -> str | int:
             value = int(data)
         case "SIZE":
             value = int(data.replace(data[-1], "")) * SIZES[data[-1]]
+        case "BOOL":
+            value = data == "TRUE"
         # TEXT is default case
         case _:
             value = data
