@@ -25,10 +25,10 @@ def search(query: list[str], account: dict) -> tuple[str, list]:
     pid: int = account["pid"] if account is not None else -1
 
     if query[0] == "":
-        return ("WHERE private = 0 OR pid == ?", [pid])
+        return ("WHERE private = 0 OR pid = ?", [pid])
 
     params = [pid]
-    sql: str = "WHERE (private = 0 OR pid == ?) AND"
+    sql: str = "WHERE (private = 0 OR pid = ?) AND"
 
     after: bool = False
 
@@ -65,15 +65,37 @@ def search(query: list[str], account: dict) -> tuple[str, list]:
                     sql += " name LIKE ? OR"
                 sql = sql[:len(sql) - 2] + "AND"
             case "TAGS":
-                for x in p[1].split("%23"):
-                    if x == "":
-                        continue
-                    params.append("#" + x.replace(" ", ""))
-                    sql += " instr(tags, ?) > 0 OR"
-                sql = sql[:len(sql) - 2] + "AND"
+                sql += search_tags(p[1].split("%23"))
             case _:
                 pass
 
     sql = sql[:len(sql) - 4]
 
     return (sql, params)
+
+def search_tags(tags: list[str]) -> str:
+    """ return search condition for tags """
+    params: list[str] = []
+    sql: str = "SELECT vid FROM tag WHERE"
+    for tag in tags:
+        if tag == "":
+            continue
+        if tag[-1] == '+':
+            tag = tag[:len(tag) - 1]
+        params.append("#" + tag)
+        sql += " instr(text, ?) > 0 OR"
+    sql = sql[:len(sql) - 2]
+
+    vids = [vid["vid"] for vid in db.query(sql, params, -1)]
+    vids = list(dict.fromkeys(vids))
+
+    if not vids:
+        return ""
+
+    sql = ""
+    for vid in vids:
+        sql += f" vid = { vid } OR"
+    sql = sql[:len(sql) - 2]
+    sql += " AND"
+
+    return sql
