@@ -8,6 +8,7 @@ from util import set_flash, get_flash, config, get_range, get_vid
 from util import get_token, get_account, get_tags, check_video
 from db import db
 
+LIMIT = 25
 EXPRESSION = re.compile(r"^\d+_")
 
 def video_page():
@@ -19,7 +20,7 @@ def video_page():
     query   = get_query("=")
 
     if query[0] == "view":
-        return video_view(account, token, query)
+        return video_view(account, token)
 
     if query[0] == "stream":
         return video_stream(query)
@@ -32,18 +33,15 @@ def video_page():
 
     return render_template("video.html", token = token, account = account, message = message)
 
-def video_view(account: dict, token: str, query: list[str]):
+def video_view(account: dict, token: str):
     """ servers view page queried by user """
 
-    vid = EXPRESSION.match(query[-1])
-    if vid is not None:
+    vid, rvid, offset, pid = view_parse_query(get_query("&"))
+    if pid is not None:
         if account is None:
             return abort(403)
-        if account["pid"] != int(vid[0][:vid.span()[1] - 1]):
+        if account["pid"] != pid:
             return abort(403)
-        vid: str = query[-1][vid.span()[1]:]
-    else:
-        vid = query[-1]
 
     video = db.query(
     "UPDATE video SET views = views + 1 WHERE vid = ? "
@@ -55,16 +53,51 @@ def video_view(account: dict, token: str, query: list[str]):
         return redirect("/")
 
     target = db.query("SELECT pid, username FROM profile WHERE pid = ?", [video["pid"]])
-    comments = db.query("SELECT cid, pid, text FROM comment WHERE vid = ?", [vid], -1)
+    comments = db.query(
+    "SELECT cid, pid, text FROM comment WHERE vid = ?" +
+    f"ORDER BY timestamp ASC LIMIT { LIMIT } OFFSET { offset * LIMIT }",
+    [vid],
+    LIMIT
+    )
 
-    return render_template("view.html",
-                           token = token,
-                           account = account,
-                           video = video,
-                           target = target,
-                           comments = comments,
-                           vid = query[-1]
-                          )
+    return render_template(
+    "view.html",
+    token = token,
+    account = account,
+    video = video,
+    target = target,
+    comments = comments,
+    vid = rvid,
+    offset = {"current": offset, "next": offset + 1, "last": offset - 1}
+    )
+
+def view_parse_query(query: list[str]) -> tuple[str, str, int, int | None]:
+    """ parse view query string """
+
+    vid: str = ""
+    rvid: str = ""
+    offset: int = 0
+    pid: int | None = None
+
+    for m in query:
+        p = m.split("=")
+        if len(p) != 2:
+            continue
+        match(p[0]):
+            case "view":
+                vid = EXPRESSION.match(p[1])
+                if vid is not None:
+                    pid = int(vid[0][:vid.span()[1] - 1])
+                    vid = vid[0][vid.span()[1]:]
+                else:
+                    vid = p[1]
+                rvid = p[1]
+            case "offset":
+                if p[1].isdigit():
+                    offset = int(p[1])
+
+    return (vid, rvid, offset, pid)
+
 
 def video_stream(query: str):
     """ 
