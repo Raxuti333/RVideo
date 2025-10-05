@@ -4,12 +4,11 @@ import re
 from os import remove, SEEK_SET, SEEK_END
 from flask import render_template, redirect, abort, Response
 from util import get_query, get_method, get_filename, get_form
-from util import set_flash, get_flash, config, get_range
+from util import set_flash, get_flash, config, get_range, get_vid
 from util import get_token, get_account, get_tags, check_video
 from db import db
 
 EXPRESSION = re.compile(r"^\d+_")
-VALID_VID  = re.compile(r"^(\d+|\d+_\d+)$")
 
 def video_page():
     """ serve video page """
@@ -129,7 +128,7 @@ def video_form(account: dict, token: str):
     if form["vid"] is None:
         return video_upload(account, form)
 
-    if VALID_VID.match(form["vid"]) is None:
+    if get_vid(form["vid"]) is None:
         return redirect("/")
 
     edit: dict[int] = {"title": title, "description": description, "delete": delete}
@@ -145,11 +144,7 @@ def title(account: dict, form: dict):
 
     link: str = "/video?view=" + str(form["vid"])
 
-    vid = EXPRESSION.match(form["vid"])
-    if vid is not None:
-        vid: str = form["vid"][vid.span()[1]:]
-    else:
-        vid = form["vid"]
+    vid = get_vid(form["vid"])
 
     if form["title"] is None:
         set_flash(["title is empty", "#ff0033"])
@@ -167,11 +162,7 @@ def description(account: dict, form: dict):
     """
     link: str = "/video?view=" + str(form["vid"])
 
-    vid = EXPRESSION.match(form["vid"])
-    if vid is not None:
-        vid: str = form["vid"][vid.span()[1]:]
-    else:
-        vid = form["vid"]
+    vid = get_vid(form["vid"])
 
     if form["description"] is None:
         set_flash(["description is empty", "#ff0033"])
@@ -186,11 +177,7 @@ def description(account: dict, form: dict):
 def delete(account: dict, form: dict):
     """ remove video """
 
-    vid = EXPRESSION.match(form["vid"])
-    if vid is not None:
-        vid: str = form["vid"][vid.span()[1]:]
-    else:
-        vid = form["vid"]
+    vid = get_vid(form["vid"])
 
     path: str = get_filename(form["vid"], "video", ["mp4"])
     if path is None:

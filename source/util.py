@@ -10,6 +10,7 @@ from flask import session, request, flash, get_flashed_messages, send_file
 from werkzeug.datastructures import FileStorage
 
 EXPRESSION = re.compile(r"^(\d+|\d+_\d+)$")
+PRIVATEVID = re.compile(r"^\d+_\d+$")
 
 SIZES: dict[str, int] = {
     "B": 1,
@@ -140,6 +141,16 @@ def get_filename(fid: int | str, root: str, types: list[str]) -> str | None:
         path: str = root + "/" + fid + "." + t
         if isfile(path):
             return path
+    return None
+
+def get_vid(vid: str | None) -> int | None:
+    """ extract vid from vid string """
+    if vid is None:
+        return None
+    if PRIVATEVID.match(vid) is not None:
+        return int(vid.split("_")[1])
+    if vid.isdigit():
+        return int(vid)
     return None
 
 def check_file(file: FileStorage, max_size: int, types: list[str]) -> tuple[bool, str]:

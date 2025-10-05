@@ -2,7 +2,7 @@
 
 import re
 from flask import redirect, abort
-from util import get_form, get_account, get_token
+from util import get_form, get_account, get_token, get_vid
 from db import db
 
 EXPRESSION = re.compile(r"\d+_\d+")
@@ -25,15 +25,10 @@ def comment_form():
     if account is None:
         return redirect("/login")
 
-    if form["vid"] is None:
-        return redirect("/")
+    vid = get_vid(form["vid"])
 
-    if EXPRESSION.match(form["vid"]) is not None:
-        vid = int(form["vid"].split('_')[1])
-    else:
-        if not form["vid"].isdigit():
-            return redirect("/")
-        vid: int = int(form["vid"])
+    if vid is None:
+        return redirect("/")
 
     link: str = "/video?view=" + str(form["vid"])
 
