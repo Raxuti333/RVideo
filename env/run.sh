@@ -1,16 +1,10 @@
 #!/bin/sh
 
-db=db.sql
 venv=../.venv/bin/activate
 main=../source/main.py
 
 # set cwd to this direcotry containing this file.
 cd "$(dirname "$0")"
-
-if [ ! -f db ]; then
-    echo "creating new database to $PWD/db"
-    cat $db | sqlite3 db
-fi
 
 if [ ! -f $venv ]; then
     echo "No venv found"

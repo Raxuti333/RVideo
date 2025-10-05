@@ -4,6 +4,43 @@ database class and query functions
 
 import sqlite3
 from threading import Lock
+from util import config
+
+TABLES: set[str] = set([
+    "profile",
+    "video",
+    "comment",
+    "tag"
+])
+
+INDEXES: set[str] = set([
+    "idx_vid_timestamp",
+    "idx_vid_private",
+    "idx_pid_private"
+])
+
+def setup(connection):
+    """ 
+    Checks db tables and creates them if missing.\n
+    If .config INDEXES TRUE checks indexes and creates them if missing.\n
+    If .config INDEXES is FALSE but db contains indexes they will be deleted.\n
+    """
+    tables = connection.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
+    if set([table["name"] for table in tables]) != TABLES:
+        print("creating tables!")
+        with open("db.sql", encoding="utf-8") as sql:
+            connection.executescript(sql.read(-1))
+
+    if not config("INDEXES"):
+        for p in INDEXES:
+            connection.execute(f"DROP INDEX IF EXISTS { p }")
+        return
+
+    indexes = connection.execute("SELECT name FROM sqlite_master WHERE type='index'")
+    if set([index["name"] for index in indexes]) != INDEXES:
+        print("creating indexes!")
+        with open("index.sql", encoding="utf-8") as sql:
+            connection.executescript(sql.read(-1))
 
 class Database:
     """
@@ -17,6 +54,8 @@ class Database:
         self.db = sqlite3.connect("db", check_same_thread=False)
         self.db.row_factory = sqlite3.Row
         self.lock = Lock()
+        setup(self.db)
+        self.db.commit()
 
     def __del__(self):
         self.db.close()
