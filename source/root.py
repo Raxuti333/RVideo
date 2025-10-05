@@ -92,10 +92,4 @@ def search_tags(tags: list[str]) -> str:
     if not vids:
         return ""
 
-    sql = ""
-    for vid in vids:
-        sql += f" vid = { vid } OR"
-    sql = sql[:len(sql) - 2]
-    sql += " AND"
-
-    return sql
+    return "".join([f" vid = { vid } OR" for vid in vids])[:-2] + "AND"
