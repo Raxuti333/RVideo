@@ -119,6 +119,15 @@
                     </div>
                     {% endfor %}
                 </div>
+                <div style="display: flex; margin-left: auto; margin-right: auto; max-width: fit-content;">
+                    <a class="comment_button_container" href="video?view={{ vid }}&offset={{ offset.last }}">
+                        <p class="comment_button">←</p>
+                    </a>
+                    <p style="margin-left: 5px; margin-right: 5px;" >{{ offset.current }}</p>
+                    <a class="comment_button_container" href="video?view={{ vid }}&offset={{ offset.next }}">
+                        <p class="comment_button">→</p>
+                    </a>
+                </div>
             </div>
         </div>
     </body>

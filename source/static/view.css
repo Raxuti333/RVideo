@@ -12,3 +12,21 @@
 
 .description_edit { display: none; }
 #description:target .description_edit { display: block; }
+
+.comment_button_container
+{
+    text-decoration: none;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.comment_button
+{
+    display: inline;
+    padding: 1px 6px;
+    border: 1px outset buttonborder;
+    border-radius: 3px;
+    color: buttontext;
+    background-color: buttonface;
+    text-decoration: none;
+}
