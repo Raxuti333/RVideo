@@ -56,7 +56,7 @@ def before():
 def after(res):
     """ remove tracker """
     if config("PRINTS"):
-        print(str(request.track))
+        print(request.track)
     del request.track
     return res
 
