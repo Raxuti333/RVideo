@@ -2,9 +2,12 @@
 database class and query functions
 """
 
+import re
 import sqlite3
 from threading import Lock
 from util import config
+
+EXPRESSION = re.compile(r"^sqlite_autoindex_profile_\d+$")
 
 TABLES: set[str] = set([
     "profile",
@@ -26,7 +29,7 @@ def setup(connection):
     If .config INDEXES is FALSE but db contains indexes they will be deleted.\n
     """
     tables = connection.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
-    if set([table["name"] for table in tables]) != TABLES:
+    if {table["name"] for table in tables} != TABLES:
         print("creating tables!")
         with open("db.sql", encoding="utf-8") as sql:
             connection.executescript(sql.read(-1))
@@ -37,7 +40,7 @@ def setup(connection):
         return
 
     indexes = connection.execute("SELECT name FROM sqlite_master WHERE type='index'")
-    if set([index["name"] for index in indexes]) != INDEXES:
+    if {index["name"] for index in indexes if EXPRESSION.match(index["name"]) is None} != INDEXES:
         print("creating indexes!")
         with open("index.sql", encoding="utf-8") as sql:
             connection.executescript(sql.read(-1))
