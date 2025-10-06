@@ -88,7 +88,7 @@ def view_parse_query(query: list[str]) -> tuple[str, str, int, int | None]:
                 vid = EXPRESSION.match(p[1])
                 if vid is not None:
                     pid = int(vid[0][:vid.span()[1] - 1])
-                    vid = vid[0][vid.span()[1]:]
+                    vid = p[1][vid.span()[1]:]
                 else:
                     vid = p[1]
                 rvid = p[1]
@@ -97,7 +97,6 @@ def view_parse_query(query: list[str]) -> tuple[str, str, int, int | None]:
                     offset = int(p[1])
 
     return (vid, rvid, offset, pid)
-
 
 def video_stream(query: str):
     """ 
