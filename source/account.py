@@ -53,6 +53,9 @@ def account_profile(query: list[str], account: dict | None):
     error = get_flash()
     target = db.query("SELECT pid, username, date FROM profile WHERE pid = ?", [query[-1]])
 
+    if target is None:
+        return redirect("/")
+
     condition: str = " AND private = 0"
     if target["pid"] == pid:
         condition = ""
