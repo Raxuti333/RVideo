@@ -200,9 +200,19 @@ def description(account: dict, form: dict):
         set_flash(["description is empty", "#ff0033"])
         return redirect(link)
 
-    db.query("UPDATE video SET description = ? WHERE vid = ? AND pid = ?",
-    [form["description"], vid, account["pid"]],
-    0)
+    value = db.query("UPDATE video SET description = ? WHERE vid = ? AND pid = ? RETURNING vid",
+    [form["description"], vid, account["pid"]]
+    )
+
+    if value is None:
+        return redirect(link)
+
+    db.query("DELETE FROM tag WHERE vid = ?", [vid], 0)
+    queries: list[tuple[int, str]] = []
+    tags: list[str] = get_tags(form["description"])
+    for tag in tags:
+        queries.append((vid, tag))
+    db.multi_query("INSERT INTO tag (vid, text) VALUES(?, ?)", queries)
 
     return redirect(link)
 
