@@ -98,16 +98,22 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
                 pass
 
     sql = sql[:-4]
-
-    if date:
-        if after:
-            sql += " ORDER BY timestamp ASC"
-        else:
-            sql += " ORDER BY timestamp DESC"
-
+    sql += search_order(date, after)
     sql += f" LIMIT { LIMIT } OFFSET { page * LIMIT }"
 
+    print(sql)
     return (sql, params, searched)
+
+def search_order(date: bool, after: bool) -> str:
+    """ create timestamp order condition """
+    if not date:
+        return ""
+    sql: str = " ORDER BY timestamp "
+    if after:
+        sql += "ASC"
+    else:
+        sql += "DESC"
+    return sql
 
 def search_tags(tags: list[str]) -> str:
     """ return search condition for tags """
