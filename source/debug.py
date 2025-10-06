@@ -13,11 +13,12 @@ class Debug:
 
     def __del__(self):
         print("\n\033[32mDebug info\033[0m:")
-        print("max:", str(round(self.max, 3)) + "s")
-        print("avg:", str(round(self.avg, 3)) + "s")
+
+        dump: str = f"max: { str(round(self.max, 3)) }s\navg: { str(round(self.avg, 3)) }s\n"
 
         for url, metric in self.urls.items():
-            print(url, metric[1], str(round(metric[0], 3)) + "s")
+            dump += url + f" {metric[1]} { str(round(metric[0], 3)) }s\n"
+        print(dump)
 
     def push(self, url, delta_time):
         """ push new data point """
