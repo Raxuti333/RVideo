@@ -46,7 +46,6 @@ for pid in range(1, PROFILE_COUNT):
     db.executemany("INSERT INTO comment (vid, pid, text, timestamp) VALUES (?, ?, ?, ?)", comment)
     db.executemany("INSERT INTO tag (vid, text) VALUES (?, ?)", tag)
     print(pid, "/", PROFILE_COUNT)
-    print(vid)
 
 
 db.commit()
