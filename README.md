@@ -181,6 +181,9 @@ PORT - Port that the program listens to.
 CHUNK_SIZE - Max stream chunks size
 MAX_PFP_SIZE - Max profile picture size
 MAX_FILE_SIZE - Max uploaded file size accepted by flask
+INDEXES - Add db indexes
+DEBUG - Add debug timing and "profiling"
+PRINTS - Realtime debug info
 SECRET_KEY - Secret key used by flask for secure session storage
 ```
 
@@ -192,4 +195,92 @@ Types tell the parser how to process data.
 INTEGER - Data is cast to int
 TEXT - Data is returned as is.
 SIZE - Data is returned as bytes supported scalars [B, K, M, G, T, P]
+BOOLEAN - Data is returned as bool keywords are [TRUE, FALSE]
+```
+
+# Preformance
+
+## Testing
+
+### seed.py
+to generate db filled with random data run
+```sh
+python seed.py
+```
+This might take up to 10min. 
+
+To speed up lower these variables
+```py
+PROFILE_COUNT = 500
+VIDEOS_PER_USER = 1001
+COMMENT_PER_VIDEO = 500
+TAGS_PER_VIDEO = 10
+TAG_MAX_LENGTH = 10
+```
+The defaults generate 8Gib large db
+
+### Run/timing
+
+#### Non-Indexed
+In **.config** set:
+```
+[DEBUG:BOOLEAN TRUE]
+[INDEXES:BOOLEAN FALSE]
+
+// optional shows realtime timing info
+[PRINTS TRUE]
+```
+This will collect search timings and other data displayed on program shutdown and not apply indexing to the db.
+
+Then start the program!
+
+#### Indexed
+In **.config** set:
+```
+[DEBUG:BOOLEAN TRUE]
+[INDEXES:BOOLEAN TRUE]
+
+// optional shows realtime timing info
+[PRINTS TRUE]
+```
+This will collect search timings and other data displayed on program shutdown and apply indexing to the db.
+
+Then start the program and see the difference!
+
+## Data
+
+In both cases db is filled with seed.py
+
+### Non-Indexed
+copy of my debug info
+```
+Debug info:
+max: 24.665s
+avg: 0.0s
+/ 2 0.005s
+/static/<path:filename> 83 0.001s
+/account?picture 35 0.0s
+/video?stream 2172 0.0s
+/video?view 2 24.268s
+/account?page 2 0.112s
+/account?search 1 0.012s
+/?SEARCH 5 0.288s
+```
+
+### Indexed
+copy of my debug info:
+```
+Debug info:
+max: 0.701s
+avg: 0.0s
+/ 5 0.001s
+/static/<path:filename> 260 0.001s
+/account?picture 92 0.001s
+/video?stream 2152 0.0s
+/video?view 30 0.006s
+/account?page 2 0.015s
+/account?search 1 0.012s
+/comment 2 0.013s
+/video 2 0.028s
+/?SEARCH 3 0.508s
 ```
