@@ -101,7 +101,6 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
     sql += search_order(date, after)
     sql += f" LIMIT { LIMIT } OFFSET { page * LIMIT }"
 
-    print(sql)
     return (sql, params, searched)
 
 def search_order(date: bool, after: bool) -> str:
