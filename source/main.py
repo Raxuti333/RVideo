@@ -7,6 +7,7 @@ import account
 import login
 import comment
 import video
+import debug
 
 app: Flask = Flask(__name__, "/static", template_folder="html")
 
@@ -34,6 +35,10 @@ def route_video():
 def route_comment():
     """ routes comment requests """
     return comment.comment_form()
+
+if config("DEBUG"):
+    app.before_request(debug.before)
+    app.after_request(debug.after)
 
 app.secret_key = config("SECRET_KEY")
 app.config["MAX_CONTENT_SIZE"] = config("MAX_FILE_SIZE")
