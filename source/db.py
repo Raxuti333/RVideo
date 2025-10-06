@@ -32,7 +32,7 @@ def setup(connection):
     if {table["name"] for table in tables} != TABLES:
         print("creating tables!")
         with open("db.sql", encoding="utf-8") as sql:
-            connection.executescript(sql.read(-1))
+            connection.executescript(sql.read())
 
     if not config("INDEXES"):
         for p in INDEXES:
@@ -43,7 +43,7 @@ def setup(connection):
     if {index["name"] for index in indexes if EXPRESSION.match(index["name"]) is None} != INDEXES:
         print("creating indexes!")
         with open("index.sql", encoding="utf-8") as sql:
-            connection.executescript(sql.read(-1))
+            connection.executescript(sql.read())
 
 class Database:
     """
