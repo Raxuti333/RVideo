@@ -1,4 +1,4 @@
-CREATE TABLE profile 
+CREATE TABLE IF NOT EXISTS profile 
 ( 
     pid INTEGER PRIMARY KEY, 
     username TEXT NOT NULL UNIQUE, 
@@ -7,7 +7,7 @@ CREATE TABLE profile
     date TEXT
 );
 
-CREATE TABLE video 
+CREATE TABLE IF NOT EXISTS video 
 ( 
     vid INTEGER PRIMARY KEY,
     pid INTEGER NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE video
     FOREIGN KEY(pid) REFERENCES profile(pid)
 );
 
-CREATE TABLE comment 
+CREATE TABLE IF NOT EXISTS comment 
 ( 
     cid INTEGER PRIMARY KEY, 
     vid INTEGER NOT NULL, 
@@ -32,7 +32,7 @@ CREATE TABLE comment
     FOREIGN KEY(pid) REFERENCES profile(pid) 
 );
 
-CREATE TABLE tag
+CREATE TABLE IF NOT EXISTS tag
 (
     vid INTEGER NOT NULL,
     text TEXT,

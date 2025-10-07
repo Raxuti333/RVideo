@@ -35,6 +35,7 @@ def setup(connection):
             connection.executescript(sql.read())
 
     if not config("INDEXES"):
+        print("removing indexes")
         for p in INDEXES:
             connection.execute(f"DROP INDEX IF EXISTS { p }")
         return
