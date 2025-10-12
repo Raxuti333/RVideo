@@ -1,15 +1,11 @@
 """ server and handle video pages and forms """
 
-import re
-from os import remove, SEEK_SET, SEEK_END
-from flask import render_template, redirect, abort, Response
-from util import get_query, get_method, get_filename, get_form
-from util import set_flash, get_flash, config, get_range, get_vid
+from os import remove
+from flask import render_template, redirect
+from util import get_method, get_filename, get_form
+from util import set_flash, get_flash, config, get_vid
 from util import get_token, get_account, get_tags, check_video
 from db import db
-
-LIMIT = 25
-EXPRESSION = re.compile(r"^\d+_")
 
 def video_page():
     """ serve video page """
@@ -17,13 +13,6 @@ def video_page():
     token   = get_token()
     account = get_account()
     message = get_flash()
-    query   = get_query("=")
-
-    if query[0] == "view":
-        return video_view(account, token)
-
-    if query[0] == "stream":
-        return video_stream(query)
 
     if account is None:
         return redirect("/")
@@ -32,112 +21,6 @@ def video_page():
         return video_form(account, token)
 
     return render_template("video.html", token = token, account = account, message = message)
-
-def video_view(account: dict, token: str):
-    """ servers view page queried by user """
-
-    vid, rvid, offset, pid = view_parse_query(get_query("&"))
-    if pid is not None:
-        if account is None:
-            return abort(403)
-        if account["pid"] != pid:
-            return abort(403)
-
-    video = db.query(
-    "UPDATE video SET views = views + 1 WHERE vid = ? "
-    "RETURNING name, description, pid, views, private, date",
-    [vid]
-    )
-
-    if video is None:
-        return redirect("/")
-
-    target = db.query("SELECT pid, username FROM profile WHERE pid = ?", [video["pid"]])
-    comments = db.query(
-    "SELECT cid, pid, text FROM comment WHERE vid = ?" +
-    f" ORDER BY timestamp ASC LIMIT { LIMIT } OFFSET { offset * LIMIT }",
-    [vid],
-    LIMIT
-    )
-
-    return render_template(
-    "view.html",
-    token = token,
-    account = account,
-    video = video,
-    target = target,
-    comments = comments,
-    vid = rvid,
-    offset = {"current": offset, "next": offset + 1, "last": offset - 1}
-    )
-
-def view_parse_query(query: list[str]) -> tuple[str, str, int, int | None]:
-    """ parse view query string """
-
-    vid: str = ""
-    rvid: str = ""
-    offset: int = 0
-    pid: int | None = None
-
-    for m in query:
-        p = m.split("=")
-        if len(p) != 2:
-            continue
-        match(p[0]):
-            case "view":
-                vid = EXPRESSION.match(p[1])
-                if vid is not None:
-                    pid = int(vid[0][:vid.span()[1] - 1])
-                    vid = p[1][vid.span()[1]:]
-                else:
-                    vid = p[1]
-                rvid = p[1]
-            case "offset":
-                if p[1].isdigit():
-                    offset = int(p[1])
-
-    return (vid, rvid, offset, pid)
-
-def video_stream(query: str):
-    """ 
-    stream requested video 
-    TODO optimize
-    """
-
-    account = get_account()
-
-    vid = query[-1]
-    pid = EXPRESSION.match(vid)
-    if pid is not None and account is not None:
-        pid = int(pid[0][:pid.span()[1] - 1])
-        if pid != account["pid"]:
-            return abort(403)
-
-    path: str = get_filename(vid, "video", ["mp4"])
-    if path is None:
-        return abort(404)
-
-    start: int = get_range()
-
-    with open(path, "rb") as video:
-        chunk_size: int = config("CHUNK_SIZE")
-
-        video.seek(0, SEEK_END)
-        size: int = video.tell()
-
-        end: int = min(start + chunk_size, size - 1)
-
-        video.seek(start, SEEK_SET)
-        chunk: bytes = video.read(chunk_size)
-
-    headers = {
-        "Content-Range": f"bytes {start}-{end}/{size}",
-        "Accept-Ranges": "bytes",
-        "Content-Length": end - start + 1,
-        "Content-Type": "video/mp4",
-    }
-
-    return Response(chunk, 206, headers)
 
 def video_form(account: dict, token: str):
     """ selector function """
@@ -174,7 +57,7 @@ def video_form(account: dict, token: str):
 def title(account: dict, form: dict):
     """ change title """
 
-    link: str = "/video?view=" + str(form["vid"])
+    link: str = "/view/" + str(form["vid"])
 
     vid = get_vid(form["vid"])
 
@@ -192,7 +75,7 @@ def description(account: dict, form: dict):
     """ change description redo tags 
         TODO update tags
     """
-    link: str = "/video?view=" + str(form["vid"])
+    link: str = "/view/" + str(form["vid"])
 
     vid = get_vid(form["vid"])
 
@@ -229,7 +112,7 @@ def delete(account: dict, form: dict):
     [vid, account["pid"]])
 
     if vid is None:
-        return redirect("/video?view=" + str(form["vid"]))
+        return redirect("/view/" + str(form["vid"]))
 
     db.query("DELETE FROM comment WHERE vid = ?", [vid["vid"]], 0)
     db.query("DELETE FROM tag WHERE vid = ?", [vid["vid"]], 0)
@@ -277,4 +160,4 @@ def video_upload(account: dict, form: dict):
 
     form["video"].save("video/" + path + "." + file_type)
 
-    return redirect("/video?view=" + path)
+    return redirect("/view/" + path)

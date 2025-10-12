@@ -15,13 +15,13 @@
             </a>
             {% if account %}
             <div style="margin-left: auto;" class="rvideo_account">
-                <a style="text-decoration: none;" href="account?page={{ account.pid }}">
-                    <img class="rvideo_account_image" src="account?picture={{ account.pid }}">
+                <a style="text-decoration: none;" href="/account?page={{ account.pid }}">
+                    <img class="rvideo_account_image" src="/account?picture={{ account.pid }}">
                     <p class="rvideo_account_text">{{ account.username }}</p>
                 </a>
             </div>
             {% else %}
-            <a class="rvideo_login" href="login">
+            <a class="rvideo_login" href="/login">
                 <p class="rvideo_login_text">Login</p>
             </a>
             {% endif %}
@@ -30,12 +30,12 @@
         <div class="video_container">
             <div style="display: grid;">
                 <video controls width="auto" height="600vw" style="margin: 0;">
-                    <source src="video?stream={{ vid }}">
+                    <source src="/stream/{{ vid }}">
                 </video>
                 <div style="display: flex;">
                     <div class="rvideo_account">
-                        <a style="text-decoration: none;" href="account?page={{ target.pid }}">
-                            <img class="rvideo_account_image" src="account?picture={{ target.pid }}">
+                        <a style="text-decoration: none;" href="/account?page={{ target.pid }}">
+                            <img class="rvideo_account_image" src="/account?picture={{ target.pid }}">
                             <p class="rvideo_account_text">{{ target.username }}</p>
                         </a>
                     </div>
@@ -93,7 +93,7 @@
             <div style="margin-left: auto; margin-right: auto;">
                 {% if account %}
                 <div>         
-                    <form action="comment" method="post">
+                    <form action="/comment" method="post">
                         <textarea style="display: block; width: 20vw;" name="comment" rows="5"></textarea>
                         <input style="display: block; margin-left: auto; margin-right: auto; max-width: fit-content;" type="submit" value="comment">
                         <input type="hidden" name="vid" value="{{ vid }}">
@@ -105,9 +105,9 @@
                     {% for comment in comments %}
                     <div style="display: flex; width: 20vw; border-style: outset; border-color: black; border-width: 1px;">
                         <div>
-                            <img style="height: 3vw;" src="account?picture={{ comment.pid }}">
+                            <img style="height: 3vw;" src="/account?picture={{ comment.pid }}">
                             {% if comment.pid == account.pid %}
-                            <form action="comment" method="post">
+                            <form action="/comment" method="post">
                                 <input type="submit" value="delete">
                                 <input type="hidden" name="cid" value="{{ comment.cid }}">
                                 <input type="hidden" name="vid" value="{{ vid }}">
@@ -120,11 +120,11 @@
                     {% endfor %}
                 </div>
                 <div style="display: flex; margin-left: auto; margin-right: auto; max-width: fit-content;">
-                    <a class="comment_button_container" href="video?view={{ vid }}&offset={{ offset.last }}">
+                    <a class="comment_button_container" href="/view/{{ vid }}?offset={{ offset.last }}">
                         <p class="comment_button">←</p>
                     </a>
                     <p style="margin-left: 5px; margin-right: 5px;" >{{ offset.current }}</p>
-                    <a class="comment_button_container" href="video?view={{ vid }}&offset={{ offset.next }}">
+                    <a class="comment_button_container" href="/view/{{ vid }}?offset={{ offset.next }}">
                         <p class="comment_button">→</p>
                     </a>
                 </div>

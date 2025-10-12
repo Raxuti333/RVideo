@@ -15,14 +15,14 @@
             </a>
     
             <div style="margin-left: auto;" class="rvideo_account">
-                <a style="text-decoration: none;" href="account?page={{ account.pid }}">
-                    <img class="rvideo_account_image" src="account?picture={{ account.pid }}">
+                <a style="text-decoration: none;" href="/account?page={{ account.pid }}">
+                    <img class="rvideo_account_image" src="/account?picture={{ account.pid }}">
                     <p class="rvideo_account_text">{{ account.username }}</p>
                 </a>
             </div>
         </div>
 
-        <form action="video" method="post" enctype="multipart/form-data">
+        <form action="/video" method="post" enctype="multipart/form-data">
             <div class="upload_grid">
                 <div style="margin-right: 25%;" class="upload_grid_item">
                     <p>Upload</p>

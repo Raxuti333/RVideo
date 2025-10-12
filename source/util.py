@@ -144,15 +144,15 @@ def get_filename(fid: int | str, root: str, types: list[str]) -> str | None:
             return path
     return None
 
-def get_vid(vid: str | None) -> int | None:
+def get_vid(vid: str | None) -> tuple[int, int] | tuple[None, None]:
     """ extract vid from vid string """
     if vid is None:
-        return None
+        return (None, None)
     if PRIVATEVID.match(vid) is not None:
-        return int(vid.split("_")[1])
+        return (int(vid.split("_")[1]), int(vid.split("_")[0]))
     if vid.isdigit():
-        return int(vid)
-    return None
+        return (int(vid), None)
+    return (None, None)
 
 def check_file(file: FileStorage, max_size: int, types: list[str]) -> tuple[bool, str]:
     """ checks if file is acceptable """

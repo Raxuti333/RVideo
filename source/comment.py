@@ -22,12 +22,12 @@ def comment_form():
     if account is None:
         return redirect("/login")
 
-    vid = get_vid(form["vid"])
+    vid = get_vid(form["vid"])[0]
 
     if vid is None:
         return redirect("/")
 
-    link: str = "/video?view=" + str(form["vid"])
+    link: str = "/view/" + str(form["vid"])
 
     if form["cid"] is not None:
         return comment_delete(form, account, link)

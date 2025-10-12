@@ -7,6 +7,8 @@ import account
 import login
 import comment
 import video
+import view
+import stream
 import debug
 
 app: Flask = Flask(__name__, "/static", template_folder="html")
@@ -30,6 +32,16 @@ def route_login():
 def route_video():
     """ routes video requests """
     return video.video_page()
+
+@app.route("/view/<vid>", methods=["GET"])
+def route_view(vid: str):
+    """ routes video page """
+    return view.view_page(vid)
+
+@app.route("/stream/<vid>", methods=["GET"])
+def route_stream(vid: str):
+    """ stream video """
+    return stream.video_stream(vid)
 
 @app.route("/comment", methods=["POST"])
 def route_comment():
