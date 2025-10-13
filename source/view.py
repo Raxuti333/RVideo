@@ -7,7 +7,7 @@ from db import db
 
 LIMIT = 25
 
-def view_page(query: str):
+def page(query: str):
     """ servers view page queried by user """
 
     account = get_account()

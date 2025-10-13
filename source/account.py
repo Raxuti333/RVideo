@@ -10,7 +10,7 @@ from db import db
 
 LIMIT = 20
 
-def account_page():
+def page():
     """ account page and sub resource routing """
 
     query = get_query("=")

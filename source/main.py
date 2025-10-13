@@ -17,42 +17,42 @@ app: Flask = Flask(__name__, "/static", template_folder="html")
 @app.route("/", methods=["GET"])
 def route_root():
     """ route to landing page """
-    return root.root_page()
+    return root.page()
 
 @app.route("/account", methods=["GET", "POST"])
 def route_account():
     """ routes account requests """
-    return account.account_page()
+    return account.page()
 
 @app.route("/login", methods=["GET", "POST"])
 def route_login():
     """ routes login requests """
-    return login.login_page()
+    return login.page()
 
 @app.route("/video", methods=["GET", "POST"])
 def route_video():
     """ routes video requests """
-    return video.video_page()
+    return video.page()
 
 @app.route("/view/<vid>", methods=["GET"])
 def route_view(vid: str):
     """ routes video page """
-    return view.view_page(vid)
+    return view.page(vid)
 
 @app.route("/stream/<vid>", methods=["GET"])
 def route_stream(vid: str):
     """ stream video """
-    return stream.stream(vid)
+    return stream.video(vid)
 
 @app.route("/picture/<int:pid>", methods=["GET"])
 def route_picture(pid: int):
     """ picture send """
-    return picture.picture(pid)
+    return picture.upload(pid)
 
 @app.route("/comment", methods=["POST"])
 def route_comment():
     """ routes comment requests """
-    return comment.comment_form()
+    return comment.form()
 
 if config("DEBUG"):
     app.before_request(debug.before)

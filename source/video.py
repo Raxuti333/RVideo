@@ -7,7 +7,7 @@ from util import set_flash, get_flash, config, get_vid
 from util import get_token, get_account, get_tags, check_video
 from db import db
 
-def video_page():
+def page():
     """ serve video page """
 
     token   = get_token()

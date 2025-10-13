@@ -4,7 +4,7 @@ from os import SEEK_SET, SEEK_END
 from flask import abort, redirect, Response
 from util import config, get_account, get_filename, get_range, get_vid
 
-def stream(query: str):
+def video(query: str):
     """ stream requested video """
 
     account = get_account()

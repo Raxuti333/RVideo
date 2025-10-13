@@ -3,7 +3,7 @@
 from flask import redirect
 from util import config, get_filename, send_data
 
-def picture(pid: int):
+def upload(pid: int):
     """ fetch account picture """
 
     mimetype: dict[str, str] = config("IMAGE_MIMETYPES")

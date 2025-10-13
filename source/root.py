@@ -8,7 +8,7 @@ from db import db
 LIMIT = 24
 EXPRESSION = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
-def root_page() -> str:
+def page() -> str:
     """ service function for landing page """
 
     token   = get_token()

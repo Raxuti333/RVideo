@@ -83,7 +83,7 @@ def handle_form(token: str):
     return login(user, form)
 
 
-def login_page():
+def page():
     """ serve page or process form """
 
     flash   = get_flash()
