@@ -30,7 +30,7 @@ def handle():
     link: str = "/view/" + str(form["vid"])
 
     if form["cid"] is not None:
-        return comment_delete(form, account, link)
+        return delete(form, account, link)
 
     if form["comment"] is None:
         return redirect("/")
@@ -44,7 +44,7 @@ def handle():
 
     return redirect(link)
 
-def comment_delete(form: dict, account: dict, link: str):
+def delete(form: dict, account: dict, link: str):
     """ deletes selected comment if allowed """
 
     db.query(
