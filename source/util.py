@@ -149,7 +149,8 @@ def get_vid(vid: str | None) -> tuple[int, int] | tuple[None, None]:
     if vid is None:
         return (None, None)
     if PRIVATEVID.match(vid) is not None:
-        return (int(vid.split("_")[1]), int(vid.split("_")[0]))
+        parts: list[str] = vid.split("_")
+        return (int(parts[1]), int(parts[0]))
     if vid.isdigit():
         return (int(vid), None)
     return (None, None)
