@@ -42,7 +42,7 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
     params = [pid]
     sql: str = "WHERE (private = 0 OR pid = ?) AND"
 
-    page = 0
+    offset = 0
     after: bool = False
     date: bool = False
 
@@ -93,13 +93,13 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
             case "PAGE":
                 if p[1].isdigit():
                     searched["PAGE"] = p[1]
-                    page = int(p[1])
+                    offset = int(p[1])
             case _:
                 pass
 
     sql = sql[:-4]
     sql += search_order(date, after)
-    sql += f" LIMIT { LIMIT } OFFSET { page * LIMIT }"
+    sql += f" LIMIT { LIMIT } OFFSET { offset * LIMIT }"
 
     return (sql, params, searched)
 

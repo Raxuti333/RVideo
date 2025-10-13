@@ -4,7 +4,7 @@ from flask import redirect, abort
 from util import get_form, get_account, get_token, get_vid
 from db import db
 
-def form():
+def handle():
     """ process comment form """
 
     account = get_account()

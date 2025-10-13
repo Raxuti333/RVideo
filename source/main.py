@@ -52,7 +52,7 @@ def route_picture(pid: int):
 @app.route("/comment", methods=["POST"])
 def route_comment():
     """ routes comment requests """
-    return comment.form()
+    return comment.handle()
 
 if config("DEBUG"):
     app.before_request(debug.before)
