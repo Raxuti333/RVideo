@@ -18,7 +18,6 @@
             <div id="advanced" class="search">
                 <form action="/">
                     <div  class="search_normal" >
-
                         <a class="search_hide_advanced" href="#">↑</a>
                         <a class="search_show_advanced" href="#advanced">↓</a>
                         
@@ -32,6 +31,8 @@
                             <p class="search_date_before">before:</p>
                             <p class="search_date_after">after:</p>
                             <input style="display: inline;" type="date" name="DATE" value="{{ searches.DATE }}">
+                            <p style="display: inline;">page:</p>
+                            <input style="display: inline; width: 2vw;" type="number" name="PAGE" value="{{ searches.PAGE }}">
                         </div>
                         <div class="search_advanced_item">
                             <p style="display: inline;">users:</p>
@@ -40,10 +41,6 @@
                         <div class="search_advanced_item">
                             <p style="display: inline;">tags:</p>
                             <input class="search_user" type="text" name="TAGS" value="{{ searches.TAGS }}">
-                        </div>
-                            <div class="search_advanced_item">
-                            <p style="display: inline;">page:</p>
-                            <input class="search_user" type="number" name="PAGE" value="{{ searches.PAGE }}">
                         </div>
                     </div>
                 </form>
