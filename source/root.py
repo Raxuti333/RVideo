@@ -24,10 +24,10 @@ def page() -> str:
 
     return render_template(
     "root.html",
-    token=token,
-    account=account,
-    videos=videos,
-    searches=condition[2]
+    token = token,
+    account = account,
+    videos = videos,
+    searches = condition[2]
     )
 
 def search(query: list[str], account: dict) -> tuple[str, list, dict]:
