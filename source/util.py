@@ -261,7 +261,7 @@ def config(field: str) -> str | int:
             value = data.replace(" ", "").split(",")
         case "DICTIONARY":
             value = {}
-            for element in data[1:-1].split(","):
+            for element in data.split(","):
                 parts: list[str] = element.replace(" ", "").split(":")
                 value[parts[0]] = parts[1]
         # TEXT is default case
