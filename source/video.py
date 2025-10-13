@@ -43,7 +43,7 @@ def video_form(account: dict, token: str):
     if form["vid"] is None:
         return video_upload(account, form)
 
-    if get_vid(form["vid"]) is None:
+    if get_vid(form["vid"])[0] is None:
         return redirect("/")
 
     edit: dict[int] = {"title": title, "description": description, "delete": delete}
@@ -59,7 +59,7 @@ def title(account: dict, form: dict):
 
     link: str = "/view/" + str(form["vid"])
 
-    vid = get_vid(form["vid"])
+    vid = get_vid(form["vid"])[0]
 
     if form["title"] is None:
         set_flash(["title is empty", "#ff0033"])
@@ -77,7 +77,7 @@ def description(account: dict, form: dict):
     """
     link: str = "/view/" + str(form["vid"])
 
-    vid = get_vid(form["vid"])
+    vid = get_vid(form["vid"])[0]
 
     if form["description"] is None:
         set_flash(["description is empty", "#ff0033"])
@@ -102,7 +102,7 @@ def description(account: dict, form: dict):
 def delete(account: dict, form: dict):
     """ remove video """
 
-    vid = get_vid(form["vid"])
+    vid = get_vid(form["vid"])[0]
 
     path: str = get_filename(form["vid"], "video", ["mp4"])
     if path is None:
