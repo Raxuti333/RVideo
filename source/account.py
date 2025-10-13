@@ -3,8 +3,8 @@
 from os import remove
 from flask import render_template, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
-from util import get_query, get_method, get_filename, get_form, check_file
-from util import set_flash, get_flash, check_password, check_username, config
+from util import get_query, get_filename, get_form, check_file, config
+from util import set_flash, get_flash, check_password, check_username
 from util import get_token, set_account, get_account, clear_account
 from db import db
 
@@ -16,11 +16,10 @@ def page():
     query = get_query("=")
     account = get_account()
 
-    if get_method() == "POST":
-        return account_edit(account)
-
-    if query[0] == "page":
-        return account_profile(query, account)
+    table: dict = { "page": profile, "edit": edit }
+    execute = table.get(query[0])
+    if execute is not None:
+        return execute(query, account)
 
     condition: dict = {
         True: "WHERE LOWER(username) LIKE LOWER(?)",
@@ -37,12 +36,12 @@ def page():
     )
 
     return render_template(
-    "account_search.html",
+    "search.html",
     account = account,
     accounts = accounts
     )
 
-def account_profile(query: list[str], account: dict | None):
+def profile(query: list[str], account: dict | None):
     """ profile page """
 
     pid: int = -1
@@ -74,7 +73,7 @@ def account_profile(query: list[str], account: dict | None):
         views = 0
 
     return render_template(
-    "account.html",
+    "page.html",
     account = account,
     target = target,
     token = token,
@@ -83,9 +82,10 @@ def account_profile(query: list[str], account: dict | None):
     error = error
     )
 
-def account_edit(account: dict):
+def edit(query: list[str], account: dict):
     """ edit account """
 
+    del query
     token = get_token()
 
     if account is None:
@@ -105,10 +105,10 @@ def account_edit(account: dict):
         return redirect("/account?page=" + str(account["pid"]) + "#edit")
 
     functions: dict = {
-        "picture": edit_picture,
-        "username": edit_username,
-        "password": edit_password,
-        "delete": delete_profile,
+        "picture": picture,
+        "username": username,
+        "password": password,
+        "delete": delete,
         }
 
     func = functions.get(form["type"])
@@ -118,7 +118,7 @@ def account_edit(account: dict):
 
     return func(account, form)
 
-def edit_picture(account: dict, form: dict):
+def picture(account: dict, form: dict):
     """ change profile picutre if suitable """
 
     link: str = "/account?page=" + str(account["pid"])
@@ -142,7 +142,7 @@ def edit_picture(account: dict, form: dict):
 
     return redirect(link)
 
-def edit_username(account: dict, form: dict):
+def username(account: dict, form: dict):
     """ chages username if suitable """
 
     link: str = "/account?page=" + str(account["pid"])
@@ -169,7 +169,7 @@ def edit_username(account: dict, form: dict):
 
     return redirect(link)
 
-def edit_password(account: dict, form: dict):
+def password(account: dict, form: dict):
     """ change password if suitable """
 
     link: str = "/account?page=" + str(account["pid"])
@@ -178,9 +178,9 @@ def edit_password(account: dict, form: dict):
         set_flash(["Wrong form", "#ff0033"])
         return redirect(link + "#edit")
 
-    password = db.query("SELECT password FROM profile WHERE pid = ?", [account["pid"]])
+    pswd = db.query("SELECT password FROM profile WHERE pid = ?", [account["pid"]])
 
-    if not check_password_hash(password[0], form["oldpaswd"]):
+    if not check_password_hash(pswd[0], form["oldpaswd"]):
         set_flash(["old password does not match", "#ff0033"])
         return redirect(link + "#edit")
 
@@ -195,7 +195,7 @@ def edit_password(account: dict, form: dict):
 
     return redirect(link)
 
-def delete_profile(account: dict, form: dict):
+def delete(account: dict, form: dict):
     """ deletes profile """
 
     del form
