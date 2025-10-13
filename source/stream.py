@@ -23,16 +23,16 @@ def video(query: str):
 
     start: int = get_range()
 
-    with open(path, "rb") as video:
+    with open(path, "rb") as file:
         chunk_size: int = config("CHUNK_SIZE")
 
-        video.seek(0, SEEK_END)
-        size: int = video.tell()
+        file.seek(0, SEEK_END)
+        size: int = file.tell()
 
         end: int = min(start + chunk_size, size - 1)
 
-        video.seek(start, SEEK_SET)
-        chunk: bytes = video.read(chunk_size)
+        file.seek(start, SEEK_SET)
+        chunk: bytes = file.read(chunk_size)
 
     headers = {
         "Content-Range": f"bytes {start}-{end}/{size}",
