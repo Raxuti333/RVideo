@@ -42,7 +42,7 @@ def route_view(vid: str):
 @app.route("/stream/<vid>", methods=["GET"])
 def route_stream(vid: str):
     """ stream video """
-    return stream.video_stream(vid)
+    return stream.stream(vid)
 
 @app.route("/picture/<int:pid>", methods=["GET"])
 def route_picture(pid: int):
