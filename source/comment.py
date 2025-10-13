@@ -32,7 +32,7 @@ def handle():
     if form["cid"] is not None:
         return delete(form, account, link)
 
-    if form["comment"] is None:
+    if form["comment"] is None or form["comment"] == "":
         return redirect("/")
 
     db.query(
