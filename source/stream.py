@@ -1,7 +1,7 @@
 """ stream video data """
 
 from os import SEEK_SET, SEEK_END
-from flask import abort, Response
+from flask import abort, redirect, Response
 from util import config, get_account, get_filename, get_range, get_vid
 
 def video_stream(query: str):
@@ -14,7 +14,10 @@ def video_stream(query: str):
         if pid != account["pid"]:
             return abort(403)
 
-    path: str = get_filename(vid, "video", ["mp4"])
+    if vid is None:
+        return redirect("/")
+
+    path: str = get_filename(query, "video", ["mp4"])
     if path is None:
         return abort(404)
 
