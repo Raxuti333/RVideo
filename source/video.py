@@ -71,9 +71,8 @@ def title(account: dict, vid: str, form: dict):
     return redirect(link)
 
 def description(account: dict, vid: str, form: dict):
-    """ change description redo tags 
-        TODO update tags
-    """
+    """ change description redo tags """
+
     link: str = "/view/" + str(form["vid"])
 
     if form["description"] is None:
