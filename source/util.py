@@ -257,6 +257,13 @@ def config(field: str) -> str | int:
             value = int(data.replace(data[-1], "")) * SIZES[data[-1]]
         case "BOOLEAN":
             value = data == "TRUE"
+        case "ARRAY":
+            value = data.replace(" ", "").split(",")
+        case "DICTIONARY":
+            value = {}
+            for element in data[1:-1].split(","):
+                parts: list[str] = element.replace(" ", "").split(":")
+                value[parts[0]] = parts[1]
         # TEXT is default case
         case _:
             value = data
