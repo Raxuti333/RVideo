@@ -16,7 +16,7 @@
             {% if account %}
             <div style="margin-left: auto;" class="rvideo_account">
                 <a style="text-decoration: none;" href="/account?page={{ account.pid }}">
-                    <img class="rvideo_account_image" src="/account?picture={{ account.pid }}">
+                    <img class="rvideo_account_image" src="/picture/{{ account.pid }}">
                     <p class="rvideo_account_text">{{ account.username }}</p>
                 </a>
             </div>
@@ -35,7 +35,7 @@
                 <div style="display: flex;">
                     <div class="rvideo_account">
                         <a style="text-decoration: none;" href="/account?page={{ target.pid }}">
-                            <img class="rvideo_account_image" src="/account?picture={{ target.pid }}">
+                            <img class="rvideo_account_image" src="/picture/{{ target.pid }}">
                             <p class="rvideo_account_text">{{ target.username }}</p>
                         </a>
                     </div>
@@ -103,7 +103,7 @@
                     {% for comment in comments %}
                     <div style="display: flex; width: 20vw; border-style: outset; border-color: black; border-width: 1px;">
                         <div>
-                            <img style="height: 3vw;" src="/account?picture={{ comment.pid }}">
+                            <img style="height: 3vw;" src="/picture/{{ comment.pid }}">
                             {% if comment.pid == account.pid %}
                             <form action="/comment" method="post">
                                 <input type="submit" value="delete">

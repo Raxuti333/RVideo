@@ -5,11 +5,10 @@ from flask import render_template, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from util import get_query, get_method, get_filename, get_form, check_file
 from util import set_flash, get_flash, check_password, check_username, config
-from util import get_token, send_data, set_account, get_account, clear_account
+from util import get_token, set_account, get_account, clear_account
 from db import db
 
 LIMIT = 20
-IMAGE_FILE_TYPES: list[str] = ["png", "jpg", "ico", "bmp"]
 
 def account_page():
     """ account page and sub resource routing """
@@ -19,9 +18,6 @@ def account_page():
 
     if get_method() == "POST":
         return account_edit(account)
-
-    if query[0] == "picture":
-        return account_picture(query)
 
     if query[0] == "page":
         return account_profile(query, account)
@@ -40,7 +36,11 @@ def account_page():
     LIMIT
     )
 
-    return render_template("account_search.html", account = account, accounts = accounts)
+    return render_template(
+    "account_search.html",
+    account = account,
+    accounts = accounts
+    )
 
 def account_profile(query: list[str], account: dict | None):
     """ profile page """
@@ -73,7 +73,8 @@ def account_profile(query: list[str], account: dict | None):
     if views is None:
         views = 0
 
-    return render_template("account.html",
+    return render_template(
+    "account.html",
     account = account,
     target = target,
     token = token,
@@ -81,22 +82,6 @@ def account_profile(query: list[str], account: dict | None):
     views = views,
     error = error
     )
-
-def account_picture(query: list[str]):
-    """ fetch account picture """
-
-    mimetype: dict[str, str] = {
-        "png": "image/png", 
-        "jpg": "image/jpeg",
-        "ico": "image/vnd.microsoft.icon",
-        "bmp": "image/bmp"
-        }
-
-    path = get_filename(query[-1], "pfp", IMAGE_FILE_TYPES)
-    if path is None:
-        return redirect("/static/no-pfp.png")
-
-    return send_data(path, mimetype[path.split(".")[-1]])
 
 def account_edit(account: dict):
     """ edit account """
@@ -142,12 +127,12 @@ def edit_picture(account: dict, form: dict):
         set_flash(["Wrong form", "#ff0033"])
         return redirect(link + "#edit")
 
-    verdict = check_file(form["picture"], config("MAX_PFP_SIZE"), IMAGE_FILE_TYPES)
+    verdict = check_file(form["picture"], config("MAX_IMAGE_SIZE"), config("IMAGE_FILE_TYPES"))
     if not verdict[0]:
         set_flash([verdict[1], "#ff0033"])
         return redirect(link + "#edit")
 
-    old_pfp = get_filename(account["pid"], "pfp", IMAGE_FILE_TYPES)
+    old_pfp = get_filename(account["pid"], "pfp", config("IMAGE_FILE_TYPES"))
     if old_pfp is not None:
         remove(old_pfp)
 
@@ -219,7 +204,7 @@ def delete_profile(account: dict, form: dict):
     db.query("DELETE FROM comment WHERE pid = ?", [account["pid"]], 0)
     db.query("DELETE FROM profile WHERE pid = ?", [account["pid"]], 0)
 
-    pfp = get_filename(account["pid"], "pfp", IMAGE_FILE_TYPES)
+    pfp = get_filename(account["pid"], "pfp", config("IMAGE_FILE_TYPES"))
     if pfp is not None:
         remove(pfp)
 

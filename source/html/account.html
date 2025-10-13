@@ -31,7 +31,7 @@
             {% elif account %}
             <div class="rvideo_account">
                 <a style="text-decoration: none;" href="/account?page={{ account.pid }}">
-                    <img class="rvideo_account_image" src="/account?picture={{ account.pid }}">
+                    <img class="rvideo_account_image" src="/picture/{{ account.pid }}">
                     <p class="rvideo_account_text">{{ account.username }}</p>
                 </a>
             </div>
@@ -45,7 +45,7 @@
         <div id="edit" class="profile_block">
             <!-- profile picture form  -->
             <form action="/account" method="post" enctype="multipart/form-data">
-                <img class="profile_block_picture" src="/account?picture={{ target.pid }}">
+                <img class="profile_block_picture" src="/picture/{{ target.pid }}">
                 <input class="profile_block_upload" type="file" name="picture">
                 <input class="profile_block_upload_submit" type="submit" value="upload picture">
                 <input type="hidden" name="token" value="{{ token }}">
@@ -97,7 +97,7 @@
         </div>
         {% else %}
         <div class="profile_block">
-            <img class="profile_block_picture" src="/account?picture={{ target.pid }}">
+            <img class="profile_block_picture" src="/picture/{{ target.pid }}">
             <div class="profile_block_div">
                 <p class="profile_block_text">{{ target.username }}</p>
             </div>

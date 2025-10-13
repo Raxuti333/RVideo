@@ -9,6 +9,7 @@ import comment
 import video
 import view
 import stream
+import picture
 import debug
 
 app: Flask = Flask(__name__, "/static", template_folder="html")
@@ -42,6 +43,11 @@ def route_view(vid: str):
 def route_stream(vid: str):
     """ stream video """
     return stream.video_stream(vid)
+
+@app.route("/picture/<int:pid>", methods=["GET"])
+def route_picture(pid: int):
+    """ picture send """
+    return picture.picture(pid)
 
 @app.route("/comment", methods=["POST"])
 def route_comment():
