@@ -35,10 +35,10 @@ def video(query: str):
         chunk: bytes = file.read(chunk_size)
 
     headers = {
-        "Content-Range": f"bytes {start}-{end}/{size}",
-        "Accept-Ranges": "bytes",
-        "Content-Length": end - start + 1,
-        "Content-Type": "video/mp4",
+    "Content-Range": f"bytes {start}-{end}/{size}",
+    "Accept-Ranges": "bytes",
+    "Content-Length": end - start + 1,
+    "Content-Type": "video/mp4",
     }
 
     return Response(chunk, 206, headers)

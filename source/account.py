@@ -22,9 +22,9 @@ def page():
         return execute(query, account)
 
     condition: dict = {
-        True: "WHERE LOWER(username) LIKE LOWER(?)",
-        False: "ORDER BY pid DESC"
-        }
+    True: "WHERE LOWER(username) LIKE LOWER(?)",
+    False: "ORDER BY pid DESC"
+    }
 
     select: bool = query[0] == "search"
 
@@ -92,24 +92,24 @@ def edit(query: list[str], account: dict):
         return redirect("/")
 
     form = get_form([
-        ("type",     str),
-        ("token",    str),
-        ("username", str),
-        ("oldpaswd", str),
-        ("newpaswd", str),
-        ("picture",  "FILE")
-        ])
+    ("type",     str),
+    ("token",    str),
+    ("username", str),
+    ("oldpaswd", str),
+    ("newpaswd", str),
+    ("picture",  "FILE")
+    ])
 
     if token != form["token"]:
         set_flash(["CSRF", "#ff0033"])
         return redirect("/account?page=" + str(account["pid"]) + "#edit")
 
     functions: dict = {
-        "picture": picture,
-        "username": username,
-        "password": password,
-        "delete": delete,
-        }
+    "picture": picture,
+    "username": username,
+    "password": password,
+    "delete": delete,
+    }
 
     func = functions.get(form["type"])
     if func is None:
@@ -189,9 +189,11 @@ def password(account: dict, form: dict):
         set_flash([verdict[1], "#ff0033"])
         return redirect(link + "#edit")
 
-    db.query("UPDATE profile SET password = ? WHERE pid = ?",
-             [generate_password_hash(form["newpaswd"]), account["pid"]],
-             0)
+    db.query(
+    "UPDATE profile SET password = ? WHERE pid = ?",
+    [generate_password_hash(form["newpaswd"]), account["pid"]],
+    0
+    )
 
     return redirect(link)
 

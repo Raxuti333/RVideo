@@ -64,7 +64,8 @@ def title(account: dict, vid: str, form: dict):
         set_flash(["title is empty", "#ff0033"])
         return redirect(link)
 
-    db.query("UPDATE video SET name = ? WHERE vid = ? AND pid = ?",
+    db.query(
+    "UPDATE video SET name = ? WHERE vid = ? AND pid = ?",
     [form["title"], vid, account["pid"]],
     0)
 
@@ -79,7 +80,8 @@ def description(account: dict, vid: str, form: dict):
         set_flash(["description is empty", "#ff0033"])
         return redirect(link)
 
-    value = db.query("UPDATE video SET description = ? WHERE vid = ? AND pid = ? RETURNING vid",
+    value = db.query(
+    "UPDATE video SET description = ? WHERE vid = ? AND pid = ? RETURNING vid",
     [form["description"], vid, account["pid"]]
     )
 

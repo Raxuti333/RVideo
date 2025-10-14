@@ -59,9 +59,9 @@ def handle(token: str):
     #   T   |   F    |   T
     if (user is None) ^ form["signup"]:
         error: dict[bool, str] = {
-            False: "user does not exist",
-            True: "username is already taken"
-            }
+        False: "user does not exist",
+        True: "username is already taken"
+        }
         set_flash([error[form["signup"]], "#ff0033"])
         return redirect(target[form["signup"]])
 
