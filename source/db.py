@@ -20,6 +20,7 @@ def setup(connection):
         connection.executescript(sql.read())
 
     if not config("INDEXES"):
+        print("removing indexes!")
         indexes = connection.execute("SELECT name FROM sqlite_master WHERE type='index'")
         for p in indexes:
             if EXPRESSION.match(p['name']) is None:
@@ -27,6 +28,7 @@ def setup(connection):
         return
 
     with open("index.sql", encoding="utf-8") as sql:
+        print("creating indexes!")
         connection.executescript(sql.read())
 
 class Database:
