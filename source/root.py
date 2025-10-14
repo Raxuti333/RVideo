@@ -127,7 +127,7 @@ def search_tags(tags: list[str]) -> str:
         sql += " instr(text, ?) > 0 OR"
     sql = sql[:len(sql) - 2]
 
-    vids = [vid["vid"] for vid in db.query(sql, params, -1)]
+    vids = [vid["vid"] for vid in db.query(sql, params, 100)]
     vids = list(dict.fromkeys(vids))
 
     if not vids:
