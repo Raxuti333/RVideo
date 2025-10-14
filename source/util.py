@@ -232,7 +232,7 @@ def check_username(username: str) -> tuple[bool, str]:
 
 def config(field: str) -> str | int:
     """ returns fields value from .config """
-
+    print(configs)
     value = configs.get(field)
     if value is not None:
         return value
@@ -241,7 +241,14 @@ def config(field: str) -> str | int:
         file: str = fd.read()
 
     begin: int = file.find("[" + field)
-    end: int = file.find("]", begin)
+    end: int = begin
+    string: bool = False
+    for ch in file[begin:]:
+        if not string and ch == ']':
+            break
+        if ch == '"':
+            string = not string
+        end += 1
 
     type_begin: int = file.find(":", begin)
     type_end: int = file.find(" ", type_begin)
@@ -258,18 +265,28 @@ def config(field: str) -> str | int:
         case "BOOLEAN":
             value = data == "TRUE"
         case "ARRAY":
-            value = data.replace(" ", "").split(",")
+            value = []
+            for element in data.split(','):
+                value.append(text(element))
         case "DICTIONARY":
             value = {}
-            for element in data.split(","):
-                key_value: list[str] = element.replace(" ", "").replace("\n", "").split(":")
-                value[key_value[0]] = key_value[1]
+            for element in data.split(','):
+                key_value = element.split(':')
+                value[text(key_value[0])] = text(key_value[1])
         # TEXT is default case
         case _:
-            value = data
+            value = text(data)
 
     configs[field] = value
     return value
+
+def text(data: str) -> str:
+    """ get text from .config """
+
+    begin: int = data.find('"')
+    end: int = data.find('"', begin + 1)
+
+    return data[begin + 1:end]
 
 def int_to_size(number: int) -> str:
     """ converts integer to human readable size """
