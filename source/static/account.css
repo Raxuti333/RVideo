@@ -71,19 +71,38 @@
 }
 
 .profile_block_form_password { display: none; }
-
 #edit:target .profile_block_form_password { display: inline; }
 
-.profile_block_form_delete { display: none; }
-
-#edit:target .profile_block_form_delete 
+.profile_block_form_delete 
 { 
+    display: none;
+
+    > * {
+        margin-left: auto; 
+        margin-right: auto; 
+        max-width: fit-content;
+    }
+}
+#delete:target + .profile_block_form_delete 
+{
+    display: grid;
+    position: fixed;
+    top: 25vh;
+    right: 47vw;
+
+    border-width: 1px;
+    border-color: black;
+    border-style: outset;
+    background-color: white;
+}
+
+.profile_delete_show { display: none; }
+#edit:target .profile_delete_show
+{
     display: block;
-    margin-top: 10px; 
-    margin-bottom: 0px; 
-    margin-left: auto; 
-    margin-right: auto; 
-    max-width: fit-content; 
+    margin-left: auto;
+    margin-right: auto;
+    max-width: fit-content;
 }
 
 .video_grid
