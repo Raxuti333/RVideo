@@ -80,23 +80,12 @@ python -m venv .venv
 
 the project is dependent **flask** and **sqlite3**
 
-The automatic starting script requires [**sqlite3 cli**](https://sqlite.org/cli.html)
-
 ##### Linux
 to install flask **flask** move into project root and run:
 ```sh
 source .venv/bin/activate
 pip install Flask
 ```
-Also check that you have sqlite3 installed. Its rather unlikely that you don't have it.
-
-Also check that you have **sqlite cli**.
-easy way to check is to run:
-```sh
-sqlite3 --version
-```
-
-if the command fails install **sqlite3 cli** from your package manager or from https://sqlite.org/download.html under Precompiled Binaries for Linux
 
 ##### Windows
 
@@ -105,16 +94,6 @@ to install flask flask move into project root and run:
 .venv\Scripts\actiavte.bat
 pip install Flask
 ```
-
-Also check that you have **sqlite cli**.
-easy way to check is to run:
-```sh
-sqlite3.exe --version
-```
-
-you can download sqlite3.exe from https://sqlite.org/download.html under Precompiled Binaries for Windows
-
-if you don't want to add sqlite3.exe to your **PATH** you can also set the exe in the **env** folder
 
 ### Config
 
@@ -162,10 +141,6 @@ if you wish to run the program "manually" read the contents of **run.sh**
 you can now access the website from address "http://127.0.0.1:8080"
 if you have changed the port in the **.conf** use it instead of the 8080
 
-### Trouble shooting
-
-If the program is crashing check your python version and see if it is at least >= 3.13.5!
-
 ## .config
 
 The **.config** file has a simple format:
@@ -179,7 +154,7 @@ Supported keys are:
 ```
 PORT - Port that the program listens to.
 CHUNK_SIZE - Max stream chunks size
-MAX_PFP_SIZE - Max profile picture size
+MAX_IMAGE_SIZE - Max profile picture size
 MAX_FILE_SIZE - Max uploaded file size accepted by flask
 INDEXES - Add db indexes
 DEBUG - Add debug timing and "profiling"
@@ -193,9 +168,11 @@ Types tell the parser how to process data.
 
 ```
 INTEGER - Data is cast to int
-TEXT - Data is returned as is.
+TEXT - Data in double quotation marks is returned as str.
 SIZE - Data is returned as bytes supported scalars [B, K, M, G, T, P]
 BOOLEAN - Data is returned as bool keywords are [TRUE, FALSE]
+ARRAY - Data is TEXT seperated with comma
+DICTIONARY - Data is seperated to TEXT key, value pairs seperated with comma
 ```
 
 # Preformance
