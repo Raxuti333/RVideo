@@ -64,3 +64,19 @@
     margin-right: auto;
     max-width: fit-content;
 }
+
+.password_requirements { display: none; }
+.form_block_div:hover .password_requirements 
+{ 
+    display: inline;
+    position: fixed;
+    left: 60vw;
+    top: 25vh;
+    font-size: 0.85em;
+    border: 2.5px ridge black;
+
+    p, ul, li 
+    {
+        font-size: 1em;
+    }
+}
