@@ -7,8 +7,8 @@ from util import config
 class Debug:
     """ hold debug info """
     def __init__(self):
-        self.avg = 0
-        self.max = 0
+        self.avg = 0.0
+        self.max = 0.0
         self.urls: dict[str, tuple[float, int]] = {}
 
     def __del__(self):
@@ -20,7 +20,7 @@ class Debug:
             dump += url + f" {metric[1]} { str(round(metric[0], 3)) }s\n"
         print(dump)
 
-    def push(self, url, delta_time):
+    def push(self, url: str, delta_time: float):
         """ push new data point """
         if self.avg == 0:
             self.avg = delta_time
@@ -28,10 +28,10 @@ class Debug:
             self.urls[url] = (delta_time, 1)
         else:
             metric = self.urls[url]
-            metric = ((metric[0] + delta_time) / 2, metric[1] + 1)
+            metric = ((metric[0] + delta_time) / 2.0, metric[1] + 1)
             self.urls[url] = metric
         self.max = max(self.max, delta_time)
-        self.avg = (self.avg + delta_time) / 2
+        self.avg = (self.avg + delta_time) / 2.0
 
 class Tracker:
     """ track container """
