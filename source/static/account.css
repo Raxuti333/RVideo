@@ -117,3 +117,20 @@
     margin-right: auto;
     max-width: fit-content;
 }
+
+#edit:target .edit_button { display: none; }
+.edit_button 
+{
+    text-decoration: none;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.hide_button { display: none; }
+#edit:target .hide_button
+{
+    display: inline;
+    text-decoration: none;
+    margin-top: auto;
+    margin-bottom: auto;
+}
