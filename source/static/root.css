@@ -6,14 +6,14 @@
     /* (1920/var(--w)) inverse term to counter act scaling down*/
     transform: translate(calc((var(--w) * 0.5px) * (1920/var(--w)) - (122.5px * (var(--w)/1920))), calc(var(--w) * 0.01px));
 
-    & * > .normal
+    & .normal
     {
         & > a { text-decoration: none; }
 
         & > .bar { width: 225px; }
     }
 
-    & * > .advanced
+    & .advanced
     {
         & > * 
         {
