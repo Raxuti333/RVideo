@@ -232,7 +232,7 @@ def check_username(username: str) -> tuple[bool, str]:
 
 def config(field: str) -> str | int:
     """ returns fields value from .config """
-    print(configs)
+
     value = configs.get(field)
     if value is not None:
         return value
