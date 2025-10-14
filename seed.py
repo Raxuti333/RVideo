@@ -38,7 +38,7 @@ for pid in range(1, PROFILE_COUNT):
             comment.append([vid, pid, "comment" + str(cid), timestamp])
 
         for tid in range(1, TAGS_PER_VIDEO):
-            text: str = '#'.join(choices(ascii_lowercase + ascii_uppercase, k=randint(0, TAG_MAX_LENGTH)))
+            text: str = "#" + ''.join(choices(ascii_lowercase + ascii_uppercase, k=randint(1, TAG_MAX_LENGTH)))
             tag.append([vid, text])
         vid += 1
 
