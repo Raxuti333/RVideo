@@ -19,10 +19,10 @@ def route_root():
     """ route to landing page """
     return root.page()
 
-@app.route("/account", methods=["GET", "POST"])
-def route_account():
+@app.route("/account/<int:pid>", methods=["GET", "POST"])
+def route_account(pid: int):
     """ routes account requests """
-    return account.page()
+    return account.page(pid)
 
 @app.route("/login", methods=["GET", "POST"])
 def route_login():
