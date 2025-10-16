@@ -1,86 +1,117 @@
 """ account.html and accounts_search.html rendering and form handling """
 
+import re
 from os import remove
 from flask import render_template, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from util import get_query, get_filename, get_form, check_file, config
-from util import set_flash, get_flash, check_password, check_username
+from util import set_flash, check_password, check_username, url_parser
 from util import get_token, set_account, get_account, clear_account
 from db import db
 
 LIMIT = 20
+EXPRESSION = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
-def page():
+def page(pid: int):
     """ account page and sub resource routing """
 
-    query = get_query("=")
     account = get_account()
+    videos = []
+    users = []
+    target = None
+    offset = 0
 
-    table: dict = { "page": profile, "edit": edit }
-    execute = table.get(query[0])
-    if execute is not None:
-        return execute(query, account)
+    if not pid == 0:
+        offset = get_offset()
 
-    condition: dict = {
-    True: "WHERE LOWER(username) LIKE LOWER(?)",
-    False: "ORDER BY pid DESC"
-    }
+        target = db.query(
+        "SELECT pid, username, date FROM profile WHERE pid = ?",
+        [pid],
+        1
+        )
 
-    select: bool = query[0] == "search"
+        videos = db.query(
+        "SELECT vid, private, name FROM video WHERE (private = 0 OR pid = ?) AND pid = ? "
+        f"LIMIT { LIMIT } OFFSET { offset * LIMIT }",
+        [pid, pid],
+        LIMIT
+        )
 
-    accounts = db.query(
-    "SELECT pid, username FROM profile " + 
-    condition[select] + f" LIMIT { LIMIT }",
-    [query[-1] + "%"] if select else [],
-    LIMIT
-    )
-
-    return render_template(
-    "search.html",
-    account = account,
-    accounts = accounts
-    )
-
-def profile(query: list[str], account: dict | None):
-    """ profile page """
-
-    pid: int = -1
-    if account is not None:
-        pid = account["pid"]
-
-    token = get_token()
-    error = get_flash()
-    target = db.query("SELECT pid, username, date FROM profile WHERE pid = ?", [query[-1]])
-
-    if target is None:
-        return redirect("/")
-
-    condition: str = " AND private = 0"
-    if target["pid"] == pid:
-        condition = ""
-
-    videos = db.query(
-    "SELECT vid, name, pid, private FROM video WHERE pid = ?" + condition,
-    [query[-1]],
-    -1
-    )
-    views  = db.query("SELECT SUM(views) FROM video WHERE pid = ?", [query[-1]])[0]
-
-    if target is None:
-        return redirect("/account")
-
-    if views is None:
-        views = 0
+    if target is None or pid == 0:
+        target = { "pid": 0 }
+        sql, params = user_search()
+        users = db.query(sql, params, LIMIT)
 
     return render_template(
     "page.html",
     account = account,
     target = target,
-    token = token,
     videos = videos,
-    views = views,
-    error = error
+    users = users,
+    offset = offset
     )
+
+def user_search() -> tuple[str, list]:
+    """ generate sql query from search terms """
+
+    offset = 0
+    date = False
+    after = False
+    params = []
+    sql: str = "SELECT pid, username FROM profile WHERE "
+
+    for m in get_query("&"):
+        p = m.split("=")
+
+        if len(p) != 2:
+            continue
+
+        match(p[0]):
+            case "SEARCH":
+                params.append(url_parser(p[1]) + "%")
+                sql += "username LIKE ? AND"
+            case "DATE":
+                if EXPRESSION.match(p[1]) is not None:
+                    sql += f" timestamp - unixepoch('{p[1]}')"
+                    sql += " > 0" if after else " < 0"
+                else: sql += " 1"
+                sql += " AND"
+                date = True
+            case "AFTER":
+                if p[1] == "on":
+                    after = True
+            case "PAGE":
+                if p[1].isdigit():
+                    offset = int(p[1])
+
+    sql = sql[:-4]
+    sql += search_order(date, after)
+    sql += f" LIMIT { LIMIT } OFFSET { offset * LIMIT }"
+
+    print(params)
+    print(sql)
+    return (sql, params)
+
+def get_offset() -> int:
+    """ get video offset """
+    p = get_query("=")
+
+    if len(p) == 2 and p[0] == "offset":
+        if p[1].isdigit():
+            return int(p[1])
+
+    return 0
+
+def search_order(date: bool, after: bool) -> str:
+    """ create timestamp order condition """
+    if not date:
+        return ""
+    sql: str = " ORDER BY timestamp "
+    if after:
+        sql += "ASC"
+    else:
+        sql += "DESC"
+    return sql
 
 def edit(query: list[str], account: dict):
     """ edit account """
