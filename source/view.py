@@ -47,7 +47,7 @@ def page(query: str):
     target = target,
     comments = comments,
     vid = query,
-    offset = {"current": offset, "next": offset + 1, "last": offset - 1}
+    offset = offset
     )
 
 def get_offset() -> int:
