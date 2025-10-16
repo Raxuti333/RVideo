@@ -1,155 +1,188 @@
-.profile_block 
+.topbar > .action 
 {
     display: grid;
-    align-content: center;
-    justify-content: center;
+    grid-gap: 1vw;
 
-    margin-left: auto;
-    margin-right: auto;
-    max-width: fit-content;
+    & > div
+    {
+        display: block;
+        border: outset 1px;
 
-    border-style: outset;
-    border-color: black;
-    border-width: 1px;
-}
+        & a
+        {
+            text-decoration: none;
 
-.profile_block_picture
-{
-    width: 10vw;
-    height: auto;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.profile_block_upload
-{
-    display: block;
-    width: 10vw;
-}
-
-.profile_block_upload_submit
-{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 0;
-    margin-bottom: 0;
-    max-width: fit-content;
-    color: black;
-}
-
-.profile_block_div
-{
-    display: inline-flex;
-
-    align-content: center;
-    justify-content: center;
-
-    margin-top: 5px;
-}
-
-#edit:target .profile_block_text { display: none; }
-
-.profile_block_text
-{
-    margin-top: 0;
-    margin-bottom: 0;
-    max-width: fit-content;
-    color: black;
-
-    font-size: 1.5vw;
-}
-
-.profile_block_form_username { display: none; }
-
-#edit:target .profile_block_form_username
-{
-    display: inline;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
-.profile_block_form_password { display: none; }
-#edit:target .profile_block_form_password { display: inline; }
-
-.profile_block_form_delete 
-{ 
-    display: none;
-
-    > * {
-        margin-left: auto; 
-        margin-right: auto; 
-        max-width: fit-content;
+            & > p
+            {
+                margin: 0;
+                color: black;
+                font-size: 2vw;
+            }
+        }
     }
 }
-#delete:target + .profile_block_form_delete 
+
+.account
 {
     display: grid;
-    position: fixed;
-    top: 25vh;
-    right: 47vw;
+    position: relative;
 
-    border-width: 1px;
-    border-color: black;
-    border-style: outset;
-    background-color: white;
-}
+    left: 45.6vw;
 
-.profile_delete_show { display: none; }
-#edit:target .profile_delete_show
-{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
     max-width: fit-content;
+    align-content: center;
+    justify-content: center;
+            
+    border-style: outset;
+    border-color: black;
+    border-width: 1px;
+            
+    & p
+    {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0;
+        margin-bottom: 0;
+        max-width: fit-content;
+        color: black;
+                
+        font-size: 1.5vw;
+    }
+            
+    & img 
+    {
+        width: 10vw;
+        height: auto;
+        image-rendering: pixelated;
+    }
 }
 
-.video_grid
+.users
 {
     display: grid;
+    position: relative;
+
+    justify-content: center;
+    grid-template-columns: auto auto auto auto auto;
+    grid-gap: 1vw;
+
+    & > a
+    {
+        text-decoration: none;
+        max-width: fit-content;
+
+        & > div
+        {
+            display: grid;
+            align-content: center;
+            justify-content: center;
+                        
+            border-style: outset;
+            border-color: black;
+            border-width: 1px;
+                        
+            & p
+            {
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 0;
+                margin-bottom: 0;
+                max-width: fit-content;
+                color: black;
+                        
+                font-size: 1.2vw;
+            }
+                    
+            & img 
+            {
+                width: 5vw;
+                height: auto;
+                image-rendering: pixelated;
+            }
+        }
+    }
+}
+
+.videos 
+{
+    display: grid;
+    position: relative;
+            
+    margin: 0;
+    left: 0;
+    top: 5vw;
+            
+    width: 100vw;
+            
     grid-template-columns: auto auto auto auto auto auto auto auto;
     align-content: center;
     justify-content: center;
+    grid-gap: 1vw;
+            
+    & a { text-decoration: none; }
+            
+    & a > div
+    {
+        display: grid;
+        max-width: 12vw;
+        border: outset 1px;
+                
+        grid-template-columns: auto;
+        align-content: center;
+                
+        & video 
+        {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: fit-content;
+            height: 6vw; 
+        }
+                
+        & p 
+        {
+            margin: 0;
+            display: block;
+            font-size: 1vw;
+            color: black;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: fit-content;
+        }
+                
+        & > div
+        {
+            overflow-x: hidden;
+        }
+    }
+
+    & > .no 
+    {
+        display: block;
+        position: absolute;
+
+        left: 48vw;
+    }
 }
 
-.video_item
+.offsets
 {
-    display: grid;
-    align-content: center;
-    justify-content: center;
+    position: relative;
+                
+    transform-origin: top left;
+    scale: calc(var(--w)/1920);
+    transform: translate(calc(1920px/2 - 22px * (var(--w)/1920)), calc(var(--w) * 0.01px));
 
-    width: 10vw;
-    height: 10vw;
+    & > a
+    {
+        display: inline;
+        text-decoration: none;
 
-    margin: 0.5vw;
-    border-width: 1px;
-    border-color: black;
-    border-style: outset;
-}
+        & > button { font-size: 15px; }
+    }
 
-.video_item_text
-{
-    display: block;
-
-    margin-left: auto;
-    margin-right: auto;
-    max-width: fit-content;
-}
-
-#edit:target .edit_button { display: none; }
-.edit_button 
-{
-    text-decoration: none;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
-.hide_button { display: none; }
-#edit:target .hide_button
-{
-    display: inline;
-    text-decoration: none;
-    margin-top: auto;
-    margin-bottom: auto;
+    & > p
+    {
+        display: inline;
+        font-size: 15px;
+    }
 }
