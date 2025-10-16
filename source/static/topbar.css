@@ -1,3 +1,18 @@
+@property --width
+{
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 100vw; 
+}
+
+body 
+{
+    margin: 0;
+    /* get screen width for scaling */
+    --w: tan(atan2(var(--width),1px));
+}
+
+
 .topbar 
 {
     display: block;
@@ -48,6 +63,38 @@
         }
     }
 
+    & > .search 
+    {
+        transform-origin: top left;
+        scale: calc(var(--w)/1920);
+
+        transform: translate(calc(1920px/2 - (122.5px * (var(--w)/1920))), calc(var(--w) * 0.01px));
+
+        & .normal
+        {
+            & > a { text-decoration: none; }
+
+            & > .bar { width: 225px; }
+        }
+
+        & .advanced
+        {
+            & > * 
+            {
+                display: block;
+
+                > * { display: inline; }
+                        
+                > .page { width: 40px; }
+
+                & > .after { display: none; }
+                & > .before { display: inline; }
+                & > #selector:checked ~ .before { display: none; }
+                & > #selector:checked ~ .after  { display: inline; }
+            }
+        }
+    }
+
     & > .action
     {
         display: flex;
@@ -74,3 +121,10 @@
         }
     }
 }
+
+#advanced .advanced { display: none; }
+#advanced:target .advanced { display: grid; }
+#advanced .hide { display: none; }
+#advanced:target .hide { display: inline; }
+#advanced .show { display: inline; }
+#advanced:target .show { display: none; }
