@@ -1,61 +1,63 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>RVideo Login</title>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='topbar.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
     </head>
     <body id="signup">
-        <div class="rvideo_topbar">
-            <!-- Logo block  -->
-            <a href="/" class="rvideo_logo">
-                <img class="rvideo_logo_img" src="{{ url_for('static', filename='favicon.ico') }}">
-                <p class="rvideo_logo_text">RVIDEO</p>
-            </a>
+        <div class="topbar">
+            <div class="logo">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='favicon.ico') }}">
+                    <p>RVIDEO</p>
+                </a>
+            </div>
         </div>
-    
-        <div class="login_block">
-            <div>
-                <p style="font-size: 30px;" class="form_block_div">Login</p>
+        
+        <div class="container">
+            <div class="login">
+                <p>Login</p>
                 <form action="/login" method="post">
-                    <div class="form_block_div">
-                        <p style="display: inline;">username:</p>
-                        <input type="text" name="username">
+                    <div>
+                        <p>username:</p>
+                        <input class="text" type="text" name="username">
                     </div>
-                    <div class="form_block_div">
-                        <p style="display: inline;">password:</p>
-                        <input type="password" name="password">
+                    <div>
+                        <p>password:</p>
+                        <input class="text" type="password" name="password">
                     </div>
-                    <input type="submit" value="login" class="form_block_submit">
+                    <div>
+                        <input class="submit" type="submit" value="login">
+                    </div>
                 
                     <input type="hidden" name="token" value="{{ token }}">
                     <input type="hidden" name="signup" value="False">
                 </form>
-            
-                <div class="form_switch_div">
+
+                <div class="message">
                     <p style="color: {{ message[1] }};">{{ message[0] }}</p>
                 </div>
-            
-                <div class="form_switch_div">
-                    <a style="text-decoration: none;" href="/login#signup">
-                        <p class="form_switch_button">sign up page</p>
-                    </a>
-                </div>
+
+                <a href="/login#signup">
+                    <input type="button" value="sign up page">
+                </a>
             </div>
-        </div>
-    
-        <div class="signup_block">
-            <div>
-                <p style="font-size: 30px;" class="form_block_div">Sign Up</p>
+
+            <div class="signup">
+                <p>Signup</p>
                 <form action="/login" method="post">
-                    <div class="form_block_div">
-                        <p style="display: inline;">username:</p>
-                        <input type="text" name="username">
+                    <div>
+                        <p>username:</p>
+                        <input class="text" type="text" name="username">
                     </div>
-                    <div class="form_block_div">
-                        <p style="display: inline;">password:</p>
-                        <input type="password" name="password">
-                        <div class="password_requirements">
+
+                    <div>
+                        <p>password:</p>
+                        <input class="text" type="password" name="password">
+
+                        <div class="requirements">
                             <p>Requirements:</p>
                             <ul>
                                 <li>Longer than seven chracters</li>
@@ -69,26 +71,28 @@
                                 </li>
                             </ul>
                         </div>
+
                     </div>
-                    <div class="form_block_div">
-                        <p style="display: inline;">password:</p>
-                        <input type="password" name="chckpswd">
+                    <div>
+                        <p>password:</p>
+                        <input class="text" type="password" name="chckpswd">
                     </div>
-                    <input type="submit" value="sign up" class="form_block_submit">
-                
+
+                    <div>
+                        <input class="submit" type="submit" value="sign up">
+                    </div>
+
                     <input type="hidden" name="token" value="{{ token }}">
                     <input type="hidden" name="signup" value="True">
                 </form>
             
-                <div class="form_switch_div">
+                <div class="message">
                     <p style="color: {{ message[1] }};">{{ message[0] }}</p>
                 </div>
-            
-                <div class="form_switch_div">
-                    <a style="text-decoration: none;" href="/login#">
-                        <p class="form_switch_button">login page</p>
-                    </a>
-                </div>
+
+                <a href="/login#">
+                    <input type="button" value="login page">
+                </a>
             </div>
         </div>
     </body>

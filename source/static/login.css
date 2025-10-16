@@ -1,82 +1,156 @@
-.form_block 
+.container
 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 80vh;
-}
+    position: relative;
 
-.form_switch_button
-{
-    padding: 1px 6px;
-    border: 1px outset buttonborder;
-    border-radius: 3px;
-    color: buttontext;
-    background-color: buttonface;
-    text-decoration: none;
-}
-
-#signup:target .login_block { display: none; }
-.login_block 
-{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 50vh;
-}
-
-.signup_block { display: none; }
-#signup:target .signup_block 
-{ 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 50vh;
-}
-
-.form_block_div 
-{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    max-width: fit-content;
-}
-
-.form_block_submit 
-{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    max-width: fit-content;
-}
-
-.form_switch_div
-{
-    display: block;
     margin-left: auto;
     margin-right: auto;
     max-width: fit-content;
-}
 
-.password_requirements { display: none; }
-.form_block_div:hover .password_requirements 
-{ 
-    display: inline;
-    position: fixed;
-    left: 60vw;
-    top: 25vh;
-    font-size: 0.85em;
-    border: 2.5px ridge black;
+    & a { text-decoration: none; }
 
-    p, ul, li 
+    & .message 
+    { 
+        max-width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+
+        & > p { font-size: 1vw; }
+    }
+
+    & > .login
     {
-        font-size: 1em;
+        & > p 
+        { 
+            font-size: 2vw; 
+            margin:  0; 
+
+            margin-left: auto;
+            margin-right: auto;
+            max-width: fit-content;
+        }
+
+        & > form
+        {
+            display: flex;
+            flex-direction: column;
+
+            & > div
+            { 
+                display: block;
+                margin-top: 0.3vw;
+
+                & > p 
+                {
+                    font-size: 0.9vw;
+                    display: inline; 
+                }
+
+                & > .submit
+                {
+                    display: block;
+                    margin-left: auto;
+                    margin-right: auto;
+                    max-width: fit-content;
+
+                    font-size: 0.7vw;
+                }
+
+                & > .text
+                {
+                    display: inline;
+                    width: 10vw;
+                    height: 1vw;
+                }
+            }
+        }
+
+        & > a
+        {
+            display: block;
+
+            margin-left: auto;
+            margin-right: auto;
+            max-width: fit-content;
+
+            & > input { font-size: 0.7vw; }
+        }
+    }
+
+    & > .signup
+    {
+        & > p 
+        { 
+            font-size: 2vw; 
+            margin:  0; 
+
+            margin-left: auto;
+            margin-right: auto;
+            max-width: fit-content;
+        }
+
+        & > form
+        {
+            display: flex;
+            flex-direction: column;
+
+            & > div
+            { 
+                display: block;
+                margin-top: 0.3vw;
+
+                & > p 
+                {
+                    font-size: 0.9vw;
+                    display: inline; 
+                }
+
+                & > .submit
+                {
+                    display: block;
+                    margin-left: auto;
+                    margin-right: auto;
+                    max-width: fit-content;
+
+                    font-size: 0.7vw;
+                }
+
+                & > .text
+                {
+                    display: inline;
+                    width: 10vw;
+                    height: 1vw;
+                }
+
+                & > .requirements { display: none; }
+
+                &:hover > .requirements 
+                {
+                    display: block;
+                    position: fixed;
+
+                    left: 60vw;
+                    top: 10vw;
+
+                    & p, li { font-size: 0.8vw; }
+
+                }
+            }
+        }
+
+        & > a
+        {
+            display: block;
+
+            margin-left: auto;
+            margin-right: auto;
+            max-width: fit-content;
+
+            & > input { font-size: 0.7vw; }
+        }
     }
 }
+
+#signup * .login { display: block; }
+#signup:target * .login { display: none; }
+#signup * .signup { display: none; }
+#signup:target * .signup { display: block; }
