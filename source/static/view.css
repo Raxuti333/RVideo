@@ -1,32 +1,296 @@
-.video_container
+.account
+{
+    display: grid;
+    align-content: center;
+    justify-content: center;
+            
+    border-style: outset;
+    border-color: black;
+    border-width: 1px;
+            
+    & a
+    {
+        text-decoration: none;
+    }
+
+    & p
+    {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0;
+        margin-bottom: 0;
+        max-width: fit-content;
+        color: black;
+                
+        font-size: 1.2vw;
+    }
+            
+    & img 
+    {
+        width: 5vw;
+        height: auto;
+        image-rendering: pixelated;
+    }
+}
+
+.content
 {
     display: flex;
+    position: relative;
+
+    & > .view
+    {
+        display: grid;
+
+        & > .video
+        {
+            height: 34vw;
+            width: auto;
+        }
+
+        & > div
+        {
+            display: flex;
+
+            height: min-content;
+
+            & > .info
+            {
+                display: flex;
+
+                flex-direction: column;
+
+                height: 6vw;
+                overflow-y: scroll;
+
+                margin-left: 0.8vw;
+                margin-top: 0.3vw;
+                & > .title
+                {
+                    margin: 0;
+                    margin-bottom: 0.3vw;
+                    max-width: 50vw;
+                    overflow: scroll;
+                    font-size: 1vw;
+                }
+
+                & > .description
+                {
+                    margin: 0;
+                    max-width: 50vw;
+                    font-size: 1vw;
+                }
+
+                & > div
+                {
+                    display: flex;
+                    flex-direction: row;
+
+                    & * 
+                    {
+                        display: inline;
+
+                        margin: 0;
+                        margin-right: 0.5vw;
+                        font-size: 0.9vw;
+                    }
+
+                    & a 
+                    {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+
+    & > .comment
+    {
+        display: flex;
+        flex-direction: column;
+
+        margin-left: auto;
+        margin-right: auto;
+        max-width: fit-content;
+
+        height: 34vw;
+
+        & > .write
+        {
+            & textarea
+            {
+                display: block;
+                width: 19.6vw;
+                height: 3vw;
+                resize: none;
+            }
+
+            & input
+            {
+                display: block; 
+                margin-left: auto; 
+                margin-right: auto; 
+                max-width: fit-content;
+            }
+        }
+
+        & > .comments
+        {
+            overflow-y: scroll;
+
+            & > div
+            {
+                display: flex; 
+                width: 20vw; 
+                border-style: outset; 
+                border-color: black; 
+                border-width: 1px;
+
+                & > p
+                {
+                    display: inline; 
+                    overflow-inline: scroll;
+
+                    margin: 0;
+                    margin-bottom: 0.1vw;
+                    margin-top: 0.1vw;
+
+                    font-size: 0.95vw;
+                }
+                            
+                & > div
+                {
+                    display: flex;
+                    flex-direction: column;
+
+                    & div
+                    {
+                        max-width: fit-content;
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+                }
+
+                & img 
+                {
+                    height: 3vw;
+                }
+            }
+        }
+
+        & > .offset
+        {
+            display: flex;
+            margin-left: auto; 
+            margin-right: auto; 
+            max-width: fit-content;
+
+            & > p
+            {
+                margin: 0;
+                margin-left: 5px; 
+                margin-right: 5px;
+
+                font-size: 1vw;
+            }
+        }
+    }
 }
 
-#title:target .title_text { display: none; }
+#edit .edit { display: none; }
+#edit:target .edit
+{ 
+    display: block;
+    position: absolute;
+                
+    background-color: aliceblue;
+    border: outset black 1px;
 
-.title_edit { display: none; }
-#title:target .title_edit { display: block; }
+    left: 50vw;
+    top: 20vw;
 
-#description:target .description_text { display: none; }
+    & > form
+    {
+        display: flex;
+        flex-direction: column;
 
-.description_edit { display: none; }
-#description:target .description_edit { display: block; }
+        width: 15vw;
+        height: 10vw;
 
-.comment_button_container
-{
-    text-decoration: none;
-    margin-top: auto;
-    margin-bottom: auto;
-}
+        & > .title
+        {
+            display: block;
 
-.comment_button
-{
-    display: inline;
-    padding: 1px 6px;
-    border: 1px outset buttonborder;
-    border-radius: 3px;
-    color: buttontext;
-    background-color: buttonface;
-    text-decoration: none;
+            width: 10vw;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 1vw;
+        }
+
+        & > .description
+        {
+            display: block;
+            resize: none;
+
+            width: 12vw;
+            height: 8vw;
+
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        & > .update
+        {
+            display: block;
+            max-width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0.5vw;
+        }
+    }
+
+    & > div
+    {
+        display: block;
+        text-decoration: none;
+
+        margin-left: 1.5vw;
+
+        & > *
+        {
+            font-size: 0.90vw;
+            display: inline;
+        }
+
+        & > input
+        {
+            margin-right: 5.8vw;
+        }
+
+        #delete ~ form { display: none; }
+        #delete:checked ~ form
+        {
+            display: inline;
+        }
+    }
+
+    & > a
+    {
+        display: flex;
+        text-decoration: none;
+
+        margin-left: auto;
+        margin-right: auto;
+        max-width: fit-content;
+    }
+
+    & > p
+    {
+        margin: 0;
+        margin-right: auto;
+        margin-left: auto;
+        max-width: fit-content;
+
+        font-size: 1vw;
+    }
 }

@@ -1,132 +1,141 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>RVideo View</title>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='topbar.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='view.css') }}">
     </head>
-    <body>
-        <div class="rvideo_topbar">
-            <!-- Logo block  -->
-            <a href="/" class="rvideo_logo">
-                <img class="rvideo_logo_img" src="{{ url_for('static', filename='favicon.ico') }}">
-                <p class="rvideo_logo_text">RVIDEO</p>
-            </a>
-            {% if account %}
-            <div style="margin-left: auto;" class="rvideo_account">
-                <a style="text-decoration: none;" href="/account?page={{ account.pid }}">
-                    <img class="rvideo_account_image" src="/picture/{{ account.pid }}">
-                    <p class="rvideo_account_text">{{ account.username }}</p>
+    <body id="edit">
+        <div class="topbar">
+            <div class="logo">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='favicon.ico') }}">
+                    <p>RVIDEO</p>
                 </a>
             </div>
-            {% else %}
-            <a class="rvideo_login" href="/login">
-                <p class="rvideo_login_text">Login</p>
-            </a>
-            {% endif %}
+            <div class="action">
+                {% if account %}
+                <div class="upload">
+                    <a href="/video">
+                        <p>Upload&#40;+&#41;</p>
+                    </a>
+                </div>
+                {% endif %}
+                <div class="account">
+                    {% if account %}
+                    <a href="/account/{{ account.pid }}">
+                        <img src="/picture/{{ account.pid }}">
+                        <p>{{ account.username }}</p>
+                    </a>
+                    {% else %}
+                    <a href="/account/0">
+                        <img src="/picture/0">
+                        <p>Guest</p>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-
-        <div class="video_container">
-            <div style="display: grid;">
-                <video controls width="auto" height="600vw" style="margin: 0;">
+        <div class="content">
+            <div class="view">
+                <video class="video"" controls>
                     <source src="/stream/{{ vid }}">
                 </video>
-                <div style="display: flex;">
-                    <div class="rvideo_account">
-                        <a style="text-decoration: none;" href="/account?page={{ target.pid }}">
-                            <img class="rvideo_account_image" src="/picture/{{ target.pid }}">
-                            <p class="rvideo_account_text">{{ target.username }}</p>
+                <div>
+                    <div class="account">
+                        <a href="/account/{{ video.pid }}">
+                            <img src="/picture/{{ video.pid }}">
+                            <p>{{ target.username }}</p>
                         </a>
                     </div>
-                    <div style="display: grid; margin-left: 10px;">
-                        <div id="title">
-                            {% if account.pid == video.pid %}
-                            <a class="title_text" style="text-decoration: none;" href="#title">
-                                <p style="color: black;">{{ video.name }}</p>
+                    <div class="info">
+                        <p class="title">{{ video.name }}</p>
+                        <p class="description">{{ video.description }}</p>
+                        <div>
+                            <p>{{ video.date }}</p>
+                            <p>views:{{ video.views }}</p>
+                            {% if video.private %}
+                            <p>[private]</p>
+                            {% endif %}
+                            {% if account.pid == target.pid %}
+                            <a href="#edit">
+                                <button type="button">edit</button>
                             </a>
-                            <form class="title_edit" action="/video?edit" method="post">
-                                <input type="text" name="title" value="{{ video.name }}">
-                                <input type="submit" value="change">
-                                <input type="hidden" name="vid" value="{{ vid }}">
-                                <input type="hidden" name="token" value="{{ token }}">
-                            </form>
-                            {% else %}
-                            <p>{{ video.name }}</p>
-                            {% endif %}
-                        </div>
-                        <div id="description">
-                            {% if account.pid == video.pid %}
-                            <a class="description_text" style="text-decoration: none;" href="#description">
-                                <p style="color: black;">{{ video.description }}</p>
-                            </a>
-                            <form class="description_edit" action="/video?edit" method="post">
-                                <input type="text" name="description" value="{{ video.description }}">
-                                <input type="submit" value="change">
-                                <input type="hidden" name="vid" value="{{ vid }}">
-                                <input type="hidden" name="token" value="{{ token }}">
-                            </form>
-                            {% else %}
-                            <p>{{ video.description }}</p>
-                            {% endif %}
-                        </div>
-                        <div style="display: block; margin-top: 0;">
-                            <p style="display: inline; margin-top: 0;">date: {{ video.date }}</p>
-                            <p style="display: inline; margin-top: 0;">views: {{ video.views }}</p>
-                            {% if account.pid == video.pid %}
-                            {% if video.private == 1 %}
-                            <p style="display: inline; margin-top: 0;">[Private]</p>
-                            {% endif %}
-                            <form style="display: inline;" action="/video?edit" method="post">
-                                <input style="color: #ff0033; margin-left: 10px;" type="submit" value="Delete">
-                                <input type="hidden" name="vid" value="{{ vid }}">
-                                <input type="hidden" name="delete">
-                                <input type="hidden" name="token" value="{{ token }}">
-                            </form>
                             {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="margin-left: auto; margin-right: auto;">
+            <div class="comment">
                 {% if account %}
-                <div>         
+                <div class="write">         
                     <form action="/comment" method="post">
-                        <textarea style="display: block; width: 20vw;" name="comment" rows="5"></textarea>
-                        <input style="display: block; margin-left: auto; margin-right: auto; max-width: fit-content;" type="submit" value="comment">
+                        <textarea name="comment" required></textarea>
+                        <input type="submit" value="comment">
                         <input type="hidden" name="vid" value="{{ vid }}">
                         <input type="hidden" name="token" value="{{ token }}">
                     </form>
                 </div>
                 {% endif %}
-                <div style="overflow: auto; height: 50vh;">
-                    {% for comment in comments %}
-                    <div style="display: flex; width: 20vw; border-style: outset; border-color: black; border-width: 1px;">
+                <div class="comments">
+                {% for comment in comments %}
+                    <div>
                         <div>
-                            <img style="height: 3vw;" src="/picture/{{ comment.pid }}">
+                            <img src="/picture/{{ comment.pid }}">
                             {% if comment.pid == account.pid %}
                             <form action="/comment" method="post">
-                                <input type="submit" value="delete">
+                                <div>
+                                    <input type="submit" value="delete">
+                                </div>
                                 <input type="hidden" name="cid" value="{{ comment.cid }}">
                                 <input type="hidden" name="vid" value="{{ vid }}">
                                 <input type="hidden" name="token" value="{{ token }}">
                             </form>
                             {% endif %}
                         </div>
-                        <p style="display: inline; overflow-inline: scroll;">{{ comment.text }}</p>
+                        <p>{{ comment.text }}</p>
                     </div>
-                    {% endfor %}
+                {% endfor %}
                 </div>
-                <div style="display: flex; margin-left: auto; margin-right: auto; max-width: fit-content;">
-                    <a class="comment_button_container" href="/view/{{ vid }}?offset={{ offset.last }}">
-                        <p class="comment_button">←</p>
+                {% if comments|length != 0 %}
+                <div class="offset">
+                    <a href="/view/{{ vid }}?offset={{ offset - 1 }}">
+                        <button>←</button>
                     </a>
-                    <p style="margin-left: 5px; margin-right: 5px;" >{{ offset.current }}</p>
-                    <a class="comment_button_container" href="/view/{{ vid }}?offset={{ offset.next }}">
-                        <p class="comment_button">→</p>
+                    <p>{{ offset }}</p>
+                    <a href="/view/{{ vid }}?offset={{ offset + 1 }}">
+                        <button>→</button>
                     </a>
                 </div>
+                {% endif %}
             </div>
         </div>
+        
+        {% if account.pid == target.pid %}
+        <div class="edit">
+            <p>Edit video info</p>
+            <form action="/video?edit" method="post">
+                <input class="title" type="text" name="title" value="{{ video.name|safe }}">
+                <textarea class="description" name="description">{{ video.description|safe }}</textarea>
+                <input class="update" type="submit" value="update">
+                <input type="hidden" name="vid" value="{{ vid }}">
+                <input type="hidden" name="token" value="{{ token }}">
+            </form>
+
+            <div>
+                <p>Delete:</p>
+                <input id="delete" type="checkbox">
+                <form action="/video?delete" method="post">
+                    <input type="submit" value="delete!">
+                    <input type="hidden" name="vid" value="{{ vid }}">
+                    <input type="hidden" name="token" value="{{ token }}">
+                </form>
+            </div>
+            <a href="#">
+                <button type="button">close</button>
+            </a>
+        </div>
+        {% endif %}
     </body>
 </html>
