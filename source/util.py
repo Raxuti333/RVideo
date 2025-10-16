@@ -288,6 +288,18 @@ def text(data: str) -> str:
 
     return data[begin + 1:end]
 
+def url_parser(string: str) -> str:
+    """ replace url escape characters """
+
+    position = string.find("%")
+    while position != -1:
+        encoded = string[position:position+3]
+        number = int(encoded[1:], 16)
+        string = string.replace(encoded, chr(number))
+        position = string.find("%", position + 1)
+
+    return string
+
 def int_to_size(number: int) -> str:
     """ converts integer to human readable size """
     for size in SIZES.items().__reversed__():
