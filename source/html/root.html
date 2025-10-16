@@ -24,26 +24,26 @@
                             <button type="button">↓</button>
                         </a>
                         
-                        <input class="bar" type="text" name="SEARCH" value="{{ searches.SEARCH }}">
+                        <input class="bar" type="text" name="SEARCH" value="{{ terms.search | safe }}">
                         <input type="submit" value="search">
                     </div>
 
                     <div class="advanced">
                         <div>
-                            <input id="selector" class="search_date" type="checkbox" name="AFTER" {{ searches.AFTER }}>
+                            <input id="selector" class="search_date" type="checkbox" name="AFTER" {% if terms.after == "on" %} checked {% endif %}>
                             <p class="before">before:</p>
                             <p class="after">after:</p>
-                            <input type="date" name="DATE" value="{{ searches.DATE }}">
+                            <input type="date" name="DATE" value="{{ terms.date }}">
                             <p>page:</p>
-                            <input class="page" type="number" name="PAGE" value="{{ searches.PAGE }}">
+                            <input class="page" type="number" name="PAGE" value="{{ terms.page }}">
                         </div>
                         <div>
                             <p>user:</p>
-                            <input type="text" name="USERS" value="{{ searches.USERS }}">
+                            <input type="text" name="USERS" value="{{ terms.users | safe }}">
                         </div>
                         <div>
                             <p>tags:</p>
-                            <input type="text" name="TAGS" value="{{ searches.TAGS }}">
+                            <input type="text" name="TAGS" value="{{ terms.tags | safe }}">
                         </div>
                     </div>
                 </form>
@@ -58,13 +58,13 @@
                 {% endif %}
                 <div class="account">
                     {% if account %}
-                    <a href="/account?page={{ account.pid }}">
-                        <img class="rvideo_account_image" src="/picture/{{ account.pid }}">
+                    <a href="/account/{{ account.pid }}">
+                        <img src="/picture/{{ account.pid }}">
                         <p>{{ account.username }}</p>
                     </a>
                     {% else %}
-                    <a href="/account">
-                        <img class="rvideo_account_image" src="/picture/0">
+                    <a href="/account/0">
+                        <img src="/picture/0">
                         <p>Guest</p>
                     </a>
                     {% endif %}
