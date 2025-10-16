@@ -2,7 +2,7 @@
 """ video view page """
 
 from flask import render_template, redirect, abort
-from util import get_account, get_token, get_vid, get_query
+from util import get_account, get_token, get_vid, get_query, get_flash
 from db import db
 
 LIMIT = 25
@@ -12,6 +12,7 @@ def page(query: str):
 
     account = get_account()
     token   = get_token()
+    message = get_flash()
 
     vid, pid = get_vid(query)
     if pid is not None:
@@ -47,6 +48,7 @@ def page(query: str):
     target = target,
     comments = comments,
     vid = query,
+    message = message,
     offset = offset
     )
 
