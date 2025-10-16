@@ -47,6 +47,9 @@
         color: black;
                 
         font-size: 1.5vw;
+
+        width: 10vw;
+        overflow-x: scroll;
     }
             
     & img 
@@ -91,6 +94,9 @@
                 color: black;
                         
                 font-size: 1.2vw;
+
+                width: 5vw;
+                overflow-x: scroll;
             }
                     
             & img 
