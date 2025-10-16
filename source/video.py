@@ -15,11 +15,10 @@ def page():
     message = get_flash()
     query   = get_query("=")
 
-    table: dict = {"upload": upload, "edit": edit }
-
     if account is None:
         return redirect("/")
 
+    table: dict = {"upload": upload, "edit": edit, "delete": delete }
     execute = table.get(query[0])
     if execute is not None:
         return execute(account, token)
@@ -33,11 +32,10 @@ def edit(account: dict, token: str):
     ("vid", str),
     ("title", str),
     ("description", str),
-    ("delete", str),
     ("token", str),
     ])
 
-    table: dict = { 6: title, 5: description, 3: delete }
+    link: str = "/view/" + str(form["vid"])
 
     if token != form["token"]:
         set_flash(["CSRF", "#ff0033"])
@@ -47,46 +45,22 @@ def edit(account: dict, token: str):
     if vid is None:
         return redirect("/")
 
-    key: int = (form["title"] is None)|(form["description"] is None)<<1|(form["delete"] is None)<<2
-    execute = table.get(key)
-
-    if execute is not None:
-        return execute(account, vid, form)
-
-    return redirect("/")
-
-def title(account: dict, vid: str, form: dict):
-    """ change title """
-
-    link: str = "/view/" + str(form["vid"])
-
-    if form["title"] is None:
+    if form["title"] is None or form["title"] == "":
         set_flash(["title is empty", "#ff0033"])
-        return redirect(link)
-
-    db.query(
-    "UPDATE video SET name = ? WHERE vid = ? AND pid = ?",
-    [form["title"], vid, account["pid"]],
-    0)
-
-    return redirect(link)
-
-def description(account: dict, vid: str, form: dict):
-    """ change description redo tags """
-
-    link: str = "/view/" + str(form["vid"])
+        return redirect(link + "#edit")
 
     if form["description"] is None:
         set_flash(["description is empty", "#ff0033"])
-        return redirect(link)
+        return redirect(link + "#edit")
 
-    value = db.query(
-    "UPDATE video SET description = ? WHERE vid = ? AND pid = ? RETURNING vid",
-    [form["description"], vid, account["pid"]]
+    success = db.query(
+    "UPDATE video SET name = ?, description = ? WHERE vid = ? AND pid = ? RETURNING vid",
+    [form["title"], form["description"], vid, account["pid"]]
     )
 
-    if value is None:
-        return redirect(link)
+    if success is None:
+        set_flash(["something went wrong!", "#ff0033"])
+        return redirect(link + "#edit")
 
     db.query("DELETE FROM tag WHERE vid = ?", [vid], 0)
     queries: list[tuple[int, str]] = []
@@ -97,8 +71,23 @@ def description(account: dict, vid: str, form: dict):
 
     return redirect(link)
 
-def delete(account: dict, vid: str, form: dict):
+def delete(account: dict, token: str):
     """ remove video """
+
+    form = get_form([
+    ("vid", str),
+    ("token", str),
+    ])
+
+    link: str = "/view/" + str(form["vid"])
+
+    if token != form["token"]:
+        set_flash(["CSRF", "#ff0033"])
+        return redirect("/video")
+
+    vid = get_vid(form["vid"])[0]
+    if vid is None:
+        return redirect("/")
 
     path: str = get_filename(form["vid"], "video", ["mp4"])
     if path is None:
@@ -108,14 +97,15 @@ def delete(account: dict, vid: str, form: dict):
     [vid, account["pid"]])
 
     if vid is None:
-        return redirect("/view/" + str(form["vid"]))
+        set_flash(["something went wrong!", "#ff0033"])
+        return redirect(link + "#edit")
 
     db.query("DELETE FROM comment WHERE vid = ?", [vid["vid"]], 0)
     db.query("DELETE FROM tag WHERE vid = ?", [vid["vid"]], 0)
 
     remove(path)
 
-    return redirect("/account?page=" + str(account["pid"]))
+    return redirect("/account/" + str(account["pid"]))
 
 def upload(account: dict, token: str):
     """ create and edit video """
