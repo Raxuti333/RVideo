@@ -33,7 +33,7 @@ def handle():
         return delete(form, account, link)
 
     if form["comment"] is None or form["comment"] == "":
-        return redirect("/")
+        return redirect(link)
 
     db.query(
     "INSERT INTO comment (vid, pid, text, timestamp, date) "
