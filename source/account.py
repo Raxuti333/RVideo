@@ -33,7 +33,7 @@ def page(pid: int):
         videos = db.query(
         "SELECT vid, private, name FROM video WHERE (private = 0 OR pid = ?) AND pid = ? "
         f"LIMIT { LIMIT } OFFSET { offset * LIMIT }",
-        [pid, pid],
+        [-1 if account is None else account["pid"], pid],
         LIMIT
         )
 
