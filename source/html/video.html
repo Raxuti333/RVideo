@@ -1,54 +1,56 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>RVideo Upload</title>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='topbar.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='video.css') }}">
     </head>
     <body>
-        <div class="rvideo_topbar">
-            <!-- Logo block  -->
-            <a href="/" class="rvideo_logo">
-                <img class="rvideo_logo_img" src="{{ url_for('static', filename='favicon.ico') }}">
-                <p class="rvideo_logo_text">RVIDEO</p>
-            </a>
-    
-            <div style="margin-left: auto;" class="rvideo_account">
-                <a style="text-decoration: none;" href="/account?page={{ account.pid }}">
-                    <img class="rvideo_account_image" src="/picture/{{ account.pid }}">
-                    <p class="rvideo_account_text">{{ account.username }}</p>
+        <div class="topbar">
+            <div class="logo">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='favicon.ico') }}">
+                    <p>RVIDEO</p>
                 </a>
+            </div>
+            <div class="action">
+                <div class="account">
+                    <a href="/account/{{ account.pid }}">
+                        <img src="/picture/{{ account.pid }}">
+                        <p>{{ account.username }}</p>
+                    </a>
+                </div>
             </div>
         </div>
 
-        <form action="/video?upload" method="post" enctype="multipart/form-data">
-            <div class="upload_grid">
-                <div style="margin-right: 25%;" class="upload_grid_item">
-                    <p>Upload</p>
+        <div class="container">
+            <p>Upload</p>
+            <form action="/video?upload" method="post" enctype="multipart/form-data">
+                <div>
+                    <p>Video:</p>
+                    <input class="file" type="file" name="video" accept="video/mp4" required>
                 </div>
-                <div class="upload_grid_item">
-                    <p class="upload_grid_item_text">Video:</p>
-                    <input style="width: 181px;" type="file" name="video">
+                <div>
+                    <p>Title:</p>
+                    <input class="text" type="text" name="title" required>
                 </div>
-                <div class="upload_grid_item">
-                    <p class="upload_grid_item_text">Title:</p>
-                    <input type="text" name="title">
+                <div>
+                    <p>Description:</p>
+                    <textarea name="description"></textarea>
                 </div>
-                <div class="upload_grid_description">
-                    <p class="upload_grid_description_text">Description:</p>
-                    <textarea name="description" rows="5" cols="24"></textarea>
+                <div class="submit">
+                    <p>Private:</p>
+                    <input type="checkbox" name="private">
+                    <div>
+                        <input type="submit" value="upload">
+                    </div>
                 </div>
-                <div style="margin-right: auto; margin-left: auto; max-width: fit-content;" class="upload_grid_item">
-                    <p style="display: inline;">Private:</p>
-                    <input style="display: inline;" type="checkbox" name="private">
-                    <input type="submit" value="upload">
+                <div>
+                    <p style="color: {{ message[1] }};">{{ message[0] }}</p>
                 </div>
-                <div class="upload_grid_item">
-                    <p style="color: {{ message[1] }};" class="upload_grid_item_text">{{ message[0] }}</p>
-                </div>
-            </div>
-            <input type="hidden" name="token" value="{{ token }}">
-        </form>
+                <input type="hidden" name="token" value="{{ token }}">
+            </form>
+        </div>
     </body>
 </html>
