@@ -12,20 +12,16 @@ def page():
     token   = get_token()
     account = get_account()
 
-    condition = search(get_query("&"), account)
+    sql, params, terms = search(get_query("&"), account)
 
-    videos = db.query(
-    "SELECT vid, name, private FROM video " + condition[0],
-    condition[1],
-    LIMIT
-    )
+    videos = db.query(sql, params, LIMIT)
 
     return render_template(
     "root.html",
     token = token,
     account = account,
     videos = videos,
-    terms = condition[2]
+    terms = terms
     )
 
 def search(query: list[str], account: dict) -> tuple[str, list, dict]:
@@ -34,11 +30,8 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
     terms: dict = {}
     pid: int = account["pid"] if account is not None else -1
 
-    if query[0] == "":
-        return ("WHERE private = 0 OR pid = ?", [pid], terms)
-
     params = [pid]
-    sql: str = "WHERE (private = 0 OR pid = ?) AND"
+    sql: str = "SELECT vid, name, private FROM video WHERE (private = 0 OR pid = ?) AND"
 
     offset = 0
     after: bool = False
