@@ -1,12 +1,10 @@
 """ Landing page processing and video search functions """
 
-import re
 from flask import render_template
-from util import get_token, get_account, get_query, url_parser
+from util import get_token, get_account, get_query, url_parser, sql_date, sql_order
 from db import db
 
 LIMIT = 24
-EXPRESSION = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 def page():
     """ service function for landing page """
@@ -57,11 +55,7 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
 
         match(p[0]):
             case "DATE":
-                if EXPRESSION.match(p[1]) is not None:
-                    sql += f" timestamp - unixepoch('{p[1]}')"
-                    sql += " > 0" if after else " < 0"
-                else: sql += " 1"
-                sql += " AND"
+                sql += sql_date(p[1], after)
                 date = True
             case "AFTER":
                 if p[1] == "on":
@@ -95,21 +89,10 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
                 pass
 
     sql = sql[:-4]
-    sql += search_order(date, after)
+    sql += sql_order(date, after)
     sql += f" LIMIT { LIMIT } OFFSET { offset * LIMIT }"
 
     return (sql, params, terms)
-
-def search_order(date: bool, after: bool) -> str:
-    """ create timestamp order condition """
-    if not date:
-        return ""
-    sql: str = " ORDER BY timestamp "
-    if after:
-        sql += "ASC"
-    else:
-        sql += "DESC"
-    return sql
 
 def search_tags(tags: list[str]) -> str:
     """ return search condition for tags """

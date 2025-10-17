@@ -12,6 +12,7 @@ from werkzeug.datastructures import FileStorage
 
 EXPRESSION = re.compile(r"^(\d+|\d+_\d+)$")
 PRIVATEVID = re.compile(r"^\d+_\d+$")
+DATESTR    = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 SIZES: dict[str, int] = {
     "B": 1,
@@ -315,3 +316,22 @@ def int_to_size(number: int) -> str:
             return value[:value.find(".") + 2] + size[0]
 
     return "NaS"
+
+def sql_date(date: str, after: bool) -> str:
+    """ generate sql date comparison """
+    sql: str = ""
+    if DATESTR.match(date) is not None:
+        sql += f" timestamp - unixepoch('{date}')"
+        sql += " > 0" if after else " < 0"
+    else: return ""
+    return sql + " AND"
+
+def sql_order(date: bool, after: bool) -> str:
+    """ create timestamp order condition """
+    if not date:
+        return ""
+    sql: str = " ORDER BY timestamp "
+    if after:
+        sql += "ASC"
+    else: sql += "DESC"
+    return sql

@@ -1,19 +1,17 @@
 """ serve and handle users.html """
 
-import re
 from flask import render_template
-from util import get_query, get_account, url_parser
+from util import get_query, get_account, url_parser, sql_date, sql_order
 from db import db
 
 LIMIT = 25
-EXPRESSION = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 def page():
     """ serve users.html """
 
     account = get_account()
 
-    sql, params, terms = user_search()
+    sql, params, terms = search()
     users = db.query(sql, params, LIMIT)
 
     return render_template(
@@ -23,7 +21,7 @@ def page():
     account = account
     )
 
-def user_search() -> tuple[str, list, dict]:
+def search() -> tuple[str, list, dict]:
     """ generate sql query from search terms """
 
     offset = 0
@@ -46,33 +44,18 @@ def user_search() -> tuple[str, list, dict]:
             case "SEARCH":
                 params.append(p[1] + "%")
                 sql += "username LIKE ? AND"
-            case "DATE":
-                if EXPRESSION.match(p[1]) is not None:
-                    sql += f" timestamp - unixepoch('{p[1]}')"
-                    sql += " > 0" if after else " < 0"
-                else: sql += " 1"
-                sql += " AND"
-                date = True
             case "AFTER":
                 if p[1] == "on":
                     after = True
+            case "DATE":
+                sql += sql_date(p[1], after)
+                date = True
             case "PAGE":
                 if p[1].isdigit():
                     offset = int(p[1])
 
     sql = sql[:-4]
-    sql += order(date, after)
+    sql += sql_order(date, after)
     sql += f" LIMIT { LIMIT } OFFSET { offset * LIMIT }"
 
     return (sql, params, terms)
-
-def order(date: bool, after: bool) -> str:
-    """ create timestamp order condition """
-    if not date:
-        return ""
-    sql: str = " ORDER BY timestamp "
-    if after:
-        sql += "ASC"
-    else:
-        sql += "DESC"
-    return sql
