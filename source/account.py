@@ -4,7 +4,7 @@ import re
 from os import remove
 from flask import render_template, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
-from util import get_query, get_filename, get_form, check_file, config
+from util import get_query, get_filename, get_form, check_file, get_offset, config
 from util import set_flash, check_password, check_username, clear_account
 from util import get_token, set_account, get_account
 from db import db
@@ -16,7 +16,7 @@ def page(pid: int):
     """ account page and sub resource routing """
 
     account = get_account()
-    offset = get_offset()
+    offset = get_offset(get_query('='))
 
     target = db.query(
     "SELECT pid, username, date FROM profile WHERE pid = ?",
@@ -41,16 +41,6 @@ def page(pid: int):
     videos = videos,
     offset = offset
     )
-
-def get_offset() -> int:
-    """ get video offset """
-    p = get_query("=")
-
-    if len(p) == 2 and p[0] == "offset":
-        if p[1].isdigit():
-            return int(p[1])
-
-    return 0
 
 def edit(query: list[str], account: dict):
     """ edit account """

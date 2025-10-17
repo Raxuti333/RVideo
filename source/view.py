@@ -1,7 +1,7 @@
 """ video view page """
 
 from flask import render_template, redirect, abort
-from util import get_account, get_token, get_vid, get_query, get_flash
+from util import get_account, get_token, get_vid, get_query, get_flash, get_offset
 from db import db
 
 LIMIT = 25
@@ -20,7 +20,7 @@ def page(query: str):
         if account["pid"] != pid:
             return abort(403)
 
-    offset: int = get_offset()
+    offset: int = get_offset(get_query('='))
 
     video = db.query(
     "UPDATE video SET views = views + 1 WHERE vid = ? "
@@ -50,14 +50,3 @@ def page(query: str):
     message = message,
     offset = offset
     )
-
-def get_offset() -> int:
-    """ get offset from query """
-
-    query = get_query("=")
-
-    if query[0] == "offset":
-        if query[-1].isdigit():
-            return int(query[-1])
-
-    return 0

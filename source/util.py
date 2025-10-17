@@ -155,6 +155,13 @@ def get_vid(vid: str | None) -> tuple[int, int] | tuple[None, None]:
         return (int(vid), None)
     return (None, None)
 
+def get_offset(query: list[str]) -> int:
+    """ get video offset """
+    if len(query) == 2 and query[0] == "offset":
+        if query[1].isdigit():
+            return int(query[1])
+    return 0
+
 def check_file(file: FileStorage, max_size: int, types: list[str]) -> tuple[bool, str]:
     """ checks if file is acceptable """
 
