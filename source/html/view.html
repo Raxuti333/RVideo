@@ -37,6 +37,7 @@
                 </div>
             </div>
         </div>
+
         <div class="content">
             <div class="view">
                 <video class="video"" controls>
@@ -67,6 +68,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="comment">
                 {% if account %}
                 <div class="write">         
@@ -98,7 +100,6 @@
                     </div>
                 {% endfor %}
                 </div>
-                {% if comments|length != 0 %}
                 <div class="offset">
                     <a href="/view/{{ vid }}?offset={{ offset - 1 }}">
                         <button>←</button>
@@ -108,7 +109,6 @@
                         <button>→</button>
                     </a>
                 </div>
-                {% endif %}
             </div>
         </div>
         
