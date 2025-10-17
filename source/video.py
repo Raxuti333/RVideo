@@ -23,7 +23,12 @@ def page():
     if execute is not None:
         return execute(account, token)
 
-    return render_template("video.html", token = token, account = account, message = message)
+    return render_template(
+    "video.html",
+    token = token,
+    account = account,
+    message = message
+    )
 
 def edit(account: dict, token: str):
     """ selector function """
