@@ -10,6 +10,7 @@ import video
 import view
 import stream
 import picture
+import users
 import debug
 
 app: Flask = Flask(__name__, "/static", template_folder="html")
@@ -23,6 +24,11 @@ def route_root():
 def route_account(pid: int):
     """ routes account requests """
     return account.page(pid)
+
+@app.route("/users/", methods=["GET"])
+def route_users():
+    """ routes users requests """
+    return users.page()
 
 @app.route("/login", methods=["GET", "POST"])
 def route_login():

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>RVideo Accounts</title>
+        <title>RVideo Users</title>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='topbar.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='account.css') }}">
@@ -24,17 +24,17 @@
                             <button type="button">↓</button>
                         </a>
                         
-                        <input class="bar" type="text" name="SEARCH" value="">
+                        <input class="bar" type="text" name="SEARCH" value="{{ terms.search }}">
                         <input type="submit" value="users">
                     </div>
                     <div class="advanced">
                         <div>
-                            <input id="selector" class="search_date" type="checkbox" name="AFTER">
+                            <input id="selector" class="search_date" type="checkbox" name="AFTER" {% if terms.after == "on" %} checked {% endif %}>
                             <p class="before">before:</p>
                             <p class="after">after:</p>
-                            <input type="date" name="DATE" value="">
+                            <input type="date" name="DATE" value="{{ terms.date }}">
                             <p>page:</p>
-                            <input class="page" type="number" name="PAGE" value="">
+                            <input class="page" type="number" name="PAGE" value="{{ terms.page }}">
                         </div>
                     </div>
                 </form>
@@ -61,46 +61,19 @@
             </div>
         </div>
     
-        <div class="account">
-            <img src="/picture/{{ target.pid }}">
-            <p>{{ target.username }}</p>
-        </div>
-
-        <div class="offsets">
-            <a href="/account/{{ target.pid }}?offset={{ offset - 1 }}">
-                <button type="button">←</button>
-            </a>
-            <p>{{ offset }}</p>
-            <a href="/account/{{ target.pid }}?offset={{ offset + 1 }}">
-                <button type="button">→</button>
-            </a>
-        </div>
-
-        <div class="videos">
-        {% if videos|length == 0 %}
-            <div class="no">
-                <p>No videos :c</p>
+        <div class="users">
+        {% if users|length == 0 %}
+            <div>
+                No users :c
             </div>
         {% else %}
-            {% for video in videos %}
-                {% if video.private == 1 %}
-                <a href="/view/{{ account.pid }}_{{ video.vid }}">
-                {% else %}
-                <a href="/view/{{ video.vid }}">
-                {% endif %}
-                    <div>
-                        <video>
-                            {% if video.private == 1 %}
-                            <source src="/stream/{{ account.pid }}_{{ video.vid }}">
-                            {% else %}
-                            <source src="/stream/{{ video.vid }}">
-                            {% endif %}
-                        </video>
-                        <div>
-                            <p>{{ video.name }}</p>
-                        </div>
-                    </div>
-                </a>
+            {% for user in users %}
+            <a href="/account/{{ user.pid }}">
+                <div>
+                    <img src="/picture/{{ user.pid  }}">
+                    <p>{{ user.username }}</p>
+                </div>
+            </a>
             {% endfor %}
         {% endif %}
         </div>
