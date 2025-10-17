@@ -1,16 +1,14 @@
 """ html rendering and form handling """
 
-import re
 from os import remove
 from flask import render_template, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
-from util import get_query, get_filename, get_form, check_file, get_offset, config
-from util import set_flash, check_password, check_username, clear_account
-from util import get_token, set_account, get_account
+from util import get_query, get_filename, get_form, check_file, get_offset
+from util import set_flash, check_password, check_username, config
+from util import get_token, set_account, get_account, clear_account
 from db import db
 
 LIMIT = 20
-EXPRESSION = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 def page(pid: int):
     """ account page and sub resource routing """
