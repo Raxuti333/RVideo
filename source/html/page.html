@@ -5,6 +5,7 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='topbar.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='account.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='settings.css') }}">
     </head>
     <body>
         <div class="topbar">
@@ -47,7 +48,7 @@
                     </a>
                 </div>
                 <div>
-                    <a href="/settings">
+                    <a href="#settings">
                         <p>Settings</p>
                     </a>
                 </div>
@@ -104,5 +105,65 @@
             {% endfor %}
         {% endif %}
         </div>
+
+        {% if account %}
+        <div id="settings">
+            <p>Account settings</p>
+
+            <div class="picture">
+                <form action="/settings/picture" method="post" enctype="multipart/form-data">
+                    <input type="file" name="picture">
+                    <input type="hidden" name="token" value="{{ token }}">
+                    <input type="hidden" name="return" value="/account/{{ target.pid }}">
+                    <input class="submit" type="submit" value="upload picture">
+                </form>
+            </div>
+
+            <div class="username">
+                <p>username:</p>
+                <form action="/settings/username" method="post">
+                    <input class="text" type="text" name="username" value="{{ account.username }}">
+                    <input type="hidden" name="token" value="{{ token }}">
+                    <input type="hidden" name="return" value="/account/{{ target.pid }}">
+                    <input class="submit" type="submit" value="change">
+                </form>
+            </div>
+
+            <div class="password">
+                <p>password:</p>
+                <form action="/settings/password" method="post">
+                    <div>
+                        <p>old:</p>
+                        <input class="text" type="password" name="old">
+                    </div>
+                    <div>
+                        <p>new:</p>
+                        <input class="text" type="password" name="new">
+                    </div>
+                    <input type="hidden" name="token" value="{{ token }}">
+                    <input type="hidden" name="return" value="/account/{{ target.pid }}">
+                    <input class="submit" type="submit" value="change">
+                </form>
+            </div>
+
+            <div class="delete">
+                <p>delete:</p>
+                <input class="select" type="checkbox">
+                <form action="/settings/delete" method="post">
+                    <p>password:</p>
+                    <input class="text" type="password" name="password">
+                    <input type="hidden" name="token" value="{{ token }}">
+                    <input type="hidden" name="return" value="/account/{{ target.pid }}">
+                    <input class="submit" type="submit" value="delete account">
+                </form>
+            </div>
+
+            <p style="color: {{ message[1] }};">{{ message[0] }}</p>
+
+            <a href="#">
+                <input type="button" value="close">
+            </a>
+        </div>
+        {% endif %}
     </body>
 </html>

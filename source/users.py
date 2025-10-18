@@ -1,7 +1,7 @@
 """ serve and handle users.html """
 
 from flask import render_template
-from util import get_query, get_account, url_parser, sql_date, sql_order
+from util import get_query, get_account, get_token, get_flash, url_parser, sql_date, sql_order
 from db import db
 
 LIMIT = 25
@@ -10,6 +10,8 @@ def page():
     """ serve users.html """
 
     account = get_account()
+    message = get_flash()
+    token   = get_token()
 
     sql, params, terms = search()
     users = db.query(sql, params, LIMIT)
@@ -18,6 +20,8 @@ def page():
     "users.html",
     users = users,
     terms = terms,
+    token = token,
+    message = message,
     account = account
     )
 

@@ -11,6 +11,7 @@ import view
 import stream
 import picture
 import users
+import settings
 import debug
 
 app: Flask = Flask(__name__, "/static", template_folder="html")
@@ -29,6 +30,11 @@ def route_account(pid: int):
 def route_users():
     """ routes users requests """
     return users.page()
+
+@app.route("/settings/<query>", methods=["POST"])
+def route_settings(query: str):
+    """ routes settings query """
+    return settings.handle(query)
 
 @app.route("/login", methods=["GET", "POST"])
 def route_login():
