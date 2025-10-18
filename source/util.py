@@ -172,8 +172,8 @@ def check_file(file: FileStorage, max_size: int, types: list[str]) -> tuple[bool
     file_type: str = file.filename.split(".")[-1]
     if file_type not in types:
         return (False,
-        f"File type { file_type } is not supported!\n"
-        f"Use: { str(types).replace("[", "").replace("]", "").replace("'", "") }"
+        "File type " + file_type + " is not supported!\n" +
+        "Use:" + str(types).replace("[", "").replace("]", "").replace("\'", "")
         )
 
     file.seek(0, SEEK_END)
