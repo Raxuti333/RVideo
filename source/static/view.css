@@ -139,7 +139,7 @@
 
         & > .comments
         {
-            overflow-y: hidden;
+            overflow-y: scroll;
 
             & > div
             {
