@@ -4,7 +4,7 @@ from flask import render_template, redirect
 from util import get_query, get_offset, get_account, get_flash, get_token
 from db import db
 
-LIMIT = 20
+LIMIT = 14
 
 def page(pid: int):
     """ account page and sub resource routing """

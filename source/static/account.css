@@ -120,7 +120,7 @@
             
     width: 100vw;
             
-    grid-template-columns: auto auto auto auto auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto auto auto;
     align-content: center;
     justify-content: center;
     grid-gap: 1vw;

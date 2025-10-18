@@ -4,7 +4,7 @@ from flask import render_template
 from util import get_token, get_account, get_query, url_parser, sql_date, sql_order
 from db import db
 
-LIMIT = 24
+LIMIT = 21
 
 def page():
     """ service function for landing page """
