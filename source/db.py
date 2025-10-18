@@ -21,7 +21,7 @@ def setup(connection):
 
     if not config("INDEXES"):
         print("removing indexes!")
-        indexes = connection.execute("SELECT name FROM sqlite_master WHERE type='index'")
+        indexes = connection.execute("SELECT name FROM sqlite_master WHERE type='index'").fetchall()
         for p in indexes:
             if EXPRESSION.match(p['name']) is None:
                 connection.execute(f"DROP INDEX IF EXISTS { p['name'] }")
