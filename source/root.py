@@ -65,7 +65,7 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
                     for u in users:
                         condition += f" pid = {u['pid']} OR"
                     condition = condition[:len(condition) - 2] + " AND"
-                else: sql += " pid = 0 AND"
+                else: condition += " pid = 0 AND"
             case "SEARCH":
                 search_query: str = ""
                 for x in p[1].split(" "):
