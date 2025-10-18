@@ -10,8 +10,8 @@ def page(pid: int):
     """ account page and sub resource routing """
 
     account = get_account()
-    token   = get_token()
-    offset  = get_offset(get_query('='))
+    token = get_token()
+    offset = get_offset(get_query('='))
     message = get_flash()
 
     target = db.query(

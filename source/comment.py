@@ -8,8 +8,8 @@ def handle():
     """ process comment form """
 
     account = get_account()
-    token   = get_token()
-    form    = get_form([
+    token = get_token()
+    form = get_form([
     ("cid", int),
     ("vid", str),
     ("token", str),

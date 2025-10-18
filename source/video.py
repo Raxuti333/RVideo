@@ -10,10 +10,10 @@ from db import db
 def page():
     """ serve video page """
 
-    token   = get_token()
+    token = get_token()
     account = get_account()
     message = get_flash()
-    query   = get_query("=")
+    query = get_query("=")
 
     if account is None:
         return redirect("/")

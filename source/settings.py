@@ -19,8 +19,8 @@ def handle(query: str):
     table = {
     "username": username, 
     "password": password, 
-    "picture":  picture,
-    "delete":   delete
+    "picture": picture,
+    "delete": delete
     }
 
     execute = table.get(query)
@@ -149,8 +149,8 @@ def delete(account: dict, token: str):
 
     form = get_form([
     ("password", str),
-    ("token",    str),
-    ("return",   str)
+    ("token", str),
+    ("return", str)
     ])
 
     link: str = form["return"]

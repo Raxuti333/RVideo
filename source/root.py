@@ -9,7 +9,7 @@ LIMIT = 21
 def page():
     """ service function for landing page """
 
-    token   = get_token()
+    token = get_token()
     account = get_account()
 
     sql, params, terms = search(get_query("&"), account)

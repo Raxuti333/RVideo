@@ -10,7 +10,7 @@ def page(query: str):
     """ servers view page queried by user """
 
     account = get_account()
-    token   = get_token()
+    token = get_token()
     message = get_flash()
 
     vid, pid = get_vid(query)

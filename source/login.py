@@ -9,8 +9,8 @@ from db import db
 def page():
     """ serve page or process form """
 
-    flash   = get_flash()
-    token   = get_token()
+    flash = get_flash()
+    token = get_token()
     account = get_account()
 
     if account is not None:
@@ -38,8 +38,8 @@ def handle(token: str):
     ("username", str),
     ("password", str),
     ("chckpswd", str),
-    ("signup",   bool),
-    ("token",    str),
+    ("signup", bool),
+    ("token", str),
     ])
 
     if form["token"] != token:

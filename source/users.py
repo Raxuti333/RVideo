@@ -11,7 +11,7 @@ def page():
 
     account = get_account()
     message = get_flash()
-    token   = get_token()
+    token = get_token()
 
     sql, params, terms = search()
     users = db.query(sql, params, LIMIT)
