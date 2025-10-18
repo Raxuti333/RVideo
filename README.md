@@ -290,3 +290,24 @@ Most significant speedup comes from comment queries.
 ✅ Käyttäjä pystyy valitsemaan tietokohteelle yhden tai useamman luokittelun | Tags and Privating videos
 ✅ Käyttäjä pystyy lisäämään tietokohteeseen toissijaisia tietokohteita | Comments and Tags
 ```
+
+## Usage
+
+### Search
+#### Video
+Searching normaly tries to match each token of the search to a video name this can still lead to multiple targets to search more accuratelly you can press
+the arrow pointing down to open advanced search panel. Here you can add aditional conditions such as date, user and tags.
+##### Page
+If there are more than 21 videos matching the search terms you need to offset them the page offset your searches by 21. Moving you to the next page
+##### Date
+Date searches for videos which were uploaded either before or after the date specified.
+##### User
+Specifies the user the videos should be from.
+##### Tags
+Specifies tags list where video should have at least one of the listed tags
+#### Users
+Searching for user normally tries to match the whole string to a begining of a username. This might result in multiple targets to search more
+##### Date
+Searches if account is created before or after a date.
+##### Page
+If there are more than 25 users matching the search terms you need to offset them the page offset your searches by 25. Moving you to the next page
