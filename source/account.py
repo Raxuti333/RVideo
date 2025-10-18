@@ -30,12 +30,16 @@ def page(pid: int):
     LIMIT
     )
 
+    info = db.query("SELECT COUNT(vid), SUM(views) FROM video WHERE pid = ?", [pid])
+
     return render_template(
     "page.html",
     account = account,
     target = target,
     videos = videos,
     token = token,
+    views = 0 if info[1] is None else info[1],
+    count = info[0],
     message = message,
     offset = offset
     )
