@@ -25,7 +25,7 @@
         font-size: 1.2vw;
 
         width: 5vw;
-        overflow-x: scroll;
+        overflow-x: hidden;
     }
             
     & img 
@@ -64,7 +64,7 @@
                 flex-direction: column;
 
                 height: 6vw;
-                overflow-y: scroll;
+                overflow-y: hidden;
 
                 margin-left: 0.8vw;
                 margin-top: 0.3vw;
@@ -73,7 +73,7 @@
                     margin: 0;
                     margin-bottom: 0.3vw;
                     max-width: 50vw;
-                    overflow: scroll;
+                    overflow: hidden;
                     font-size: 1vw;
                 }
 
@@ -139,7 +139,7 @@
 
         & > .comments
         {
-            overflow-y: scroll;
+            overflow-y: hidden;
 
             & > div
             {
@@ -152,7 +152,7 @@
                 & > p
                 {
                     display: inline; 
-                    overflow-inline: scroll;
+                    overflow-inline: hidden;
 
                     margin: 0;
                     margin-bottom: 0.1vw;
