@@ -178,6 +178,8 @@
     scale: calc(var(--w)/1920);
     transform: translate(calc(1920px/2 - 22px * (var(--w)/1920)), calc(var(--w) * 0.01px));
 
+    max-width: fit-content;
+
     & > a
     {
         display: inline;

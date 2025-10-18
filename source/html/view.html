@@ -116,7 +116,7 @@
         <div class="edit">
             <p>Edit video info</p>
             <form action="/video?edit" method="post">
-                <input class="title" type="text" name="title" value="{{ video.name|safe }}">
+                <input class="title" type="text" name="title" value="{{ video.name|safe }}" required>
                 <textarea class="description" name="description">{{ video.description|safe }}</textarea>
                 <input class="update" type="submit" value="update">
                 <input type="hidden" name="vid" value="{{ vid }}">
