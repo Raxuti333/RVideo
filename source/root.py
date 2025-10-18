@@ -31,7 +31,9 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
     pid: int = account["pid"] if account is not None else -1
 
     params = [pid]
-    sql: str = "SELECT vid, name, private FROM video WHERE (private = 0 OR pid = ?) AND"
+    sql: str = "SELECT vid, name, private FROM video WHERE (private = 0 OR pid = ?)"
+
+    condition: str = ""
 
     offset = 0
     after: bool = False
@@ -48,7 +50,7 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
 
         match(p[0]):
             case "DATE":
-                sql += sql_date(p[1], after)
+                condition += sql_date(p[1], after)
                 date = True
             case "AFTER":
                 if p[1] == "on":
@@ -61,8 +63,8 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
                     )
                 if users != []:
                     for u in users:
-                        sql += f" pid = {u['pid']} OR"
-                    sql = sql[:len(sql) - 2] + " AND"
+                        condition += f" pid = {u['pid']} OR"
+                    condition = condition[:len(condition) - 2] + " AND"
                 else: sql += " pid = 0 AND"
             case "SEARCH":
                 search_query: str = ""
@@ -70,21 +72,24 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
                     if x == "":
                         continue
                     params.append("%"+x+"%")
-                    sql += " name LIKE ? OR"
+                    condition += " name LIKE ? OR"
                     search_query += x + " "
-                sql = sql[:-2] + "AND"
+                condition = condition[:-2] + "AND"
             case "TAGS":
-                sql += search_tags(p[1].split('#'))
+                condition += search_tags(p[1].split('#'))
             case "PAGE":
                 if p[1].isdigit():
                     offset = int(p[1])
             case _:
                 pass
 
-    sql = sql[:-4]
+    condition = condition[:-4]
+    if condition != "":
+        sql += "AND (" + condition + ")"
     sql += sql_order(date, after)
     sql += f" LIMIT { LIMIT } OFFSET { offset * LIMIT }"
 
+    print(sql)
     return (sql, params, terms)
 
 def search_tags(tags: list[str]) -> str:
