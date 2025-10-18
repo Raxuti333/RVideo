@@ -89,7 +89,6 @@ def search(query: list[str], account: dict) -> tuple[str, list, dict]:
     sql += sql_order(date, after)
     sql += f" LIMIT { LIMIT } OFFSET { offset * LIMIT }"
 
-    print(sql)
     return (sql, params, terms)
 
 def search_tags(tags: list[str]) -> str:
