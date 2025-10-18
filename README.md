@@ -136,7 +136,7 @@ env\run.bat
 ```
 This will automatically create the **db** as well.
 
-if you wish to run the program "manually" read the contents of **run.sh**
+if you wish to run the program "manually" read the contents of **run.bat**
 
 you can now access the website from address "http://127.0.0.1:8080"
 if you have changed the port in the **.conf** use it instead of the 8080
@@ -222,6 +222,7 @@ In **.config** set:
 ```
 This will collect search timings and other data displayed on program shutdown and apply indexing to the db.
 
+Creating indexes may take a while the program will show message "creating indexes!" this may take up to 10min.
 Then start the program and see the difference!
 
 ## Data
@@ -231,33 +232,49 @@ In both cases db is filled with seed.py
 ### Non-Indexed
 copy of my debug info
 ```
-Debug info:
-max: 24.665s
-avg: 0.0s
-/ 2 0.005s
-/static/<path:filename> 83 0.001s
-/account?picture 35 0.0s
-/video?stream 2172 0.0s
-/video?view 2 24.268s
-/account?page 2 0.112s
-/account?search 1 0.012s
-/?SEARCH 5 0.288s
+max: 21.798s
+avg: 0.002s
+/ 4 0.002s
+/static/<path:filename> 123 0.001s
+/picture/<int:pid> 71 0.0s
+/stream/<vid> 126 0.001s
+/view/<vid> 5 20.954s
+/view/<vid>?offset 1 20.302s
+/?SEARCH 2 0.348s
+/users/ 1 0.007s
+/account/<int:pid> 7 0.057s
+/login 2 0.047s
+/video?edit 1 0.435s
+/video 1 0.008s
+/video?upload 1 0.012s
+/users/?SEARCH 1 0.003s
+/settings/<query> 1 0.02s
 ```
 
 ### Indexed
 copy of my debug info:
 ```
 Debug info:
-max: 0.701s
+max: 0.595s
 avg: 0.0s
-/ 5 0.001s
-/static/<path:filename> 260 0.001s
-/account?picture 92 0.001s
-/video?stream 2152 0.0s
-/video?view 30 0.006s
-/account?page 2 0.015s
-/account?search 1 0.012s
-/comment 2 0.013s
-/video 2 0.028s
-/?SEARCH 3 0.508s
+/view/<vid> 6 0.006s
+/static/<path:filename> 155 0.001s
+/picture/<int:pid> 64 0.0s
+/ 7 0.001s
+/stream/<vid> 295 0.0s
+/view/<vid>?offset 6 0.017s
+/?SEARCH 8 0.326s
+/users/ 1 0.007s
+/login 4 0.059s
+/video 1 0.003s
+/video?upload 1 0.031s
+/comment 2 0.015s
+/account/<int:pid> 2 0.005s
+/settings/<query> 1 0.001s
+/login?out 1 0.0s
 ```
+
+### Results
+
+We can see significant speed up in the responce times.
+Most significant speedup comes from comment queries.
