@@ -110,4 +110,4 @@ def search_tags(tags: list[str]) -> str:
     if not vids:
         return ""
 
-    return "".join([f" vid = { vid } OR" for vid in vids])[:-2] + "AND"
+    return " (" + "".join([f" vid = { vid } OR" for vid in vids])[:-2] + ") AND"
