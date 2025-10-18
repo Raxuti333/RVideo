@@ -278,3 +278,15 @@ avg: 0.0s
 
 We can see significant speed up in the responce times.
 Most significant speedup comes from comment queries.
+
+## Course targets
+
+```
+✅ Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen | Login and Signup
+✅ Käyttäjä pystyy lisäämään, muokkaamaan ja poistamaan tietokohteita | Accounts, Videos and Comments can be deleted
+✅ Käyttäjä näkee sovellukseen lisätyt tietokohteet | Accounts, Videos and Comments are visible and searchable
+✅ Käyttäjä pystyy etsimään tietokohteita hakusanalla tai muulla perusteella | Advanced search functionality for both Videos and Accounts
+✅ Käyttäjäsivu näyttää tilastoja ja käyttäjän lisäämät tietokohteet | Dates, Views and Video counts are tracked and shown
+✅ Käyttäjä pystyy valitsemaan tietokohteelle yhden tai useamman luokittelun | Tags and Privating videos
+✅ Käyttäjä pystyy lisäämään tietokohteeseen toissijaisia tietokohteita | Comments and Tags
+```
