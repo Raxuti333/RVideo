@@ -77,8 +77,6 @@ def username(account: dict, token: str):
     if link is None:
         link = "/"
 
-    print(link)
-
     if token != form["token"]:
         set_flash(["CSRF", "#ff0033"])
         return redirect(link + "#settings")
