@@ -30,7 +30,7 @@
         <div class="topbar">
             <div class="logo">
                 <a href="/">
-                    <img src="{{ url_for('static', filename='favicon.ico') }}">
+                    <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Failed to load">
                     <p>RVIDEO</p>
                 </a>
             </div>
@@ -82,7 +82,7 @@
         </div>
     
         <div class="account">
-            <img src="/picture/{{ target.pid }}">
+            <img src="/picture/{{ target.pid }}" alt="Failed to load">
             <p>{{ target.username }}</p>
         </div>
         <div class="info">

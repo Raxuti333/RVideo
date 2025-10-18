@@ -10,7 +10,7 @@
         <div class="topbar">
             <div class="logo">
                 <a href="/">
-                    <img src="{{ url_for('static', filename='favicon.ico') }}">
+                    <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Failed to load">
                     <p>RVIDEO</p>
                 </a>
             </div>
@@ -25,12 +25,12 @@
                 <div class="account">
                     {% if account %}
                     <a href="/account/{{ account.pid }}">
-                        <img src="/picture/{{ account.pid }}">
+                        <img src="/picture/{{ account.pid }}" alt="Failed to load">
                         <p>{{ account.username }}</p>
                     </a>
                     {% else %}
                     <a href="/users/">
-                        <img src="/picture/0">
+                        <img src="/picture/0" alt="Failed to load" alt="Failed to load">
                         <p>Guest</p>
                     </a>
                     {% endif %}
@@ -46,7 +46,7 @@
                 <div>
                     <div class="account">
                         <a href="/account/{{ video.pid }}">
-                            <img src="/picture/{{ video.pid }}">
+                            <img src="/picture/{{ video.pid }}" alt="Failed to load">
                             <p>{{ target.username }}</p>
                         </a>
                     </div>
@@ -84,7 +84,7 @@
                 {% for comment in comments %}
                     <div>
                         <div>
-                            <img src="/picture/{{ comment.pid }}">
+                            <img src="/picture/{{ comment.pid }}" alt="Failed to load">
                             {% if comment.pid == account.pid %}
                             <form action="/comment" method="post">
                                 <div>

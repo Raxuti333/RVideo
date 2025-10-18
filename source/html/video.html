@@ -10,14 +10,14 @@
         <div class="topbar">
             <div class="logo">
                 <a href="/">
-                    <img src="{{ url_for('static', filename='favicon.ico') }}">
+                    <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Failed to load">
                     <p>RVIDEO</p>
                 </a>
             </div>
             <div class="action">
                 <div class="account">
                     <a href="/account/{{ account.pid }}">
-                        <img src="/picture/{{ account.pid }}">
+                        <img src="/picture/{{ account.pid }}" alt="Failed to load">
                         <p>{{ account.username }}</p>
                     </a>
                 </div>

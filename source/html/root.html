@@ -10,7 +10,7 @@
         <div class="topbar">
             <div class="logo">
                 <a href="/">
-                    <img src="{{ url_for('static', filename='favicon.ico') }}">
+                    <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Failed to load">
                     <p>RVIDEO</p>
                 </a>
             </div>
@@ -55,16 +55,22 @@
                         <p>Upload&#40;+&#41;</p>
                     </a>
                 </div>
+                {% else %}
+                <div class="upload">
+                    <a href="/login">
+                        <p>Login</p>
+                    </a>
+                </div>
                 {% endif %}
                 <div class="account">
                     {% if account %}
                     <a href="/account/{{ account.pid }}">
-                        <img src="/picture/{{ account.pid }}">
+                        <img src="/picture/{{ account.pid }}" alt="Failed to load">
                         <p>{{ account.username }}</p>
                     </a>
                     {% else %}
                     <a href="/users/">
-                        <img src="/picture/0">
+                        <img src="/picture/0" alt="Failed to load">
                         <p>Guest</p>
                     </a>
                     {% endif %}

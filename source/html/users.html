@@ -11,7 +11,7 @@
         <div class="topbar">
             <div class="logo">
                 <a href="/">
-                    <img src="{{ url_for('static', filename='favicon.ico') }}">
+                    <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Failed to load">
                     <p>RVIDEO</p>
                 </a>
             </div>
@@ -71,7 +71,7 @@
             {% for user in users %}
             <a href="/account/{{ user.pid }}">
                 <div>
-                    <img src="/picture/{{ user.pid  }}">
+                    <img src="/picture/{{ user.pid  }}" alt="Failed to load">
                     <p>{{ user.username }}</p>
                 </div>
             </a>
