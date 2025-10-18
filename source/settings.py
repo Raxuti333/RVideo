@@ -150,7 +150,7 @@ def delete(account: dict, token: str):
     """ deletes profile """
 
     form = get_form([
-    ("password", str), # TODO check password
+    ("password", str),
     ("token",    str),
     ("return",   str)
     ])
